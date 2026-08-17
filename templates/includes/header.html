@@ -1,0 +1,85 @@
+{% load i18n site_tags %}
+<header class="nav{% if is_home %} nav--home is-transparent{% endif %}" data-nav>
+  <div class="nav__inner">
+    <a href="{% url 'home' %}" class="nav__logo" aria-label="Food Compass početna">
+      {% include 'includes/logo.html' with size='sm' variant='dark' %}
+    </a>
+
+    <nav class="nav__links" aria-label="Glavna navigacija">
+      {% for item in nav_items %}
+        {% if item.children %}
+          <div class="nav__dropdown">
+            <a href="{% url item.url_name %}" class="nav__link{% if request.resolver_match.url_name == item.url_name or request.resolver_match.url_name == 'service_detail' %} is-active{% endif %}">{{ item.label }}</a>
+            <div class="nav__dropdown-menu">
+              {% for child in item.children %}
+                <a href="{% url child.url_name slug=child.slug %}">{{ child.label }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <a href="{% url item.url_name %}" class="nav__link{% if request.resolver_match.url_name == item.url_name %} is-active{% endif %}">{{ item.label }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="nav__langs">
+      {% get_current_language as LANGUAGE_CODE %}
+      {% get_available_languages as LANGUAGES %}
+      {% get_language_info_list for LANGUAGES as languages %}
+      <form action="{% url 'set_language' %}" method="post" class="lang-switch">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <details class="lang-switch__drop">
+          <summary class="lang-switch__toggle" aria-label="Izaberi jezik">
+            {% if LANGUAGE_CODE == 'en' %}ENG{% elif LANGUAGE_CODE == 'ru' %}RU{% else %}SR{% endif %}
+          </summary>
+          <div class="lang-switch__menu">
+            {% for lang in languages %}
+              <button type="submit" name="language" value="{{ lang.code }}" class="lang-switch__btn{% if lang.code == LANGUAGE_CODE %} is-active{% endif %}">
+                {% if lang.code == 'sr' %}SR{% elif lang.code == 'en' %}ENG{% else %}RU{% endif %}
+              </button>
+            {% endfor %}
+          </div>
+        </details>
+      </form>
+    </div>
+
+    <button class="nav__burger" type="button" aria-label="Otvori meni" aria-expanded="false" aria-controls="mobile-menu" data-burger>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav__backdrop" data-backdrop aria-hidden="true"></div>
+  <nav id="mobile-menu" class="nav__mobile" aria-label="Mobilna navigacija" aria-hidden="true" data-mobile>
+    {% for item in nav_items %}
+      <div class="nav__mobile-group">
+        <a href="{% url item.url_name %}" class="nav__mobile-link">{{ item.label }}</a>
+        {% if item.children %}
+          <div class="nav__mobile-sub">
+            {% for child in item.children %}
+              <a href="{% url child.url_name slug=child.slug %}" class="nav__mobile-sublink">{{ child.label }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="nav__mobile-group nav__mobile-langs">
+      <form action="{% url 'set_language' %}" method="post" class="lang-switch lang-switch--mobile">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <details class="lang-switch__drop">
+          <summary class="lang-switch__toggle" aria-label="Izaberi jezik">
+            {% if LANGUAGE_CODE == 'en' %}ENG{% elif LANGUAGE_CODE == 'ru' %}RU{% else %}SR{% endif %}
+          </summary>
+          <div class="lang-switch__menu">
+            {% for lang in languages %}
+              <button type="submit" name="language" value="{{ lang.code }}" class="lang-switch__btn{% if lang.code == LANGUAGE_CODE %} is-active{% endif %}">
+                {% if lang.code == 'sr' %}SR{% elif lang.code == 'en' %}ENG{% else %}RU{% endif %}
+              </button>
+            {% endfor %}
+          </div>
+        </details>
+      </form>
+    </div>
+  </nav>
+</header>

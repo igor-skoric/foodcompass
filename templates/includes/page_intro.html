@@ -1,0 +1,8 @@
+{% load site_tags %}
+<header class="page-intro page-intro--compact">
+  {% breadcrumbs %}
+  {% if hero.eyebrow %}<span class="eyebrow">{{ hero.eyebrow }}</span>{% endif %}
+  <h1>{{ hero.title }}</h1>
+  {% if hero.subtitle %}<p class="page-intro__kicker">{{ hero.subtitle }}</p>{% endif %}
+  {% if hero.lead %}<p>{{ hero.lead }}</p>{% endif %}
+</header>

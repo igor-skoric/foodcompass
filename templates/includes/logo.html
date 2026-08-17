@@ -1,0 +1,11 @@
+<div class="logo logo--{{ size|default:'md' }}{% if variant == 'light' %} logo--light{% endif %} {{ class_name }}" role="img" aria-label="FOOD COMPASS">
+  <div class="logo__row">
+    <span class="logo__food">F</span>
+    <span class="logo__o">
+      <span class="logo__rose">{% include 'includes/compass.svg' %}</span>
+    </span>
+    <span class="logo__food">OD</span>
+    <span class="logo__word">COMPASS</span>
+  </div>
+  {% if not hide_rule %}<span class="logo__rule" aria-hidden="true"></span>{% endif %}
+</div>

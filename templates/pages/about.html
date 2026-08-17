@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load site_tags %}
+
+{% block content %}
+<section class="section about-page">
+  <div class="container">
+    <div class="about-hero">
+      <div class="about-hero__copy">
+        <header class="page-intro page-intro--compact">
+          {% breadcrumbs %}
+          <span class="eyebrow">{{ about.title }}</span>
+          <h1>{{ about.eyebrow }}</h1>
+        </header>
+        <p class="about-hero__lead reveal">{{ about.hero_lead }}</p>
+      </div>
+      <div class="about-hero__mark" aria-hidden="true">
+        <span class="about-compass">{% include 'includes/compass.svg' %}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-quote">
+  <div class="container about-quote__grid">
+    <blockquote class="about-quote__text reveal">
+      <span class="about-quote__mark" aria-hidden="true">„</span>
+      {{ about.quote }}
+    </blockquote>
+    <div class="about-quote__side reveal">
+      <p>{{ about.quote_context }}</p>
+      <p class="about-quote__stat">
+        <span>22+</span>
+        godina iskustva
+      </p>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-origin">
+  <div class="container">
+    <div class="about-origin__inner reveal">
+      <span class="eyebrow">Zašto je nastao Food Compass</span>
+      <h2>Od složenih zahteva do jasnog pravca</h2>
+      <p>{{ about.origin }}</p>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-what">
+  <div class="container about-what__grid">
+    <div class="about-what__copy reveal">
+      <span class="eyebrow">Šta je Food Compass</span>
+      <h2>Stručnost koja ima praktičnu primenu</h2>
+      {% for p in about.what %}
+        <p>{{ p }}</p>
+      {% endfor %}
+    </div>
+    <ul class="about-principles reveal">
+      {% for item in about.principles %}
+        <li>
+          {% if forloop.counter == 1 %}
+            {% include 'includes/about_icon.html' with name='skill' %}
+          {% elif forloop.counter == 2 %}
+            {% include 'includes/about_icon.html' with name='practice' %}
+          {% else %}
+            {% include 'includes/about_icon.html' with name='digitalizacija' %}
+          {% endif %}
+          <div>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.text }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-areas">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Oblasti podrške</span>
+      <p class="about-areas__lead">{{ about.areas_intro }}</p>
+    </div>
+    <ul class="about-areas__grid">
+      {% for item in about.areas %}
+        <li class="reveal">
+          {% include 'includes/about_icon.html' with name=item.icon %}
+          <h3>{{ item.title }}</h3>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-value">
+  <div class="container about-value__inner reveal">
+    <span class="eyebrow">Naš pristup</span>
+    <h2>Složene zahteve pretvaramo u jasna rešenja.</h2>
+    <p>{{ about.value }}</p>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-founder">
+  <div class="container">
+    <div class="about-founder__copy reveal">
+      <span class="eyebrow">Osnivač Food Compass-a</span>
+      <h2>{{ about.founder_name }}</h2>
+      <p class="about-founder__role">{{ about.founder_role }}</p>
+      <p class="about-founder__specialty">{{ about.founder_specialty }}</p>
+      {% for p in about.founder_body %}
+        <p>{{ p }}</p>
+      {% endfor %}
+      <ul class="about-expertise">
+        {% for item in about.expertise %}
+          <li>
+            <span>{{ item.value }}</span>
+            {{ item.label }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/about_flow.html' %}
+
+<section class="section about-close">
+  <div class="container about-close__inner reveal">
+    <span class="eyebrow">Naš cilj</span>
+    <h2>{{ about.goal_title }}</h2>
+    <p>{{ about.goal }}</p>
+    <div class="cta-row cta-row--center">
+      <a href="{% url 'contact' %}" class="btn btn--gold">Razgovarajmo o vašem poslovanju →</a>
+      <a href="{% url 'services' %}" class="btn btn--outline">Pogledajte naše usluge</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

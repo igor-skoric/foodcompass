@@ -1,0 +1,12 @@
+---
+description: Page intro (breadcrumb, gold page name, title) stays on the left like every other page.
+alwaysApply: true
+---
+
+# Page intro alignment
+
+On every page, breadcrumb, gold page-name eyebrow, and the main title stay **left**, in the same place as the rest of the site.
+
+Do not put a photo, compass, or aside to the left of that intro. Side visuals go **right**. The intro must not be pushed into a right column.
+
+On `/o-meni/`, identity (breadcrumb, O meni, name, title, credentials) is left; the portrait is right and may stay sticky while the text scrolls.

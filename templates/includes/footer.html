@@ -1,0 +1,37 @@
+{% load static %}
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      {% include 'includes/logo.html' with size='md' variant='light' class_name='footer__logo' %}
+      <p>Stručna podrška u upravljanju bezbednošću hrane kroz znanje, iskustvo i savremena rešenja.</p>
+    </div>
+    <div>
+      <h4>Navigacija</h4>
+      <div class="footer__links">
+        <a href="{% url 'about' %}">O nama</a>
+        <a href="{% url 'about_me' %}">O meni</a>
+        <a href="{% url 'services' %}">Naše usluge</a>
+        <a href="{% url 'journey' %}">Od ideje do police</a>
+        <a href="{% url 'support' %}">Stručna podrška</a>
+        <a href="{% url 'news' %}">Aktuelnosti</a>
+        <a href="{% url 'contact' %}">Kontakt</a>
+      </div>
+    </div>
+    <div>
+      <h4>Usluge</h4>
+      <div class="footer__links">
+        {% for service in all_services %}
+          <a href="{% url 'service_detail' slug=service.slug %}">{{ service.title }}</a>
+        {% endfor %}
+      </div>
+      <p style="margin-top: 1.25rem">
+        <a href="mailto:{{ contact_info.email }}">{{ contact_info.email }}</a><br />
+        <a href="tel:{{ contact_info.phone }}">{{ contact_info.phone_display }}</a>
+      </p>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <span>© {% now "Y" %} Food Compass</span>
+    <span>Sajt uradio <a href="https://www.itbranch.rs" target="_blank" rel="noreferrer">itbranch.rs</a></span>
+  </div>
+</footer>

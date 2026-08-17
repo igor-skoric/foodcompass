@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load site_tags %}
+
+{% block content %}
+<section class="services-page">
+  <div class="container">
+    <header class="page-intro">
+      {% breadcrumbs %}
+      <span class="eyebrow">Naše usluge</span>
+      <h1>Stručna podrška za bezbedno i usklađeno poslovanje sa hranom.</h1>
+      <p>Od implementacije standarda i pripreme za audit do deklarisanja proizvoda i digitalizacije sistema bezbednosti hrane.</p>
+    </header>
+
+    <div class="service-grid">
+      {% for card in service_cards %}
+        <div class="reveal">
+          <a
+            href="{% if card.slug %}{% url card.url_name slug=card.slug %}{% else %}{% url card.url_name %}{% endif %}"
+            class="service-card{% if card.flagship %} service-card--flagship{% endif %}"
+          >
+            <div class="service-card__top">
+              <span class="service-card__num">{{ card.number }}</span>
+              {% include 'includes/service_icon.html' with name=card.icon %}
+            </div>
+            <div class="service-card__body">
+              <h2>{{ card.title }}</h2>
+              {% if card.standards %}
+                <p class="service-card__standards">
+                  {% for item in card.standards %}<span>{{ item }}</span>{% endfor %}
+                </p>
+              {% endif %}
+              <p class="service-card__desc">{{ card.desc }}</p>
+            </div>
+            <span class="service-card__cta">Saznajte više <span aria-hidden="true">→</span></span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

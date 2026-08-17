@@ -1,0 +1,22 @@
+{
+  "name": "Food Compass",
+  "short_name": "Food Compass",
+  "description": "Stručna podrška u bezbednosti hrane — HACCP, deklarisanje i digitalizacija.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef6f1",
+  "theme_color": "#0c3322",
+  "lang": "sr",
+  "icons": [
+    {
+      "src": "/favicon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}

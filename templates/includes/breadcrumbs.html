@@ -1,0 +1,15 @@
+{% if crumbs|length > 1 %}
+<nav class="breadcrumbs" aria-label="Putanja stranice">
+  <ol class="breadcrumbs__list">
+    {% for crumb in crumbs %}
+      <li class="breadcrumbs__item">
+        {% if crumb.url %}
+          <a href="{{ crumb.url }}" class="breadcrumbs__link">{{ crumb.label }}</a>
+        {% else %}
+          <span class="breadcrumbs__current" aria-current="page">{{ crumb.label }}</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}

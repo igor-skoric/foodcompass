@@ -1,0 +1,22 @@
+# Dependencies
+.venv
+venv
+
+# Django
+db.sqlite3
+media
+staticfiles
+*.pyc
+__pycache__/
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# Logs
+*.log

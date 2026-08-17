@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'includes/page_top.html' %}
+<section class="section">
+  <div class="container">
+    <article class="article">
+      {% if article.published_at %}
+        <time class="article__date">{{ article.published_at|date:"d.m.Y." }}</time>
+      {% endif %}
+      <div class="prose article__body">
+        {{ article.body|safe }}
+      </div>
+      {% if article.images.all %}
+        <div class="article__gallery">
+          {% for image in article.images.all %}
+            <figure>
+              <img src="{{ image.image.url }}" alt="{{ image.caption }}" />
+              {% if image.caption %}<figcaption>{{ image.caption }}</figcaption>{% endif %}
+            </figure>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="cta-row">
+        <a href="{% url 'news' %}" class="btn btn--outline">Sve aktuelnosti</a>
+        <a href="{% url 'contact' %}" class="btn btn--gold">Kontaktirajte nas</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

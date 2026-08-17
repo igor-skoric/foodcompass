@@ -1,0 +1,16 @@
+{% load static site_tags %}
+<section class="page-top page-top--hero">
+  <div class="page-top__media" aria-hidden="true">
+    {% if hero.cover %}
+      <img src="{{ hero.cover }}" alt="" class="page-top__photo" />
+    {% else %}
+      {% with img=hero.image|hero_image %}
+        <img src="{% static img %}" alt="" class="page-top__photo" width="1600" height="900" />
+      {% endwith %}
+    {% endif %}
+  </div>
+  <div class="page-top__veil"></div>
+  <div class="container page-top__shell">
+    {% include 'includes/page_intro.html' %}
+  </div>
+</section>

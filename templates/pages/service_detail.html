@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'includes/page_top.html' %}
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="service-detail__intro">
+        {% include 'includes/service_icon.html' with name=service.icon %}
+        <div>
+          <span class="eyebrow">Šta obuhvata</span>
+          {% if service.lead %}<p class="section__lead">{{ service.lead }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if service.list_items %}
+      <div class="reveal">
+        {% if service.list_title %}<p class="section__lead">{{ service.list_title }}</p>{% endif %}
+        <ul class="check-list">
+          {% for item in service.list_items %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if service.items %}
+      <ol class="service-points">
+        {% for item in service.items %}
+          <li class="service-point reveal">
+            <span class="service-point__num">{{ forloop.counter|stringformat:"02d" }}</span>
+            <div class="service-point__body">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.text }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+
+    {% if service.closer %}
+      <div class="reveal">
+        <p class="section__lead" style="margin-top: 2rem">{{ service.closer }}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section band service-detail__cta">
+  <div class="container">
+    <div class="reveal">
+      <div class="service-detail__cta-inner">
+        <div>
+          <span class="eyebrow" style="color: var(--gold-300)">Sledeći korak</span>
+          <h2>Želite da pokrenemo ovu uslugu?</h2>
+          <p>Javite nam se za konsultacije i konkretan predlog prilagođen vašem objektu i proizvodima.</p>
+        </div>
+        <div class="cta-row">
+          <a href="{% url 'contact' %}" class="btn btn--light">Zatraži ponudu</a>
+          <a href="{% url 'services' %}" class="btn btn--outline-gold">Sve usluge</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

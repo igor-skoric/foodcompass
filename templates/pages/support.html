@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'includes/page_top.html' %}
+<section class="section">
+  <div class="container">
+    <div class="split">
+      {% for option in support.options %}
+        <div class="reveal">
+          <article class="pillar" id="{{ option.slug }}">
+            <h3>{{ option.title }}</h3>
+            <p style="font-family: var(--font-display); font-size: 1.2rem; color: var(--green-800); margin-bottom: 1rem">{{ option.subtitle }}</p>
+            <div class="prose">
+              {% for p in option.body %}
+                <p>{{ p }}</p>
+              {% endfor %}
+              {% if option.list_items %}
+                {% if option.list_title %}<p>{{ option.list_title }}</p>{% endif %}
+                <ul class="check-list">
+                  {% for item in option.list_items %}
+                    <li>{{ item }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              {% for p in option.closer %}
+                <p>{{ p }}</p>
+              {% endfor %}
+            </div>
+            <div class="cta-row">
+              <a href="{% url 'contact' %}" class="btn btn--gold">{{ option.cta }}</a>
+            </div>
+          </article>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

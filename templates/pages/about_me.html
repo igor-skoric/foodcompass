@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static site_tags %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="about-layout about-layout--bio">
+      <header class="page-intro page-intro--compact page-intro--bio bio-head">
+        {% breadcrumbs %}
+        <span class="eyebrow">{{ about_me.title }}</span>
+        <h1>{{ about_me.name }}</h1>
+        <p class="bio-degree">{{ about_me.role }}</p>
+        <p class="bio-specialty">{{ about_me.role_extra }}</p>
+      </header>
+
+      <aside class="about-layout__aside">
+        <figure class="bio-card">
+          <div class="bio-card__portrait{% if not about_photo %} bio-card__portrait--mark{% endif %}">
+            {% if about_photo %}
+              <img src="{% static about_photo %}" alt="{{ about_me.name }}" width="995" height="941" />
+            {% else %}
+              <span class="bio-card__compass" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
+              <span class="bio-card__initials">{{ about_me.initials }}</span>
+            {% endif %}
+          </div>
+          {% if contact_info.linkedin %}
+            <figcaption>
+              <a class="bio-card__link" href="{{ contact_info.linkedin }}" target="_blank" rel="noreferrer">LinkedIn profil →</a>
+            </figcaption>
+          {% endif %}
+        </figure>
+      </aside>
+
+      <ul class="bio-stats">
+        {% for fact in about_me.facts %}
+          <li>
+            <span class="bio-stats__value">{{ fact.value }}</span>
+            <span class="bio-stats__label">{{ fact.label }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="about-layout__copy">
+        <p class="bio-lead">{{ about_me.lead }}</p>
+        <div class="reveal">
+          <div class="prose">
+            {% for p in about_me.paragraphs %}
+              <p>{{ p }}</p>
+            {% endfor %}
+          </div>
+        </div>
+        <blockquote class="quote">„{{ about_me.quote }}“</blockquote>
+        <div class="cta-row">
+          <a href="{% url 'about' %}" class="btn btn--outline">O nama</a>
+          <a href="{% url 'contact' %}" class="btn btn--gold">Kontaktirajte nas</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

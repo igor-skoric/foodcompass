@@ -1,0 +1,20 @@
+{% load static site_tags %}
+{% with img=hero.image|hero_image %}
+<header class="page-hero page-hero--{{ hero.image }}{% if hero.cover %} page-hero--cover{% endif %}">
+  <div class="page-hero__media" aria-hidden="true">
+    {% if hero.cover %}
+      <img src="{{ hero.cover }}" alt="" class="page-hero__photo" />
+    {% else %}
+      <img src="{% static img %}" alt="" class="page-hero__photo" width="1600" height="900" />
+    {% endif %}
+  </div>
+  <div class="page-hero__veil"></div>
+  <div class="page-hero__shell">
+    {% breadcrumbs %}
+    {% if hero.eyebrow %}<span class="eyebrow page-hero__eyebrow">{{ hero.eyebrow }}</span>{% endif %}
+    <h1>{{ hero.title }}</h1>
+    {% if hero.subtitle %}<p class="page-hero__subtitle">{{ hero.subtitle }}</p>{% endif %}
+    {% if hero.lead %}<p>{{ hero.lead }}</p>{% endif %}
+  </div>
+</header>
+{% endwith %}

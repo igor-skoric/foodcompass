@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__media" data-hero-slider aria-hidden="true">
+    {% for slide in hero_slides %}
+      <picture>
+        {% if slide.avif %}
+          <source type="image/avif" srcset="{% static slide.avif %}?v={{ slide.version }}" />
+        {% endif %}
+        {% if slide.webp %}
+          <source type="image/webp" srcset="{% static slide.webp %}?v={{ slide.version }}" />
+        {% endif %}
+        <img
+          src="{% static slide.src %}?v={{ slide.version }}"
+          alt=""
+          class="hero__photo{% if forloop.first %} is-active{% endif %}"
+          width="{{ slide.width }}"
+          height="{{ slide.height }}"
+          sizes="100vw"
+          {% if forloop.first %}fetchpriority="high" loading="eager"{% else %}loading="lazy"{% endif %}
+          decoding="async"
+        />
+      </picture>
+    {% endfor %}
+  </div>
+  <div class="hero__veil"></div>
+  <div class="hero__shell">
+    <div class="hero__content">
+      <p class="hero__eyebrow">Deklarisanje prehrambenih proizvoda</p>
+      <h1 class="hero__title">
+        <span class="hero__title-main">Bezbednost hrane.</span>
+        <span class="hero__title-sub">Od ideje do police.</span>
+      </h1>
+      <p class="hero__lead">Uspostavljamo sisteme bezbednosti hrane, pripremamo vas za audit i sertifikaciju, izrađujemo deklaracije i digitalizujemo HACCP i druge standarde.</p>
+      <p class="hero__standards">
+        <span>HACCP</span>
+        <span>IFS</span>
+        <span>FSSC 22000</span>
+        <span>BRCGS</span>
+        <span>ISO 9001</span>
+        <span>ISO 22000</span>
+      </p>
+      <div class="hero__actions">
+        <a href="{% url 'contact' %}" class="btn btn--gold">Zakažite konsultacije →</a>
+        <a href="{% url 'services' %}" class="btn btn--outline-gold">Naše usluge</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/home_break.html' with variant='on-dark' %}
+
+<section class="section band-soft journey-home" data-journey>
+  <div class="container">
+    <div class="reveal">
+      <div class="section__head section__head--center">
+        <span class="eyebrow">Putovanje proizvoda</span>
+        <h2 class="section__title">Od ideje do police</h2>
+        <p class="section__lead">Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda.</p>
+      </div>
+    </div>
+    <div class="journey-path" role="list">
+      {% for step in journey %}
+        <article class="journey-path__step" role="listitem" style="--step: {{ forloop.counter0 }}">
+          <div class="journey-path__visual">
+            <img src="{% static 'images/journey/'|add:step.image|add:'.jpg' %}" alt="" class="journey-path__img" loading="lazy" width="900" height="900" />
+            <span class="journey-path__badge" aria-hidden="true">0{{ forloop.counter }}</span>
+            {% if not forloop.last %}
+              <span class="journey-path__connector journey-path__connector--h" aria-hidden="true"></span>
+            {% endif %}
+          </div>
+          <div class="journey-path__copy">
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.lead }}</p>
+          </div>
+          {% if not forloop.last %}
+            <span class="journey-path__connector journey-path__connector--v" aria-hidden="true"></span>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+    <div class="cta-row cta-row--center journey-home__cta">
+      <a href="{% url 'journey' %}" class="btn btn--gold">Saznajte više →</a>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/home_break.html' %}
+
+<section class="section section--cream">
+  <div class="container">
+    <div class="reveal">
+      <div class="section__head section__head--center">
+        <span class="eyebrow">Naše usluge</span>
+        <h2 class="section__title">Stručna podrška u bezbednosti hrane</h2>
+        <p class="section__lead">Znanje, iskustvo i savremena rešenja — sve na jednom mestu.</p>
+      </div>
+    </div>
+    <div class="service-rail">
+      {% for service in services %}
+        <div class="reveal">
+          <a href="{% url 'service_detail' slug=service.slug %}" class="service-rail__item">
+            {% include 'includes/service_icon.html' with name=service.icon %}
+            <div>
+              <h3>{{ service.title }}</h3>
+              <p>{{ service.short }}</p>
+            </div>
+            <span class="service-rail__more">Prikaži →</span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include 'includes/home_break.html' %}
+
+<section class="section section--sage home-support">
+  <div class="container">
+    <div class="reveal">
+      <div class="section__head section__head--center home-support__intro">
+        <span class="eyebrow">Stručna podrška</span>
+        <h2 class="section__title">Nudimo vam mogućnost<br>izbora</h2>
+        <p class="section__lead">Redovna ili vanredna stručna poseta — prilagođena vašim potrebama.</p>
+      </div>
+    </div>
+    <div class="home-support__grid">
+      {% for option in support.options %}
+        <a href="{% url 'support' %}#{{ option.slug }}" class="home-support__option home-support__option--{{ option.slug }} reveal">
+          <span class="home-support__index">
+            <span>0{{ forloop.counter }}</span>
+          </span>
+          {% include 'includes/about_icon.html' with name=option.icon %}
+          <h3>{{ option.title }}</h3>
+          <p>{{ option.subtitle }}</p>
+          {% if option.highlights %}
+            <ul class="home-support__points">
+              {% for item in option.highlights %}
+                <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <span class="home-support__cta">Saznajte više <span aria-hidden="true">→</span></span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include 'includes/home_break.html' %}
+
+<section class="section home-news section--mist">
+  <div class="container">
+    <div class="reveal">
+      <div class="section__head section__head--center">
+        <span class="eyebrow">Aktuelnosti</span>
+        <h2 class="section__title">Iz stručne prakse</h2>
+        <p class="section__lead">Tekstovi o bezbednosti hrane, standardima i putu od ideje do police.</p>
+      </div>
+    </div>
+    {% if latest_news %}
+      <div class="news-grid{% if latest_news|length == 1 %} news-grid--featured{% endif %}">
+        {% for article in latest_news %}
+          <a href="{{ article.get_absolute_url }}" class="news-card{% if latest_news|length == 1 %} news-card--featured{% endif %} reveal">
+            {% if article.cover %}
+              <img src="{{ article.cover.url }}" alt="" class="news-card__img" />
+            {% else %}
+              <div class="news-card__placeholder" aria-hidden="true"></div>
+            {% endif %}
+            <div class="news-card__body">
+              {% if article.published_at %}<time>{{ article.published_at|date:"d.m.Y." }}</time>{% endif %}
+              <h3>{{ article.title }}</h3>
+              {% if article.excerpt %}<p>{{ article.excerpt|truncatechars:140 }}</p>{% endif %}
+              <span class="news-card__more">Pročitajte →</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="section__lead home-news__empty">Uskoro više tekstova.</p>
+    {% endif %}
+    <div class="cta-row cta-row--center">
+      <a href="{% url 'news' %}" class="btn btn--gold">Sve aktuelnosti →</a>
+    </div>
+  </div>
+</section>
+
+{% include 'includes/home_break.html' %}
+
+<section class="section band">
+  <div class="container">
+    <div class="reveal">
+      <div class="experience">
+        <div>
+          <span class="eyebrow" style="color: var(--gold-300)">Naš cilj</span>
+          <p class="experience__quote">Da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.</p>
+        </div>
+        <div class="experience__aside">
+          <p>Vi imate ideju. Mi vam pokazujemo put.</p>
+          <div class="cta-row">
+            <a href="{% url 'contact' %}" class="btn btn--light">Zakažite sastanak</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

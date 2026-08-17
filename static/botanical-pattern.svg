@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="340" viewBox="0 0 340 340">
+  <!-- Low baked opacity so it can tile as a cheap scrolling background -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.035">
+    <g stroke="#134530" stroke-width="1.35">
+      <path d="M52 78c28-48 78-42 96-8 2 4 1 9-3 12-32 22-68 38-93 12-3-3-3-8 0-16z" />
+      <path d="M52 78c22 18 52 36 93 12" />
+      <path d="M78 62c8 14 18 26 34 34" />
+    </g>
+    <g stroke="#1b5c40" stroke-width="1.2" opacity="0.85">
+      <path d="M248 48c-18 36-8 72 22 88 4 2 9 1 12-2 20-28 28-68 2-96-3-3-8-3-12 0-8 4-16 8-24 10z" />
+      <path d="M248 48c12 22 22 52 24 86" />
+      <path d="M262 72c10 12 22 20 36 24" />
+    </g>
+    <g stroke="#a67f45" stroke-width="1.15" opacity="0.75">
+      <path d="M168 210c42-22 78 6 74 42-1 5-5 8-10 8-38 2-74-8-84-36-1-4 1-9 5-11 5-2 10-2 15-3z" />
+      <path d="M168 210c18 20 42 34 74 38" />
+      <path d="M188 228c14 6 30 8 46 6" />
+    </g>
+    <g stroke="#134530" stroke-width="1.1" opacity="0.7">
+      <path d="M278 248c-36 26-32 72 4 92 4 2 9 1 12-2 26-24 36-64 8-96-3-3-8-4-12-2-4 2-8 5-12 8z" />
+      <path d="M278 248c14 24 20 52 4 84" />
+    </g>
+    <g stroke="#24704e" stroke-width="1.05" opacity="0.55">
+      <path d="M72 268c20-8 36 4 40 22 1 4-1 8-5 9-18 6-38 2-48-12-2-3-1-8 2-10 3-2 7-5 11-9z" />
+      <path d="M72 268c10 12 22 22 40 26" />
+    </g>
+  </g>
+</svg>

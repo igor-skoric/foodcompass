@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% include 'includes/page_top.html' %}
+
+<section class="journey-page" data-journey-page>
+  <div class="section journey-page__top">
+    <div class="container">
+      <div class="reveal prose journey-page__intro">
+        <p>Imate ideju za novi prehrambeni proizvod, ali ne znate odakle da počnete?</p>
+        <p>Food Compass vas vodi kroz ceo proces – od početne ideje i razvoja proizvoda, preko regulatorne usaglašenosti i uspostavljanja sistema bezbednosti hrane, do pravilnog deklarisanja i pripreme proizvoda za tržište.</p>
+        <p>Ne morate sami da povezujete zahteve propisa, bezbednosti hrane, dokumentacije i deklarisanja. Mi povezujemo sve korake u jednu celinu.</p>
+      </div>
+
+      <nav class="journey-map" data-journey-map aria-label="Tri koraka od ideje do police">
+        <div class="journey-path" role="list">
+          {% for step in journey %}
+            <a
+              class="journey-path__step"
+              role="listitem"
+              href="#{{ step.id }}"
+              data-journey-link="{{ step.id }}"
+              style="--step: {{ forloop.counter0 }}"
+            >
+              <div class="journey-path__visual">
+                <img
+                  src="{% static 'images/journey/'|add:step.image|add:'.jpg' %}"
+                  alt=""
+                  class="journey-path__img"
+                  width="900"
+                  height="675"
+                />
+                <span class="journey-path__badge" aria-hidden="true">0{{ forloop.counter }}</span>
+                {% if not forloop.last %}
+                  <span class="journey-path__connector journey-path__connector--h" aria-hidden="true"></span>
+                {% endif %}
+              </div>
+              <div class="journey-path__copy">
+                <h2>{{ step.title }}</h2>
+                <p>{{ step.lead }}</p>
+              </div>
+              {% if not forloop.last %}
+                <span class="journey-path__connector journey-path__connector--v" aria-hidden="true"></span>
+              {% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <nav class="journey-progress" data-journey-progress aria-label="Napredak kroz korake">
+    <div class="container">
+      <div class="journey-progress__row">
+        {% for step in journey %}
+          <a class="journey-progress__link" href="#{{ step.id }}" data-journey-link="{{ step.id }}">
+            <span class="journey-progress__num">0{{ forloop.counter }}</span>
+            <span class="journey-progress__title">{{ step.title }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </nav>
+
+  {% for step in journey %}
+    <article
+      class="journey-chapter{% if forloop.counter == 2 %} journey-chapter--flip{% endif %}{% if forloop.last %} journey-chapter--finale{% endif %}"
+      id="{{ step.id }}"
+      data-journey-chapter="{{ step.id }}"
+    >
+      <div class="container journey-chapter__grid">
+        <div class="journey-chapter__media">
+          <img
+            src="{% static 'images/journey/'|add:step.image|add:'.jpg' %}"
+            alt="{{ step.title }}"
+            class="journey-chapter__img"
+            width="900"
+            height="900"
+            {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+          />
+          <span class="journey-chapter__badge" aria-hidden="true">0{{ forloop.counter }}</span>
+        </div>
+        <div class="journey-chapter__copy">
+          <span class="eyebrow">Korak 0{{ forloop.counter }}</span>
+          <h2>{{ step.title }}</h2>
+          <p class="journey-chapter__lead">{{ step.lead }}</p>
+          {% if step.intro %}<p class="journey-chapter__intro">{{ step.intro }}</p>{% endif %}
+          <ul class="check-list">
+            {% for item in step.items %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+
+  <div class="section section--cream journey-page__close">
+    <div class="container">
+      <div class="reveal">
+        <span class="eyebrow">Jedan partner</span>
+        <h2>Jedan partner za ceo put</h2>
+        <div class="prose">
+          <p>Od prve ideje do proizvoda spremnog za tržište.</p>
+          <p>Food Compass povezuje razvoj proizvoda, bezbednost hrane, regulatornu usaglašenost, dokumentaciju i deklarisanje kako bi vaš proizvod bio pravilno definisan, bezbedan i spreman za tržište.</p>
+        </div>
+        <blockquote class="quote">Vi imate ideju. Mi vam pokazujemo put.</blockquote>
+        <div class="cta-row">
+          <a href="{% url 'contact' %}" class="btn btn--gold">Zakažite sastanak</a>
+          <a href="{% url 'services' %}" class="btn btn--outline">Naše usluge</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
