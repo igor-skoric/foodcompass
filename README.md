@@ -44,7 +44,7 @@ Ispred Gunicorna stavi Nginx ili Caddy sa HTTPS. Kada SSL radi, u `.env` uključ
 
 Folderi `media/` i `db.sqlite3` moraju da ostanu na disku (nisu u gitu). Ako koristiš Nginx za fajlove, isključi `DJANGO_SERVE_MEDIA`.
 
-Za Railway / Render / slične PaaS servise dovoljni su `Procfile` i `runtime.txt`. Za cPanel / Passenger koristi `passenger_wsgi.py`.
+Za Railway / Render / slične PaaS servise dovoljni su `Procfile` i `runtime.txt`.
 
 ## Jezici
 

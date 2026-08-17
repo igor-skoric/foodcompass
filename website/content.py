@@ -81,7 +81,7 @@ SERVICES = [
         'standards': ['ISO 9001', 'ISO 22000'],
         'card': 'Implementacija sistema upravljanja kvalitetom i bezbednošću hrane prilagođenih vašem poslovanju.',
         'icon': 'iso',
-        'hero': 'services',
+        'hero': 'iso',
         'intro': (
             'Podrška kompanijama u uspostavljanju, unapređenju i proveri sistema upravljanja prema '
             'međunarodno priznatim ISO standardima, sa fokusom na kvalitet i bezbednost hrane.'
@@ -175,7 +175,7 @@ SERVICES = [
         'standards': [],
         'card': 'Proveravamo koliko je vaš sistem zaista spreman za audit i definišemo šta treba unaprediti.',
         'icon': 'gap',
-        'hero': 'supervision',
+        'hero': 'gap',
         'intro': (
             'Kroz stručnu procenu postojećeg sistema utvrđujemo nivo usaglašenosti sa zahtevima relevantnog '
             'standarda i identifikujemo oblasti koje je potrebno unaprediti pre audita.'
