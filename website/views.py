@@ -1,3 +1,4 @@
+import logging
 import re
 import shutil
 from pathlib import Path
@@ -6,12 +7,16 @@ from PIL import Image
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.staticfiles import finders
 from django.core.files.storage import default_storage
+from django.core.mail import BadHeaderError
 from django.core.paginator import Paginator
 from django.db.models import F
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
+from smtplib import SMTPException
 
 from .content import (
     ABOUT,
@@ -21,11 +26,15 @@ from .content import (
     SEO_PAGES,
     SERVICES,
     SUPPORT,
+    TERMS,
     get_service,
     get_service_cards,
 )
 from .forms import ContactForm
+from .mail import send_contact_message
 from .models import Article
+
+logger = logging.getLogger(__name__)
 
 HERO_FILE = re.compile(r'^hero(\d+)\.(png|jpe?g)$', re.I)
 
@@ -90,9 +99,9 @@ def get_hero_slides():
     slides.sort()
     if slides:
         return [item for _, item in slides]
-    fallback = dest / 'hero-food.jpg'
+    fallback = dest / 'hero2.png'
     version = int(fallback.stat().st_mtime) if fallback.exists() else 1
-    return [{'src': 'images/hero-food.jpg', 'webp': '', 'avif': '', 'width': 1920, 'height': 1080, 'version': version}]
+    return [{'src': 'images/hero2.png', 'webp': '', 'avif': '', 'width': 1920, 'height': 1080, 'version': version}]
 
 
 def _seo(key, extra=None):
@@ -243,19 +252,33 @@ def news_detail(request, slug):
 
 def contact(request):
     sent = False
+    send_error = False
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
-            sent = True
-            form = ContactForm()
+            message = form.save()
+            try:
+                send_contact_message(message)
+                sent = True
+                form = ContactForm()
+            except (SMTPException, BadHeaderError, OSError):
+                logger.exception('Failed to send contact form email')
+                send_error = True
     else:
         form = ContactForm()
     return render(request, 'pages/contact.html', {
         'form': form,
         'sent': sent,
+        'send_error': send_error,
         'contact': CONTACT,
         'seo': _seo('contact'),
+    })
+
+
+def terms(request):
+    return render(request, 'pages/terms.html', {
+        'terms': TERMS,
+        'seo': _seo('terms'),
     })
 
 
@@ -267,3 +290,17 @@ def upload_image(request):
         return JsonResponse({'error': 'Nije poslata slika.'}, status=400)
     path = default_storage.save(f'aktuelnosti/inline/{uploaded.name}', uploaded)
     return JsonResponse({'location': f'{settings.MEDIA_URL}{path}'})
+
+
+@never_cache
+def service_worker(request):
+    path = finders.find('js/sw.js')
+    if not path:
+        return HttpResponse('Not found', status=404, content_type='text/plain')
+    response = HttpResponse(
+        Path(path).read_text(encoding='utf-8'),
+        content_type='application/javascript; charset=utf-8',
+    )
+    response['Service-Worker-Allowed'] = '/'
+    response['Cache-Control'] = 'no-cache'
+    return response

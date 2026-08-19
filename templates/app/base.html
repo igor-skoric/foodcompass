@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32.png' %}" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0c3322" />
+    {% include 'includes/pwa.html' %}
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{{ seo.title|default:'Panel | Food Compass' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/app.css' %}" />
+  </head>
+  <body class="app-body">
+    <div class="app" data-app>
+      <div class="app__backdrop" data-app-backdrop hidden></div>
+      <header class="app__topbar">
+        <a href="{% url 'app_home' %}" class="app__brand" aria-label="Food Compass panel">
+          {% include 'includes/logo.html' with size='sm' variant='light' hide_rule=True %}
+        </a>
+        <button class="app__burger" type="button" aria-label="Otvori meni" aria-expanded="false" aria-controls="app-sidebar" data-app-burger>
+          <span></span><span></span><span></span>
+        </button>
+      </header>
+      <aside id="app-sidebar" class="app__sidebar" data-app-sidebar>
+        <a href="{% url 'app_home' %}" class="app__brand app__brand--sidebar" aria-label="Food Compass panel">
+          {% include 'includes/logo.html' with size='sm' variant='light' hide_rule=True %}
+        </a>
+        <p class="app__eyebrow">Radni prostor</p>
+        <nav class="app__nav" aria-label="Panel">
+          <a href="{% url 'app_home' %}" class="app__link{% if request.resolver_match.url_name == 'app_home' %} is-active{% endif %}">Pregled</a>
+          <a href="{% url 'app_messages' %}" class="app__link{% if request.resolver_match.url_name == 'app_messages' or request.resolver_match.url_name == 'app_message_detail' %} is-active{% endif %}">
+            Poruke
+            {% if app_unread %}<span class="app__badge">{{ app_unread }}</span>{% endif %}
+          </a>
+          <a href="{% url 'app_news' %}" class="app__link{% if request.resolver_match.url_name == 'app_news' or request.resolver_match.url_name == 'app_news_detail' or request.resolver_match.url_name == 'app_news_create' or request.resolver_match.url_name == 'app_news_edit' %} is-active{% endif %}">Aktuelnosti</a>
+          <a href="{% url 'app_partners' %}" class="app__link{% if request.resolver_match.url_name == 'app_partners' or request.resolver_match.url_name == 'app_partner_detail' or request.resolver_match.url_name == 'app_partner_edit' or request.resolver_match.url_name == 'app_partner_create' %} is-active{% endif %}">Saradnja</a>
+        </nav>
+        <div class="app__nav app__nav--foot">
+          <a href="{% url 'admin:index' %}" class="app__link">Administracija</a>
+          <a href="{% url 'home' %}" class="app__link">Sajt</a>
+          <form action="{% url 'app_logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="app__link app__link--btn">Odjava</button>
+          </form>
+        </div>
+      </aside>
+      <main class="app__main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/pwa.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

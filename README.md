@@ -21,7 +21,7 @@ Lokalni rad ne zahteva `.env` fajl (`DEBUG` ostaje uključen).
 
 ## Deploy
 
-1. Kopiraj `.env.example` u `.env` na serveru i popuni vrednosti.
+1. Kopiraj `.env.example` u `.env` na serveru i popuni vrednosti, uključujući SMTP za kontakt formu (`EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `CONTACT_EMAIL`).
 2. Generiši tajni ključ:
 
 ```bash

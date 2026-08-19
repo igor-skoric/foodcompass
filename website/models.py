@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
@@ -100,3 +102,47 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f'{self.name} — {self.email}'
+
+
+class Partner(models.Model):
+    STATUS_ACTIVE = 'active'
+    STATUS_PENDING = 'pending'
+    STATUS_COMPLETED = 'completed'
+    STATUS_PAUSED = 'paused'
+    STATUS_CHOICES = [
+        (STATUS_ACTIVE, 'Aktivan'),
+        (STATUS_PENDING, 'Na čekanju'),
+        (STATUS_COMPLETED, 'Završen'),
+        (STATUS_PAUSED, 'Pauziran'),
+    ]
+
+    name = models.CharField('Naziv saradnika', max_length=180)
+    recorded_on = models.DateField('Datum', default=timezone.localdate, db_index=True)
+    amount = models.DecimalField('Iznos', max_digits=12, decimal_places=2, default=0)
+    description = models.TextField('Opis', blank=True)
+    status = models.CharField(
+        'Status',
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_ACTIVE,
+        db_index=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-recorded_on', 'name']
+        verbose_name = 'Saradnja'
+        verbose_name_plural = 'Saradnja'
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def format_amount(amount):
+        value = f'{(amount or Decimal("0")):,.2f}'
+        return value.replace(',', 'X').replace('.', ',').replace('X', '.')
+
+    @property
+    def amount_display(self):
+        return self.format_amount(self.amount)

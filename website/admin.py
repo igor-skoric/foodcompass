@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Article, ArticleImage, ContactMessage
+from .models import Article, ArticleImage, ContactMessage, Partner
 
 
 class ArticleImageInline(admin.TabularInline):
@@ -57,3 +57,10 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_filter = ('is_read',)
     search_fields = ('name', 'email', 'message')
     readonly_fields = ('name', 'email', 'phone', 'message', 'created_at')
+
+
+@admin.register(Partner)
+class PartnerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'recorded_on', 'amount', 'status', 'updated_at')
+    list_filter = ('status', 'recorded_on')
+    search_fields = ('name', 'description')

@@ -1,0 +1,43 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <a class="app-back" href="{% url 'app_news' %}"><span aria-hidden="true">←</span> Nazad na aktuelnosti</a>
+    <span class="eyebrow">Pregled</span>
+    <h1>{{ article.title }}</h1>
+  </header>
+
+  <article class="app-message app-message--wide">
+    <dl>
+      <div>
+        <dt>Status</dt>
+        <dd>
+          <span class="app-status {% if article.is_published %}app-status--published{% else %}app-status--draft{% endif %}">
+            {% if article.is_published %}Objavljeno{% else %}Nacrt{% endif %}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt>Datum</dt>
+        <dd>{% if article.published_at %}{{ article.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</dd>
+      </div>
+    </dl>
+    {% if article.cover %}
+      <img src="{{ article.cover.url }}" alt="" class="app-article__cover" />
+    {% endif %}
+    {% if article.excerpt %}
+      <p class="app-article__excerpt">{{ article.excerpt }}</p>
+    {% endif %}
+    {% if article.body %}
+      <div class="prose app-article__body">{{ article.body|safe }}</div>
+    {% else %}
+      <p class="app-empty">Nema unetog teksta.</p>
+    {% endif %}
+    <div class="cta-row">
+      <a class="btn btn--gold" href="{% url 'app_news_edit' article.pk %}">Izmeni</a>
+      {% if article.is_published %}
+        <a class="btn btn--outline" href="{{ article.get_absolute_url }}" target="_blank" rel="noopener">Pogledaj na sajtu</a>
+      {% endif %}
+    </div>
+  </article>
+{% endblock %}

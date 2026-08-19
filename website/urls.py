@@ -13,4 +13,5 @@ urlpatterns = [
     path('aktuelnosti/', views.news_list, name='news'),
     path('aktuelnosti/<slug:slug>/', views.news_detail, name='news_detail'),
     path('kontakt/', views.contact, name='contact'),
+    path('uslovi-koriscenja/', views.terms, name='terms'),
 ]

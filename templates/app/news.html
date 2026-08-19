@@ -1,0 +1,34 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <span class="eyebrow">Sajt</span>
+    <h1>Aktuelnosti</h1>
+    <p>Dodajte vest, sačuvajte nacrt ili objavite na sajtu.</p>
+  </header>
+
+  <div class="app-actions">
+    <a class="btn btn--gold" href="{% url 'app_news_create' %}">Nova vest</a>
+  </div>
+
+  {% if articles %}
+    <ul class="app-list app-list--cards">
+      {% for item in articles %}
+        <li>
+          <a href="{% url 'app_news_detail' item.pk %}" class="app-list__row{% if item.cover %} app-list__row--media{% endif %}">
+            {% if item.cover %}
+              <img src="{{ item.cover.url }}" alt="" class="app-list__thumb" />
+            {% endif %}
+            <span>
+              <strong>{{ item.title }}</strong>
+              <em>{% if item.is_published %}Objavljeno{% else %}Nacrt{% endif %}</em>
+            </span>
+            <time>{% if item.published_at %}{{ item.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</time>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="app-empty">Još nema aktuelnosti. Dodajte prvu vest.</p>
+  {% endif %}
+{% endblock %}

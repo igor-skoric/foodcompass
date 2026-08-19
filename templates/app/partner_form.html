@@ -1,0 +1,47 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <a class="app-back" href="{% if partner %}{% url 'app_partner_detail' partner.pk %}{% else %}{% url 'app_partners' %}{% endif %}"><span aria-hidden="true">←</span> {% if partner %}Nazad na pregled{% else %}Nazad na saradnju{% endif %}</a>
+    <span class="eyebrow">{% if is_create %}Novi unos{% else %}Izmena{% endif %}</span>
+    <h1>{% if is_create %}Novi unos{% else %}{{ partner.name }}{% endif %}</h1>
+  </header>
+
+  <form class="app-form" method="post" novalidate>
+    {% csrf_token %}
+    <label class="field">
+      <span>{{ form.name.label }}</span>
+      {{ form.name }}
+      {{ form.name.errors }}
+    </label>
+    <div class="app-form__row">
+      <label class="field">
+        <span>{{ form.recorded_on.label }}</span>
+        {{ form.recorded_on }}
+        {{ form.recorded_on.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.status.label }}</span>
+        {{ form.status }}
+        {{ form.status.errors }}
+      </label>
+    </div>
+    <label class="field">
+      <span>{{ form.amount.label }}</span>
+      {{ form.amount }}
+      {% if form.amount.help_text %}<small>{{ form.amount.help_text }}</small>{% endif %}
+      {{ form.amount.errors }}
+    </label>
+    <label class="field">
+      <span>{{ form.description.label }}</span>
+      {{ form.description }}
+      {{ form.description.errors }}
+    </label>
+    {% if form.non_field_errors %}
+      <p class="contact-form__error" role="alert">{{ form.non_field_errors|join:' ' }}</p>
+    {% endif %}
+    <div class="cta-row">
+      <button type="submit" class="btn btn--gold">{% if is_create %}Sačuvaj unos{% else %}Sačuvaj izmene{% endif %}</button>
+    </div>
+  </form>
+{% endblock %}

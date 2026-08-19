@@ -1,5 +1,8 @@
 {% load static %}
 <footer class="footer">
+  <div class="footer__photo" aria-hidden="true">
+    <img src="{% static 'images/food.jpg' %}" alt="" />
+  </div>
   <div class="container footer__grid">
     <div>
       {% include 'includes/logo.html' with size='md' variant='light' class_name='footer__logo' %}
@@ -32,6 +35,7 @@
   </div>
   <div class="container footer__bottom">
     <span>© {% now "Y" %} Food Compass</span>
+    <a href="{% url 'terms' %}">Uslovi korišćenja</a>
     <span>Sajt uradio <a href="https://www.itbranch.rs" target="_blank" rel="noreferrer">itbranch.rs</a></span>
   </div>
 </footer>

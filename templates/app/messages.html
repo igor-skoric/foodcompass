@@ -1,0 +1,27 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <span class="eyebrow">Kontakt forma</span>
+    <h1>Poruke</h1>
+    <p>Upiti sa stranice Kontakt.</p>
+  </header>
+
+  {% if contact_messages %}
+    <ul class="app-list app-list--cards">
+      {% for item in contact_messages %}
+        <li>
+          <a href="{% url 'app_message_detail' item.pk %}" class="app-list__row{% if not item.is_read %} is-unread{% endif %}">
+            <span>
+              <strong>{{ item.name }}</strong>
+              <em>{{ item.email }}{% if item.phone %} · {{ item.phone }}{% endif %}</em>
+            </span>
+            <time>{{ item.created_at|date:"d.m.Y. H:i" }}</time>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="app-empty">Još nema poruka.</p>
+  {% endif %}
+{% endblock %}

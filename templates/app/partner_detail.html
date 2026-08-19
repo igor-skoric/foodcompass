@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <a class="app-back" href="{% url 'app_partners' %}"><span aria-hidden="true">←</span> Nazad na saradnju</a>
+    <span class="eyebrow">Pregled</span>
+    <h1>{{ partner.name }}</h1>
+  </header>
+
+  <article class="app-message">
+    <dl>
+      <div>
+        <dt>Naziv saradnika</dt>
+        <dd>{{ partner.name }}</dd>
+      </div>
+      <div>
+        <dt>Datum</dt>
+        <dd>{{ partner.recorded_on|date:"d.m.Y." }}</dd>
+      </div>
+      <div>
+        <dt>Iznos</dt>
+        <dd>{{ partner.amount_display }} RSD</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd><span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span></dd>
+      </div>
+    </dl>
+    {% if partner.description %}
+      <p class="app-message__body">{{ partner.description|linebreaksbr }}</p>
+    {% else %}
+      <p class="app-empty">Nema unetog opisa.</p>
+    {% endif %}
+    <div class="cta-row">
+      <a class="btn btn--gold" href="{% url 'app_partner_edit' partner.pk %}">Izmeni</a>
+    </div>
+  </article>
+{% endblock %}

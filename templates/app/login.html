@@ -1,0 +1,51 @@
+{% load static %}
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon-32.png' %}" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0c3322" />
+    {% include 'includes/pwa.html' %}
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{{ seo.title|default:'Prijava | Food Compass' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/app.css' %}" />
+  </head>
+  <body class="app-body app-body--login">
+    <main class="app-login">
+      <div class="app-login__copy">
+        <a href="{% url 'home' %}" class="app-login__logo" aria-label="Food Compass početna">
+          {% include 'includes/logo.html' with size='sm' variant='dark' %}
+        </a>
+        <span class="eyebrow">Pristup</span>
+        <h1>Prijava</h1>
+        <p>Samo za vlasnika sajta.</p>
+        <form class="app-login__form" method="post" novalidate>
+          {% csrf_token %}
+          {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+          <label class="field">
+            <span>{{ form.username.label }}</span>
+            {{ form.username }}
+          </label>
+          <label class="field">
+            <span>{{ form.password.label }}</span>
+            {{ form.password }}
+          </label>
+          {% if form.non_field_errors or form.errors %}
+            <p class="contact-form__error" role="alert">{{ form.non_field_errors|join:' ' }}{% if not form.non_field_errors %}Proverite korisničko ime i lozinku.{% endif %}</p>
+          {% endif %}
+          <button type="submit" class="btn btn--gold">Prijavite se →</button>
+        </form>
+      </div>
+      <div class="app-login__mark" aria-hidden="true">
+        {% include 'includes/compass.svg' %}
+      </div>
+    </main>
+    <script src="{% static 'js/pwa.js' %}"></script>
+  </body>
+</html>

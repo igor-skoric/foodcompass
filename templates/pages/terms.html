@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load site_tags %}
+
+{% block content %}
+<section class="section legal-page">
+  <div class="container">
+    <header class="page-intro">
+      {% breadcrumbs %}
+      <span class="eyebrow">Pravne napomene</span>
+      <h1>{{ terms.title }}</h1>
+      <p>{{ terms.intro }}</p>
+    </header>
+
+    <div class="prose legal-page__body">
+      <p class="legal-page__updated">Poslednje ažuriranje: {{ terms.updated }}</p>
+      {% for section in terms.sections %}
+        <h2>{{ section.title }}</h2>
+        {% for paragraph in section.paragraphs %}
+          <p>{{ paragraph }}</p>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

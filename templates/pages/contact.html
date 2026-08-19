@@ -77,7 +77,9 @@
               <span>{{ form.message.label }}</span>
               {{ form.message }}
             </label>
-            {% if form.errors %}
+            {% if send_error %}
+              <p class="contact-form__error" role="alert">Poruka je sačuvana, ali slanje emaila trenutno nije uspelo. Pišite nam na {{ contact.email }}.</p>
+            {% elif form.errors %}
               <p class="contact-form__error" role="alert">Popunite ime, email i poruku.</p>
             {% endif %}
             <button type="submit" class="btn btn--gold">Pošaljite poruku →</button>

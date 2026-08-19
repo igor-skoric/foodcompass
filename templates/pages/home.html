@@ -52,7 +52,7 @@
 
 {% include 'includes/home_break.html' with variant='on-dark' %}
 
-<section class="section band-soft journey-home" data-journey>
+<section class="section journey-home home-section home-section--light" data-journey>
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
@@ -89,7 +89,7 @@
 
 {% include 'includes/home_break.html' %}
 
-<section class="section section--cream">
+<section class="section home-services home-section home-section--cream">
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
@@ -117,7 +117,7 @@
 
 {% include 'includes/home_break.html' %}
 
-<section class="section section--sage home-support">
+<section class="section home-support home-section home-section--dark">
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center home-support__intro">
@@ -149,9 +149,9 @@
   </div>
 </section>
 
-{% include 'includes/home_break.html' %}
+{% include 'includes/home_break.html' with variant='on-dark' %}
 
-<section class="section home-news section--mist">
+<section class="section home-news home-section home-section--light">
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
@@ -189,7 +189,8 @@
 
 {% include 'includes/home_break.html' %}
 
-<section class="section band">
+<section class="section home-finale home-section home-section--deep">
+  <span class="home-finale__compass" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
   <div class="container">
     <div class="reveal">
       <div class="experience">

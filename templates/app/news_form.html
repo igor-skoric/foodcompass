@@ -1,0 +1,62 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+  <header class="app-page__head">
+    <a class="app-back" href="{% if article %}{% url 'app_news_detail' article.pk %}{% else %}{% url 'app_news' %}{% endif %}"><span aria-hidden="true">←</span> {% if article %}Nazad na pregled{% else %}Nazad na aktuelnosti{% endif %}</a>
+    <span class="eyebrow">{% if is_create %}Nova vest{% else %}Izmena{% endif %}</span>
+    <h1>{% if is_create %}Nova vest{% else %}{{ article.title }}{% endif %}</h1>
+  </header>
+
+  <form class="app-form app-form--wide" method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    <label class="field">
+      <span>{{ form.title.label }}</span>
+      {{ form.title }}
+      {{ form.title.errors }}
+    </label>
+    <label class="field">
+      <span>{{ form.excerpt.label }}</span>
+      {{ form.excerpt }}
+      {% if form.excerpt.help_text %}<small>{{ form.excerpt.help_text }}</small>{% endif %}
+      {{ form.excerpt.errors }}
+    </label>
+    <div class="field">
+      <span>{{ form.cover.label }}</span>
+      {% if article.cover %}
+        <img src="{{ article.cover.url }}" alt="" class="app-form__preview" />
+      {% endif %}
+      {{ form.cover }}
+      {% if form.cover.help_text %}<small>{{ form.cover.help_text }}</small>{% endif %}
+      {{ form.cover.errors }}
+      {% if 'remove_cover' in form.fields %}
+        <label class="field field--check">
+          {{ form.remove_cover }}
+          <span>{{ form.remove_cover.label }}</span>
+        </label>
+      {% endif %}
+    </div>
+    <label class="field">
+      <span>{{ form.body.label }}</span>
+      {{ form.body }}
+      {{ form.body.errors }}
+    </label>
+    <label class="field field--check">
+      {{ form.is_published }}
+      <span>{{ form.is_published.label }}</span>
+    </label>
+    {% if form.is_published.help_text %}<small class="app-form__hint">{{ form.is_published.help_text }}</small>{% endif %}
+    {{ form.is_published.errors }}
+    {% if form.non_field_errors %}
+      <p class="contact-form__error" role="alert">{{ form.non_field_errors|join:' ' }}</p>
+    {% endif %}
+    <div class="cta-row">
+      <button type="submit" class="btn btn--gold">{% if is_create %}Sačuvaj vest{% else %}Sačuvaj izmene{% endif %}</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.0/tinymce.min.js"></script>
+  <script src="{% static 'admin/js/tinymce_init.js' %}"></script>
+{% endblock %}

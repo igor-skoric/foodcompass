@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <a class="app-back" href="{% url 'app_messages' %}"><span aria-hidden="true">←</span> Nazad na poruke</a>
+    <span class="eyebrow">Upit</span>
+    <h1>{{ message.name }}</h1>
+    <p>{{ message.created_at|date:"d.m.Y. H:i" }}</p>
+  </header>
+
+  <article class="app-message">
+    <dl>
+      <div>
+        <dt>Email</dt>
+        <dd><a href="mailto:{{ message.email }}">{{ message.email }}</a></dd>
+      </div>
+      {% if message.phone %}
+        <div>
+          <dt>Telefon</dt>
+          <dd><a href="tel:{{ message.phone }}">{{ message.phone }}</a></dd>
+        </div>
+      {% endif %}
+    </dl>
+    <p class="app-message__body">{{ message.message|linebreaksbr }}</p>
+    <div class="cta-row">
+      <a class="btn btn--gold" href="mailto:{{ message.email }}">Odgovori emailom</a>
+    </div>
+  </article>
+{% endblock %}

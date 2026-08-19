@@ -490,6 +490,10 @@ SEO_PAGES = {
         'title': 'Kontakt',
         'description': 'Kontaktirajte Food Compass — pišite na office@foodcompass.rs ili pozovite +381 63 7707 319.',
     },
+    'terms': {
+        'title': 'Uslovi korišćenja',
+        'description': 'Uslovi korišćenja sajta Food Compass — prava, obaveze i merodavno pravo.',
+    },
 }
 
 CRUMB_LABELS = {
@@ -501,6 +505,7 @@ CRUMB_LABELS = {
     'haccp-nadzor': 'Stručna podrška',
     'aktuelnosti': 'Aktuelnosti',
     'kontakt': 'Kontakt',
+    'uslovi-koriscenja': 'Uslovi korišćenja',
 }
 
 
@@ -532,3 +537,123 @@ def get_service_cards():
         'flagship': True,
     })
     return cards
+
+
+TERMS = {
+    'title': 'Uslovi korišćenja',
+    'updated': '18. avgust 2026.',
+    'intro': (
+        'Ovi uslovi uređuju korišćenje sajta foodcompass.rs. Korišćenjem sajta smatra se da ste ih '
+        'pročitali i prihvatili. Ako se sa njima ne slažete, molimo vas da sajt ne koristite.'
+    ),
+    'sections': [
+        {
+            'title': '1. Operater sajta',
+            'paragraphs': [
+                'Sajt foodcompass.rs (u daljem tekstu: „Sajt“) vodi Food Compass, stručni i konsultantski '
+                'koncept u oblasti bezbednosti hrane, sa sedištem u Republici Srbiji.',
+                'Kontakt: office@foodcompass.rs, telefon +381 63 7707 319.',
+            ],
+        },
+        {
+            'title': '2. Svrha sajta',
+            'paragraphs': [
+                'Sajt služi za predstavljanje delatnosti, usluga i stručnih tekstova Food Compass-a, '
+                'kao i za ostvarivanje kontakta sa zainteresovanim licima.',
+                'Sadržaj na Sajtu je informativnog karaktera. Ne predstavlja obavezujuću ponudu, pravni, '
+                'poreski ili regulatorni savet, niti zamenjuje ugovor o pružanju usluga.',
+            ],
+        },
+        {
+            'title': '3. Usluge',
+            'paragraphs': [
+                'Konkretne usluge (HACCP, deklarisanje, ISO i drugi standardi, gap analiza, digitalizacija, '
+                'stručne posete i slično) ugovaraju se posebno, pismenim putem, nakon dogovora o obimu, '
+                'rokovima i naknadi.',
+                'Objavljivanje opisa usluga na Sajtu ne stvara obavezu pružanja usluge niti prihvatanje '
+                'svakog zahteva.',
+            ],
+        },
+        {
+            'title': '4. Intelektualna svojina',
+            'paragraphs': [
+                'Tekstovi, fotografije, logotip, grafička rešenja, struktura i ostali sadržaj Sajta '
+                'zaštićeni su autorskim i srodnim pravima i pripadaju Food Compass-u ili davacima licence, '
+                'osim ako je drugačije navedeno.',
+                'Dozvoljeno je pregledanje i deljenje javnih stranica uz navođenje izvora. Zabranjeno je '
+                'kopiranje, prepravka, preprodaja ili korišćenje sadržaja u komercijalne svrhe bez prethodne '
+                'pisane saglasnosti.',
+            ],
+        },
+        {
+            'title': '5. Tačnost informacija i odgovornost',
+            'paragraphs': [
+                'Trudimo se da informacije na Sajtu budu tačne i ažurne, ali ne garantujemo potpunost, '
+                'tačnost ni podobnost sadržaja za konkretnu situaciju. Propisi i standardi se menjaju, '
+                'a svaki slučaj zahteva posebnu stručnu procenu.',
+                'Food Compass nije odgovoran za štetu nastalu korišćenjem ili nemogućnošću korišćenja Sajta, '
+                'uključujući prekid rada, greške u prikazu, viruse ili postupke trećih lica, osim u meri '
+                'u kojoj je odgovornost po zakonu neisključiva.',
+            ],
+        },
+        {
+            'title': '6. Korisničko ponašanje',
+            'paragraphs': [
+                'Obavezujete se da Sajt koristite u skladu sa zakonom i dobrim običajima. Zabranjeno je '
+                'narušavanje rada Sajta, slanje štetnog koda, neovlašćeni pristup, zloupotreba kontakt forme '
+                'i slanje lažnih ili uvredljivih sadržaja.',
+            ],
+        },
+        {
+            'title': '7. Kontakt forma i lični podaci',
+            'paragraphs': [
+                'Ako nam pošaljete upit, obrađujemo podatke koje navedete (ime, email, telefon, sadržaj '
+                'poruke) isključivo radi odgovora i, po potrebi, pripreme ponude. Podatke ne prodajemo '
+                'trećim licima.',
+                'Pravni osnov je preduzimanje koraka na vaš zahtev pre zaključenja ugovora, odnosno '
+                'legitimni interes da odgovorimo na upit. Podatke čuvamo onoliko koliko je potrebno za '
+                'tu svrhu, a zatim ih brišemo, osim ako zakon nalaže duže čuvanje.',
+                'Imate pravo na uvid, ispravku, brisanje i ograničenje obrade, kao i pravo prigovora. '
+                'Za zahteve pišite na office@foodcompass.rs. Poverenik za informacije od javnog značaja '
+                'i zaštitu podataka o ličnosti je nadležno telo u Republici Srbiji.',
+            ],
+        },
+        {
+            'title': '8. Kolačići i analitika',
+            'paragraphs': [
+                'Sajt može da koristi tehnički neophodne kolačiće radi rada stranice, jezika i bezbednosti. '
+                'Ako se naknadno uvedu analitički ili marketinški kolačići, o tome ćete biti obavešteni '
+                'i, gde je to propisano, zatražićemo saglasnost.',
+            ],
+        },
+        {
+            'title': '9. Linkovi ka drugim sajtovima',
+            'paragraphs': [
+                'Sajt može sadržati linkove ka LinkedIn-u i drugim spoljnim stranicama. Food Compass ne '
+                'kontroliše njihov sadržaj ni politiku privatnosti i nije odgovoran za štetu nastalu '
+                'njihovim korišćenjem.',
+            ],
+        },
+        {
+            'title': '10. Izmene uslova',
+            'paragraphs': [
+                'Zadržavamo pravo da ove uslove izmenimo. Izmene stupaju na snagu objavljivanjem na ovoj '
+                'stranici, uz navođenje datuma ažuriranja. Nastavak korišćenja Sajta nakon izmene smatra '
+                'se prihvatanjem novih uslova.',
+            ],
+        },
+        {
+            'title': '11. Merodavno pravo',
+            'paragraphs': [
+                'Na ove uslove i korišćenje Sajta primenjuje se pravo Republike Srbije. Za sporove su '
+                'nadležni sudovi u Republici Srbiji, u skladu sa važećim propisima.',
+            ],
+        },
+        {
+            'title': '12. Kontakt',
+            'paragraphs': [
+                'Za pitanja u vezi sa ovim uslovima pišite na office@foodcompass.rs ili koristite stranicu Kontakt.',
+            ],
+        },
+    ],
+}

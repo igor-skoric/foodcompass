@@ -148,7 +148,33 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_NAME = 'Food Compass'
 SITE_URL = os.environ.get('SITE_URL', 'https://foodcompass.rs')
-SITE_EMAIL = 'office@foodcompass.rs'
+SITE_EMAIL = os.environ.get('SITE_EMAIL', 'office@foodcompass.rs').strip() or 'office@foodcompass.rs'
 SITE_PHONE = '+381637707319'
 SITE_PHONE_DISPLAY = '+381 63 7707 319'
 SITE_LINKEDIN = 'https://www.linkedin.com/in/sandra-djukanovic-koji%C4%87-599277197/'
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', '').strip()
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '').strip()
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_SSL = env_bool('EMAIL_USE_SSL', default=False)
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', default=not EMAIL_USE_SSL)
+EMAIL_TIMEOUT = int(os.environ.get('EMAIL_TIMEOUT', '20'))
+DEFAULT_FROM_EMAIL = (
+    os.environ.get('EMAIL_FROM', '').strip()
+    or EMAIL_HOST_USER
+    or SITE_EMAIL
+)
+CONTACT_EMAIL = env_list('CONTACT_EMAIL', default=[SITE_EMAIL]) or [SITE_EMAIL]
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', '').strip()
+if not EMAIL_BACKEND:
+    if EMAIL_HOST:
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    elif DEBUG:
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    else:
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+LOGIN_URL = '/prijava/'
+LOGIN_REDIRECT_URL = '/app/'
+LOGOUT_REDIRECT_URL = '/'

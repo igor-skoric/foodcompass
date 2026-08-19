@@ -1,0 +1,72 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <header class="app-page__head">
+    <span class="eyebrow">Pregled</span>
+    <h1>Dobro došli</h1>
+    <p>Poruke sa sajta, saradnja i aktuelnosti.</p>
+  </header>
+
+  <section class="app-stats">
+    <a href="{% url 'app_messages' %}" class="app-stat">
+      <span class="app-stat__label">Nove poruke</span>
+      <strong>{{ app_unread }}</strong>
+    </a>
+    <a href="{% url 'app_partners' %}" class="app-stat">
+      <span class="app-stat__label">Saradnja</span>
+      <strong>{{ partner_count }}</strong>
+    </a>
+    <a href="{% url 'app_news' %}" class="app-stat">
+      <span class="app-stat__label">Objavljene vesti</span>
+      <strong>{{ article_count }}</strong>
+    </a>
+  </section>
+
+  <section class="app-panel">
+    <div class="app-panel__head">
+      <h2>Poslednje poruke</h2>
+      <a href="{% url 'app_messages' %}">Sve poruke →</a>
+    </div>
+    {% if recent_messages %}
+      <ul class="app-list">
+        {% for item in recent_messages %}
+          <li>
+            <a href="{% url 'app_message_detail' item.pk %}" class="app-list__row{% if not item.is_read %} is-unread{% endif %}">
+              <span>
+                <strong>{{ item.name }}</strong>
+                <em>{{ item.email }}</em>
+              </span>
+              <time>{{ item.created_at|date:"d.m.Y. H:i" }}</time>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="app-empty">Još nema poruka sa kontakt forme.</p>
+    {% endif %}
+  </section>
+
+  <section class="app-panel" style="margin-top: 1.25rem">
+    <div class="app-panel__head">
+      <h2>Aktuelnosti</h2>
+      <a href="{% url 'app_news' %}">Sve vesti →</a>
+    </div>
+    {% if recent_articles %}
+      <ul class="app-list">
+        {% for item in recent_articles %}
+          <li>
+            <a href="{% url 'app_news_detail' item.pk %}" class="app-list__row">
+              <span>
+                <strong>{{ item.title }}</strong>
+                <em>{% if item.is_published %}Objavljeno{% else %}Nacrt{% endif %}</em>
+              </span>
+              <time>{% if item.published_at %}{{ item.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</time>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="app-empty">Još nema aktuelnosti.</p>
+    {% endif %}
+  </section>
+{% endblock %}
