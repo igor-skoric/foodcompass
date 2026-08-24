@@ -8,6 +8,9 @@ from .models import Article
 class StaticSitemap(Sitemap):
     changefreq = 'weekly'
     protocol = 'https'
+    i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
         return [
@@ -36,6 +39,9 @@ class ServiceSitemap(Sitemap):
     changefreq = 'monthly'
     priority = 0.85
     protocol = 'https'
+    i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
         return SERVICES
@@ -48,6 +54,10 @@ class NewsSitemap(Sitemap):
     changefreq = 'weekly'
     priority = 0.6
     protocol = 'https'
+
+    i18n = True
+    alternates = True
+    x_default = True
 
     def items(self):
         return Article.objects.filter(is_published=True)

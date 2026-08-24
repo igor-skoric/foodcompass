@@ -16,22 +16,27 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = ('title', 'is_published', 'published_at', 'cover_preview')
     list_filter = ('is_published',)
     list_editable = ('is_published',)
-    search_fields = ('title', 'excerpt', 'body')
+    search_fields = (
+        'title', 'excerpt', 'body',
+        'title_en', 'excerpt_en', 'body_en',
+        'title_ru', 'excerpt_ru', 'body_ru',
+    )
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'published_at'
     inlines = [ArticleImageInline]
     fieldsets = (
-        ('Vest', {
-            'fields': ('title', 'excerpt', 'cover', 'body'),
-            'description': 'Naslov, kratak opis i slika idu na listu Aktuelnosti. Tekst se prikazuje na stranici vesti.',
+        ('Srpski', {
+            'fields': ('title', 'excerpt', 'body'),
+            'description': 'Obavezno. Ako prevod nije unet, na tom jeziku se prikazuje srpski tekst.',
         }),
-        ('Objava', {
-            'fields': ('is_published', 'published_at', 'slug'),
+        ('English', {
+            'fields': ('title_en', 'excerpt_en', 'body_en'),
         }),
-        ('Header slika', {
-            'classes': ('collapse',),
-            'fields': ('header_image',),
-            'description': 'Opciono. Ako je prazno, u headeru vesti koristi se slika iznad.',
+        ('Русский', {
+            'fields': ('title_ru', 'excerpt_ru', 'body_ru'),
+        }),
+        ('Slika i objava', {
+            'fields': ('cover', 'is_published', 'published_at', 'slug', 'header_image'),
         }),
     )
 

@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   tinymce.init({
-    selector: '#id_body',
-    height: 560,
+    selector: '#id_body, #id_body_en, #id_body_ru',
+    height: 420,
     menubar: false,
     branding: false,
     plugins: 'lists link image table autolink',
@@ -41,5 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     },
     content_style: 'body{font-family:Georgia,serif;font-size:16px;line-height:1.65}',
+  });
+
+  document.querySelectorAll('form').forEach(function (form) {
+    form.addEventListener('submit', function () {
+      tinymce.triggerSave();
+    });
   });
 });

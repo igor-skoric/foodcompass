@@ -9,21 +9,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0c3322" />
     {% include 'includes/pwa.html' %}
-    <title>{{ seo.title|default:'Food Compass | HACCP, deklarisanje i digitalizacija' }}</title>
-    <meta name="description" content="{{ seo.description|default:'HACCP sistemi, digitalizacija HACCP-a i deklarisanje. Food Compass — stručna podrška u bezbednosti hrane.' }}" />
+    <title>{{ seo.title|default:t.seo_title_default }}</title>
+    <meta name="description" content="{{ seo.description|default:t.seo_desc_default }}" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="author" content="Food Compass" />
     <link rel="canonical" href="{{ canonical_url }}" />
-    <link rel="alternate" hreflang="sr" href="{{ canonical_url }}" />
-    <link rel="alternate" hreflang="x-default" href="{{ canonical_url }}" />
+    {% for code, href in hreflang_urls.items %}
+    <link rel="alternate" hreflang="{{ code }}" href="{{ href }}" />
+    {% endfor %}
+    <link rel="alternate" hreflang="x-default" href="{{ hreflang_urls.sr }}" />
     <meta property="og:type" content="{{ seo.og_type|default:'website' }}" />
     <meta property="og:site_name" content="Food Compass" />
-    <meta property="og:locale" content="sr_RS" />
+    <meta property="og:locale" content="{{ og_locale }}" />
+    {% for code, href in hreflang_urls.items %}
+      {% if code != current_language %}<meta property="og:locale:alternate" content="{% if code == 'en' %}en_US{% elif code == 'ru' %}ru_RU{% else %}sr_RS{% endif %}" />{% endif %}
+    {% endfor %}
     <meta property="og:title" content="{{ seo.title|default:'Food Compass' }}" />
     <meta property="og:description" content="{{ seo.description|default:'' }}" />
     <meta property="og:url" content="{{ canonical_url }}" />
     <meta property="og:image" content="{{ seo.image }}" />
-    <meta property="og:image:alt" content="{{ seo.image_alt|default:'Food Compass — HACCP i digitalizacija HACCP sistema' }}" />
+    <meta property="og:image:alt" content="{{ seo.image_alt|default:t.og_image_alt }}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -32,7 +37,7 @@
     <meta name="twitter:title" content="{{ seo.title|default:'Food Compass' }}" />
     <meta name="twitter:description" content="{{ seo.description|default:'' }}" />
     <meta name="twitter:image" content="{{ seo.image }}" />
-    <meta name="twitter:image:alt" content="{{ seo.image_alt|default:'Food Compass — HACCP i digitalizacija HACCP sistema' }}" />
+    <meta name="twitter:image:alt" content="{{ seo.image_alt|default:t.og_image_alt }}" />
     {% include 'includes/seo_jsonld.html' %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,7 +46,7 @@
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Preskoči na sadržaj</a>
+    <a class="skip-link" href="#main-content">{{ t.skip_link }}</a>
     <div class="site{% if is_home %} site--home{% endif %}">
       {% if is_home %}{% include 'includes/home_loader.html' %}{% endif %}
       {% include 'includes/header.html' %}
@@ -49,7 +54,7 @@
         {% block content %}{% endblock %}
       </main>
       {% include 'includes/footer.html' %}
-      <button type="button" class="back-to-top" aria-label="Nazad na vrh">
+      <button type="button" class="back-to-top" aria-label="{{ t.back_to_top }}">
         <span class="back-to-top__rose">{% include 'includes/compass.svg' %}</span>
       </button>
     </div>

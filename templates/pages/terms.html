@@ -6,13 +6,13 @@
   <div class="container">
     <header class="page-intro">
       {% breadcrumbs %}
-      <span class="eyebrow">Pravne napomene</span>
+      <span class="eyebrow">{{ terms.eyebrow }}</span>
       <h1>{{ terms.title }}</h1>
       <p>{{ terms.intro }}</p>
     </header>
 
     <div class="prose legal-page__body">
-      <p class="legal-page__updated">Poslednje ažuriranje: {{ terms.updated }}</p>
+      <p class="legal-page__updated">{{ terms.updated_label }} {{ terms.updated }}</p>
       {% for section in terms.sections %}
         <h2>{{ section.title }}</h2>
         {% for paragraph in section.paragraphs %}

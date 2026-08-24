@@ -6,6 +6,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
 from website import app_views, views
+from website.i18n import set_language
 from website.sitemaps import NewsSitemap, ServiceSitemap, StaticSitemap
 
 admin.site.site_header = 'Food Compass administracija'
@@ -19,7 +20,7 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),
+    path('i18n/setlang/', set_language, name='set_language'),
     path('media-upload/', views.upload_image, name='upload_image'),
     path('sw.js', views.service_worker, name='service_worker'),
     path('robots.txt', views.robots_txt, name='robots_txt'),

@@ -28,12 +28,12 @@
   <div class="hero__veil"></div>
   <div class="hero__shell">
     <div class="hero__content">
-      <p class="hero__eyebrow">Deklarisanje prehrambenih proizvoda</p>
+      <p class="hero__eyebrow">{{ home.eyebrow }}</p>
       <h1 class="hero__title">
-        <span class="hero__title-main">Bezbednost hrane.</span>
-        <span class="hero__title-sub">Od ideje do police.</span>
+        <span class="hero__title-main">{{ home.title_main }}</span>
+        <span class="hero__title-sub">{{ home.title_sub }}</span>
       </h1>
-      <p class="hero__lead">Uspostavljamo sisteme bezbednosti hrane, pripremamo vas za audit i sertifikaciju, izrađujemo deklaracije i digitalizujemo HACCP i druge standarde.</p>
+      <p class="hero__lead">{{ home.lead }}</p>
       <p class="hero__standards">
         <span>HACCP</span>
         <span>IFS</span>
@@ -43,8 +43,8 @@
         <span>ISO 22000</span>
       </p>
       <div class="hero__actions">
-        <a href="{% url 'contact' %}" class="btn btn--gold">Zakažite konsultacije →</a>
-        <a href="{% url 'services' %}" class="btn btn--outline-gold">Naše usluge</a>
+        <a href="{% url 'contact' %}" class="btn btn--gold">{{ home.cta_consult }}</a>
+        <a href="{% url 'services' %}" class="btn btn--outline-gold">{{ home.cta_services }}</a>
       </div>
     </div>
   </div>
@@ -56,9 +56,9 @@
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
-        <span class="eyebrow">Putovanje proizvoda</span>
-        <h2 class="section__title">Od ideje do police</h2>
-        <p class="section__lead">Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda.</p>
+        <span class="eyebrow">{{ home.journey_eyebrow }}</span>
+        <h2 class="section__title">{{ home.journey_title }}</h2>
+        <p class="section__lead">{{ home.journey_lead }}</p>
       </div>
     </div>
     <div class="journey-path" role="list">
@@ -82,7 +82,7 @@
       {% endfor %}
     </div>
     <div class="cta-row cta-row--center journey-home__cta">
-      <a href="{% url 'journey' %}" class="btn btn--gold">Saznajte više →</a>
+      <a href="{% url 'journey' %}" class="btn btn--gold">{{ home.journey_more }}</a>
     </div>
   </div>
 </section>
@@ -93,9 +93,9 @@
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
-        <span class="eyebrow">Naše usluge</span>
-        <h2 class="section__title">Stručna podrška u bezbednosti hrane</h2>
-        <p class="section__lead">Znanje, iskustvo i savremena rešenja — sve na jednom mestu.</p>
+        <span class="eyebrow">{{ home.services_eyebrow }}</span>
+        <h2 class="section__title">{{ home.services_title }}</h2>
+        <p class="section__lead">{{ home.services_lead }}</p>
       </div>
     </div>
     <div class="service-rail">
@@ -107,7 +107,7 @@
               <h3>{{ service.title }}</h3>
               <p>{{ service.short }}</p>
             </div>
-            <span class="service-rail__more">Prikaži →</span>
+            <span class="service-rail__more">{{ home.service_more }}</span>
           </a>
         </div>
       {% endfor %}
@@ -121,9 +121,9 @@
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center home-support__intro">
-        <span class="eyebrow">Stručna podrška</span>
-        <h2 class="section__title">Nudimo vam mogućnost<br>izbora</h2>
-        <p class="section__lead">Redovna ili vanredna stručna poseta — prilagođena vašim potrebama.</p>
+        <span class="eyebrow">{{ home.support_eyebrow }}</span>
+        <h2 class="section__title">{{ home.support_title_html|safe }}</h2>
+        <p class="section__lead">{{ home.support_lead }}</p>
       </div>
     </div>
     <div class="home-support__grid">
@@ -142,7 +142,7 @@
               {% endfor %}
             </ul>
           {% endif %}
-          <span class="home-support__cta">Saznajte više <span aria-hidden="true">→</span></span>
+          <span class="home-support__cta">{{ home.support_more }} <span aria-hidden="true">→</span></span>
         </a>
       {% endfor %}
     </div>
@@ -155,9 +155,9 @@
   <div class="container">
     <div class="reveal">
       <div class="section__head section__head--center">
-        <span class="eyebrow">Aktuelnosti</span>
-        <h2 class="section__title">Iz stručne prakse</h2>
-        <p class="section__lead">Tekstovi o bezbednosti hrane, standardima i putu od ideje do police.</p>
+        <span class="eyebrow">{{ home.news_eyebrow }}</span>
+        <h2 class="section__title">{{ home.news_title }}</h2>
+        <p class="section__lead">{{ home.news_lead }}</p>
       </div>
     </div>
     {% if latest_news %}
@@ -171,18 +171,18 @@
             {% endif %}
             <div class="news-card__body">
               {% if article.published_at %}<time>{{ article.published_at|date:"d.m.Y." }}</time>{% endif %}
-              <h3>{{ article.title }}</h3>
-              {% if article.excerpt %}<p>{{ article.excerpt|truncatechars:140 }}</p>{% endif %}
-              <span class="news-card__more">Pročitajte →</span>
+              <h3>{{ article.display_title }}</h3>
+              {% if article.display_excerpt %}<p>{{ article.display_excerpt|truncatechars:140 }}</p>{% endif %}
+              <span class="news-card__more">{{ home.news_more }}</span>
             </div>
           </a>
         {% endfor %}
       </div>
     {% else %}
-      <p class="section__lead home-news__empty">Uskoro više tekstova.</p>
+      <p class="section__lead home-news__empty">{{ home.news_empty }}</p>
     {% endif %}
     <div class="cta-row cta-row--center">
-      <a href="{% url 'news' %}" class="btn btn--gold">Sve aktuelnosti →</a>
+      <a href="{% url 'news' %}" class="btn btn--gold">{{ home.news_all }}</a>
     </div>
   </div>
 </section>
@@ -195,13 +195,13 @@
     <div class="reveal">
       <div class="experience">
         <div>
-          <span class="eyebrow" style="color: var(--gold-300)">Naš cilj</span>
-          <p class="experience__quote">Da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.</p>
+          <span class="eyebrow" style="color: var(--gold-300)">{{ home.goal_eyebrow }}</span>
+          <p class="experience__quote">{{ home.goal_quote }}</p>
         </div>
         <div class="experience__aside">
-          <p>Vi imate ideju. Mi vam pokazujemo put.</p>
+          <p>{{ home.goal_aside }}</p>
           <div class="cta-row">
-            <a href="{% url 'contact' %}" class="btn btn--light">Zakažite sastanak</a>
+            <a href="{% url 'contact' %}" class="btn btn--light">{{ home.goal_cta }}</a>
           </div>
         </div>
       </div>

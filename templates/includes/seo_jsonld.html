@@ -7,7 +7,7 @@
   "url": "{{ site_url }}",
   "logo": "{{ site_url }}{% static 'icons/icon-512.png' %}",
   "image": "{{ seo.image|default:site_url }}",
-  "description": "Stručna podrška u bezbednosti hrane: HACCP, digitalizacija HACCP-a, deklarisanje i priprema za audit.",
+  "description": "{{ t.jsonld_description }}",
   "email": "{{ contact_info.email }}",
   "telephone": "{{ contact_info.phone }}",
   "areaServed": "RS",
@@ -20,7 +20,7 @@
   "@type": "WebSite",
   "name": "Food Compass",
   "url": "{{ site_url }}",
-  "inLanguage": "sr"
+  "inLanguage": "{{ current_language }}"
 }
 </script>
 {% if seo.og_type == 'article' %}

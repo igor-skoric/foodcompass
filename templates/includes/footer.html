@@ -6,22 +6,18 @@
   <div class="container footer__grid">
     <div>
       {% include 'includes/logo.html' with size='md' variant='light' class_name='footer__logo' %}
-      <p>Stručna podrška u upravljanju bezbednošću hrane kroz znanje, iskustvo i savremena rešenja.</p>
+      <p>{{ t.footer_blurb }}</p>
     </div>
     <div>
-      <h4>Navigacija</h4>
+      <h4>{{ t.footer_nav }}</h4>
       <div class="footer__links">
-        <a href="{% url 'about' %}">O nama</a>
-        <a href="{% url 'about_me' %}">O meni</a>
-        <a href="{% url 'services' %}">Naše usluge</a>
-        <a href="{% url 'journey' %}">Od ideje do police</a>
-        <a href="{% url 'support' %}">Stručna podrška</a>
-        <a href="{% url 'news' %}">Aktuelnosti</a>
-        <a href="{% url 'contact' %}">Kontakt</a>
+        {% for item in nav_items %}
+          <a href="{% url item.url_name %}">{{ item.label }}</a>
+        {% endfor %}
       </div>
     </div>
     <div>
-      <h4>Usluge</h4>
+      <h4>{{ t.footer_services }}</h4>
       <div class="footer__links">
         {% for service in all_services %}
           <a href="{% url 'service_detail' slug=service.slug %}">{{ service.title }}</a>
@@ -35,7 +31,7 @@
   </div>
   <div class="container footer__bottom">
     <span>© {% now "Y" %} Food Compass</span>
-    <a href="{% url 'terms' %}">Uslovi korišćenja</a>
-    <span>Sajt uradio <a href="https://www.itbranch.rs" target="_blank" rel="noreferrer">itbranch.rs</a></span>
+    <a href="{% url 'terms' %}">{{ t.footer_terms }}</a>
+    <span>{{ t.footer_credit }} <a href="https://www.itbranch.rs" target="_blank" rel="noreferrer">itbranch.rs</a></span>
   </div>
 </footer>

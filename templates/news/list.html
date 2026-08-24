@@ -6,9 +6,9 @@
   <div class="container">
     <header class="page-intro page-intro--compact">
       {% breadcrumbs %}
-      <span class="eyebrow">Aktuelnosti</span>
-      <h1>Iz stručne prakse</h1>
-      <p>Saveti, propisi i praksa u oblasti bezbednosti hrane.</p>
+      <span class="eyebrow">{{ news_page.eyebrow }}</span>
+      <h1>{{ news_page.title }}</h1>
+      <p>{{ news_page.lead }}</p>
     </header>
 
     {% if articles %}
@@ -22,23 +22,23 @@
             {% endif %}
             <div class="news-card__body">
               {% if article.published_at %}<time>{{ article.published_at|date:"d.m.Y." }}</time>{% endif %}
-              <h3>{{ article.title }}</h3>
-              {% if article.excerpt %}<p>{{ article.excerpt|truncatechars:140 }}</p>{% endif %}
-              <span class="news-card__more">Pročitajte →</span>
+              <h3>{{ article.display_title }}</h3>
+              {% if article.display_excerpt %}<p>{{ article.display_excerpt|truncatechars:140 }}</p>{% endif %}
+              <span class="news-card__more">{{ news_page.read_more }}</span>
             </div>
           </a>
         {% endfor %}
       </div>
     {% else %}
-      <p class="section__lead">Uskoro više tekstova.</p>
+      <p class="section__lead">{{ news_page.empty }}</p>
     {% endif %}
 
     {% if page_obj.paginator.num_pages > 1 %}
-      <nav class="pagination" aria-label="Stranice aktuelnosti">
+      <nav class="pagination" aria-label="{{ news_page.pagination }}">
         {% if page_obj.has_previous %}
-          <a class="pagination__nav" href="?page={{ page_obj.previous_page_number }}">← Prethodna</a>
+          <a class="pagination__nav" href="?page={{ page_obj.previous_page_number }}">{{ news_page.prev }}</a>
         {% else %}
-          <span class="pagination__nav is-disabled">← Prethodna</span>
+          <span class="pagination__nav is-disabled">{{ news_page.prev }}</span>
         {% endif %}
         <ol class="pagination__pages">
           {% for num in page_numbers %}
@@ -54,9 +54,9 @@
           {% endfor %}
         </ol>
         {% if page_obj.has_next %}
-          <a class="pagination__nav" href="?page={{ page_obj.next_page_number }}">Sledeća →</a>
+          <a class="pagination__nav" href="?page={{ page_obj.next_page_number }}">{{ news_page.next }}</a>
         {% else %}
-          <span class="pagination__nav is-disabled">Sledeća →</span>
+          <span class="pagination__nav is-disabled">{{ news_page.next }}</span>
         {% endif %}
       </nav>
     {% endif %}

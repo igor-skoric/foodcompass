@@ -11,26 +11,14 @@ from django.contrib.staticfiles import finders
 from django.core.files.storage import default_storage
 from django.core.mail import BadHeaderError
 from django.core.paginator import Paginator
-from django.db.models import F
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 from smtplib import SMTPException
 
-from .content import (
-    ABOUT,
-    ABOUT_ME,
-    CONTACT,
-    JOURNEY,
-    SEO_PAGES,
-    SERVICE_SEO,
-    SERVICES,
-    SUPPORT,
-    TERMS,
-    get_service,
-    get_service_cards,
-)
+from .content import CONTACT
+from .copy_loader import get_service, get_service_cards, published_articles, site_copy
 from .forms import ContactForm
 from .mail import send_contact_message
 from .models import Article
@@ -107,7 +95,8 @@ def get_hero_slides():
 
 
 def _seo(key, extra=None):
-    data = dict(SEO_PAGES.get(key, SEO_PAGES['home']))
+    pages = site_copy().SEO_PAGES
+    data = dict(pages.get(key, pages['home']))
     if extra:
         data.update(extra)
     published = data.get('published')
@@ -124,15 +113,14 @@ def _seo(key, extra=None):
 
 
 def home(request):
-    latest = (
-        Article.objects.filter(is_published=True)
-        .order_by(F('published_at').desc(nulls_last=True), '-created_at')[:3]
-    )
+    copy = site_copy()
+    latest = published_articles()[:3]
     return render(request, 'pages/home.html', {
         'is_home': True,
-        'services': SERVICES,
-        'journey': JOURNEY,
-        'support': SUPPORT,
+        'home': copy.HOME,
+        'services': copy.SERVICES,
+        'journey': copy.JOURNEY,
+        'support': copy.SUPPORT,
         'latest_news': latest,
         'hero_slides': get_hero_slides(),
         'seo': _seo('home'),
@@ -156,40 +144,45 @@ def _about_photo():
 
 def about(request):
     return render(request, 'pages/about.html', {
-        'about': ABOUT,
+        'about': site_copy().ABOUT,
         'seo': _seo('about'),
     })
 
 
 def about_me(request):
     return render(request, 'pages/about_me.html', {
-        'about_me': ABOUT_ME,
+        'about_me': site_copy().ABOUT_ME,
         'about_photo': _about_photo(),
         'seo': _seo('about_me'),
     })
 
 
 def services(request):
+    copy = site_copy()
     return render(request, 'pages/services.html', {
         'service_cards': get_service_cards(),
+        'services_page': copy.SERVICES_PAGE,
         'seo': _seo('services'),
     })
 
 
 def service_detail(request, slug):
+    copy = site_copy()
     service = get_service(slug)
     if not service:
         return redirect('services')
-    meta = SERVICE_SEO.get(slug, {})
+    meta = copy.SERVICE_SEO.get(slug, {})
+    ui = copy.SERVICE_PAGE
     return render(request, 'pages/service_detail.html', {
         'service': service,
+        'service_page': ui,
         'seo': _seo('services', {
             'title': service['title'],
             'description': meta.get('description') or service.get('intro') or service['short'],
         }),
         'hero': {
             'image': service.get('hero', 'services'),
-            'eyebrow': 'Naše usluge',
+            'eyebrow': ui['eyebrow'],
             'title': service['title'],
             'subtitle': service.get('short') if service.get('short') and service['short'] != service.get('intro') else '',
             'lead': service.get('intro', ''),
@@ -198,35 +191,36 @@ def service_detail(request, slug):
 
 
 def journey(request):
+    copy = site_copy()
+    page = copy.JOURNEY_PAGE
     return render(request, 'pages/journey.html', {
-        'journey': JOURNEY,
+        'journey': copy.JOURNEY,
+        'journey_page': page,
         'seo': _seo('journey'),
         'hero': {
             'image': 'journey',
-            'eyebrow': 'Od ideje do police',
-            'title': 'Od ideje do police',
-            'lead': 'Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda.',
+            'eyebrow': page['hero_eyebrow'],
+            'title': page['hero_title'],
+            'lead': page['hero_lead'],
         },
     })
 
 
 def support(request):
+    copy = site_copy()
     return render(request, 'pages/support.html', {
-        'support': SUPPORT,
+        'support': copy.SUPPORT,
         'seo': _seo('support'),
         'hero': {
             'image': 'supervision',
-            'eyebrow': 'Stručna podrška',
-            'title': SUPPORT['title'],
+            'eyebrow': copy.SUPPORT['eyebrow'],
+            'title': copy.SUPPORT['title'],
         },
     })
 
 
 def news_list(request):
-    articles = (
-        Article.objects.filter(is_published=True)
-        .order_by(F('published_at').desc(nulls_last=True), '-created_at')
-    )
+    articles = published_articles()
     paginator = Paginator(articles, 9)
     page_obj = paginator.get_page(request.GET.get('page'))
     page_numbers = page_obj.paginator.get_elided_page_range(
@@ -236,6 +230,7 @@ def news_list(request):
         'articles': page_obj,
         'page_obj': page_obj,
         'page_numbers': page_numbers,
+        'news_page': site_copy().NEWS_PAGE,
         'seo': _seo('news'),
     })
 
@@ -247,11 +242,13 @@ def news_detail(request, slug):
         is_published=True,
     )
     cover = article.header_image or article.cover
+    news_page = site_copy().NEWS_PAGE
     return render(request, 'news/detail.html', {
         'article': article,
+        'news_page': news_page,
         'seo': page_seo(
-            article.title,
-            article.excerpt or article.title,
+            article.display_title,
+            article.display_excerpt or article.display_title,
             image=cover.url if cover else None,
             og_type='article',
             published=article.published_at,
@@ -259,9 +256,9 @@ def news_detail(request, slug):
         'hero': {
             'image': 'services',
             'cover': cover.url if cover else '',
-            'eyebrow': 'Aktuelnosti',
-            'title': article.title,
-            'lead': article.excerpt or '',
+            'eyebrow': news_page['eyebrow'],
+            'title': article.display_title,
+            'lead': article.display_excerpt or '',
         },
     })
 
@@ -282,18 +279,20 @@ def contact(request):
                 send_error = True
     else:
         form = ContactForm()
+    copy = site_copy()
     return render(request, 'pages/contact.html', {
         'form': form,
         'sent': sent,
         'send_error': send_error,
         'contact': CONTACT,
+        'contact_page': copy.CONTACT_PAGE,
         'seo': _seo('contact'),
     })
 
 
 def terms(request):
     return render(request, 'pages/terms.html', {
-        'terms': TERMS,
+        'terms': site_copy().TERMS,
         'seo': _seo('terms'),
     })
 

@@ -10,20 +10,71 @@
 
   <form class="app-form app-form--wide" method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
-    <label class="field">
-      <span>{{ form.title.label }}</span>
-      {{ form.title }}
-      {{ form.title.errors }}
-    </label>
-    <label class="field">
-      <span>{{ form.excerpt.label }}</span>
-      {{ form.excerpt }}
-      {% if form.excerpt.help_text %}<small>{{ form.excerpt.help_text }}</small>{% endif %}
-      {{ form.excerpt.errors }}
-    </label>
+
+    <fieldset class="app-form__lang">
+      <legend>Srpski</legend>
+      <p class="app-form__hint">Obavezno. Ako prevod nije unet, na tom jeziku se prikazuje ovaj tekst.</p>
+      <label class="field">
+        <span>{{ form.title.label }}</span>
+        {{ form.title }}
+        {{ form.title.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.excerpt.label }}</span>
+        {{ form.excerpt }}
+        {% if form.excerpt.help_text %}<small>{{ form.excerpt.help_text }}</small>{% endif %}
+        {{ form.excerpt.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.body.label }}</span>
+        {{ form.body }}
+        {{ form.body.errors }}
+      </label>
+    </fieldset>
+
+    <fieldset class="app-form__lang">
+      <legend>English</legend>
+      <label class="field">
+        <span>{{ form.title_en.label }}</span>
+        {{ form.title_en }}
+        {% if form.title_en.help_text %}<small>{{ form.title_en.help_text }}</small>{% endif %}
+        {{ form.title_en.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.excerpt_en.label }}</span>
+        {{ form.excerpt_en }}
+        {{ form.excerpt_en.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.body_en.label }}</span>
+        {{ form.body_en }}
+        {{ form.body_en.errors }}
+      </label>
+    </fieldset>
+
+    <fieldset class="app-form__lang">
+      <legend>Русский</legend>
+      <label class="field">
+        <span>{{ form.title_ru.label }}</span>
+        {{ form.title_ru }}
+        {% if form.title_ru.help_text %}<small>{{ form.title_ru.help_text }}</small>{% endif %}
+        {{ form.title_ru.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.excerpt_ru.label }}</span>
+        {{ form.excerpt_ru }}
+        {{ form.excerpt_ru.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.body_ru.label }}</span>
+        {{ form.body_ru }}
+        {{ form.body_ru.errors }}
+      </label>
+    </fieldset>
+
     <div class="field">
       <span>{{ form.cover.label }}</span>
-      {% if article.cover %}
+      {% if article and article.cover %}
         <img src="{{ article.cover.url }}" alt="" class="app-form__preview" />
       {% endif %}
       {{ form.cover }}
@@ -36,11 +87,6 @@
         </label>
       {% endif %}
     </div>
-    <label class="field">
-      <span>{{ form.body.label }}</span>
-      {{ form.body }}
-      {{ form.body.errors }}
-    </label>
     <label class="field field--check">
       {{ form.is_published }}
       <span>{{ form.is_published.label }}</span>

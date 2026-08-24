@@ -8,7 +8,7 @@
       <div class="service-detail__intro">
         {% include 'includes/service_icon.html' with name=service.icon %}
         <div>
-          <span class="eyebrow">Šta obuhvata</span>
+          <span class="eyebrow">{{ service_page.covers }}</span>
           {% if service.lead %}<p class="section__lead">{{ service.lead }}</p>{% endif %}
         </div>
       </div>
@@ -52,13 +52,13 @@
     <div class="reveal">
       <div class="service-detail__cta-inner">
         <div>
-          <span class="eyebrow" style="color: var(--gold-300)">Sledeći korak</span>
-          <h2>Želite da pokrenemo ovu uslugu?</h2>
-          <p>Javite nam se za konsultacije i konkretan predlog prilagođen vašem objektu i proizvodima.</p>
+          <span class="eyebrow" style="color: var(--gold-300)">{{ service_page.next_eyebrow }}</span>
+          <h2>{{ service_page.next_title }}</h2>
+          <p>{{ service_page.next_lead }}</p>
         </div>
         <div class="cta-row">
-          <a href="{% url 'contact' %}" class="btn btn--light">Zatraži ponudu</a>
-          <a href="{% url 'services' %}" class="btn btn--outline-gold">Sve usluge</a>
+          <a href="{% url 'contact' %}" class="btn btn--light">{{ service_page.cta_offer }}</a>
+          <a href="{% url 'services' %}" class="btn btn--outline-gold">{{ service_page.cta_all }}</a>
         </div>
       </div>
     </div>

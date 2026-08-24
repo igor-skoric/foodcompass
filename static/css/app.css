@@ -827,8 +827,29 @@ body.app-body:not(.app-body--login) .app {
   background: #fff;
 }
 
-.app-form textarea#id_excerpt {
+.app-form textarea#id_excerpt,
+.app-form textarea#id_excerpt_en,
+.app-form textarea#id_excerpt_ru {
   min-height: 5.2rem;
+}
+
+.app-form__lang {
+  margin: 0;
+  padding: 1.15rem 1.1rem 0.35rem;
+  border: 1px solid rgba(19, 69, 48, 0.14);
+  border-radius: var(--radius);
+  display: grid;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.app-form__lang legend {
+  padding: 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--green-800);
 }
 
 .app-form--wide {

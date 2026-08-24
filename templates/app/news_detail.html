@@ -21,6 +21,10 @@
         <dt>Datum</dt>
         <dd>{% if article.published_at %}{{ article.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</dd>
       </div>
+      <div>
+        <dt>Prevodi</dt>
+        <dd>SR{% if article.title_en or article.body_en %} · EN{% endif %}{% if article.title_ru or article.body_ru %} · RU{% endif %}</dd>
+      </div>
     </dl>
     {% if article.cover %}
       <img src="{{ article.cover.url }}" alt="" class="app-article__cover" />

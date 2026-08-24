@@ -376,6 +376,20 @@ ABOUT = {
     ],
     'goal_title': 'Bezbednost hrane treba da bude razumljiva, efikasna i laka za upravljanje.',
     'goal': 'Naš cilj je jednostavan – da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.',
+    'years_label': 'godina iskustva',
+    'origin_eyebrow': 'Zašto je nastao Food Compass',
+    'origin_title': 'Od složenih zahteva do jasnog pravca',
+    'what_eyebrow': 'Šta je Food Compass',
+    'what_title': 'Stručnost koja ima praktičnu primenu',
+    'areas_eyebrow': 'Oblasti podrške',
+    'value_eyebrow': 'Naš pristup',
+    'value_title': 'Složene zahteve pretvaramo u jasna rešenja.',
+    'founder_eyebrow': 'Osnivač Food Compass-a',
+    'goal_eyebrow': 'Naš cilj',
+    'cta_talk': 'Razgovarajmo o vašem poslovanju →',
+    'cta_services': 'Pogledajte naše usluge',
+    'quote_open': '„',
+    'quote_close': '“',
 }
 
 ABOUT_ME = {
@@ -386,6 +400,8 @@ ABOUT_ME = {
     'role_extra': 'Specijalista za bezbednost hrane',
     'lead': 'Više od 22 godine profesionalnog iskustva, uz dugogodišnji rad u oblasti bezbednosti hrane, službenih kontrola, HACCP sistema, procene rizika i usaglašenosti sa nacionalnim i evropskim propisima.',
     'quote': 'Verujem da dobar sistem bezbednosti hrane ne treba da bude samo dokumentacija.',
+    'quote_open': '„',
+    'quote_close': '“',
     'facts': [
         {'value': '22+', 'label': 'godina iskustva'},
         {'value': 'TMF', 'label': 'Univerzitet u Beogradu'},
@@ -400,6 +416,9 @@ ABOUT_ME = {
         'Posebnu vrednost u svom radu vidim u povezivanju struke, propisa i praktične primene. Dugogodišnje iskustvo u državnom sistemu kontrole hrane omogućilo mi je da razumem ne samo šta propisi zahtevaju, već i sa kakvim se konkretnim izazovima kompanije suočavaju kada te zahteve treba primeniti u svakodnevnom poslovanju.',
         'Danas svoje iskustvo prenosim u drugačiji oblik – kroz Food Compass, sa ciljem da kompanijama pomognem da svoje sisteme bezbednosti hrane učine jasnijim, efikasnijim, transparentnijim i jednostavnijim za primenu i održavanje.',
     ],
+    'linkedin': 'LinkedIn profil →',
+    'cta_about': 'O nama',
+    'cta_contact': 'Kontaktirajte nas',
 }
 
 SUPPORT = {
@@ -566,6 +585,162 @@ CRUMB_LABELS = {
     'uslovi-koriscenja': 'Uslovi korišćenja',
 }
 
+HOME = {
+    'eyebrow': 'Deklarisanje prehrambenih proizvoda',
+    'title_main': 'Bezbednost hrane.',
+    'title_sub': 'Od ideje do police.',
+    'lead': (
+        'Uspostavljamo sisteme bezbednosti hrane, pripremamo vas za audit i sertifikaciju, '
+        'izrađujemo deklaracije i digitalizujemo HACCP i druge standarde.'
+    ),
+    'cta_consult': 'Zakažite konsultacije →',
+    'cta_services': 'Naše usluge',
+    'journey_eyebrow': 'Putovanje proizvoda',
+    'journey_title': 'Od ideje do police',
+    'journey_lead': 'Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda.',
+    'journey_more': 'Saznajte više →',
+    'services_eyebrow': 'Naše usluge',
+    'services_title': 'Stručna podrška u bezbednosti hrane',
+    'services_lead': 'Znanje, iskustvo i savremena rešenja — sve na jednom mestu.',
+    'service_more': 'Prikaži →',
+    'support_eyebrow': 'Stručna podrška',
+    'support_title_html': 'Nudimo vam mogućnost<br>izbora',
+    'support_lead': 'Redovna ili vanredna stručna poseta — prilagođena vašim potrebama.',
+    'support_more': 'Saznajte više',
+    'news_eyebrow': 'Aktuelnosti',
+    'news_title': 'Iz stručne prakse',
+    'news_lead': 'Tekstovi o bezbednosti hrane, standardima i putu od ideje do police.',
+    'news_empty': 'Uskoro više tekstova.',
+    'news_more': 'Pročitajte →',
+    'news_all': 'Sve aktuelnosti →',
+    'goal_eyebrow': 'Naš cilj',
+    'goal_quote': 'Da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.',
+    'goal_aside': 'Vi imate ideju. Mi vam pokazujemo put.',
+    'goal_cta': 'Zakažite sastanak',
+}
+
+SERVICES_PAGE = {
+    'eyebrow': 'Naše usluge',
+    'title_light': 'Stručna podrška',
+    'title_gold': 'za bezbedno i usklađeno poslovanje sa hranom.',
+    'lead': (
+        'Od implementacije standarda i pripreme za audit do deklarisanja proizvoda '
+        'i digitalizacije sistema bezbednosti hrane.'
+    ),
+    'more': 'Saznajte više',
+}
+
+JOURNEY_PAGE = {
+    'intro': [
+        'Imate ideju za novi prehrambeni proizvod, ali ne znate odakle da počnete?',
+        (
+            'Food Compass vas vodi kroz ceo proces – od početne ideje i razvoja proizvoda, '
+            'preko regulatorne usaglašenosti i uspostavljanja sistema bezbednosti hrane, '
+            'do pravilnog deklarisanja i pripreme proizvoda za tržište.'
+        ),
+        (
+            'Ne morate sami da povezujete zahteve propisa, bezbednosti hrane, dokumentacije '
+            'i deklarisanja. Mi povezujemo sve korake u jednu celinu.'
+        ),
+    ],
+    'map_label': 'Tri koraka od ideje do police',
+    'progress_label': 'Napredak kroz korake',
+    'step_eyebrow': 'Korak',
+    'close_eyebrow': 'Jedan partner',
+    'close_title': 'Jedan partner za ceo put',
+    'close_p1': 'Od prve ideje do proizvoda spremnog za tržište.',
+    'close_p2': (
+        'Food Compass povezuje razvoj proizvoda, bezbednost hrane, regulatornu usaglašenost, '
+        'dokumentaciju i deklarisanje kako bi vaš proizvod bio pravilno definisan, bezbedan '
+        'i spreman za tržište.'
+    ),
+    'quote': 'Vi imate ideju. Mi vam pokazujemo put.',
+    'cta_meeting': 'Zakažite sastanak',
+    'cta_services': 'Naše usluge',
+    'hero_eyebrow': 'Od ideje do police',
+    'hero_title': 'Od ideje do police',
+    'hero_lead': 'Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda.',
+}
+
+CONTACT_PAGE = {
+    'eyebrow': 'Kontakt',
+    'direct': 'Direktno',
+    'title': 'Razgovarajmo.',
+    'lead': 'Pišite, pozovite ili nas pronađite na LinkedIn-u — javićemo se u najkraćem roku.',
+    'email': 'Email',
+    'phone': 'Telefon',
+    'linkedin': 'LinkedIn',
+    'linkedin_cta': 'Otvori profil →',
+    'sent_eyebrow': 'Poruka poslata',
+    'sent_title': 'Hvala vam.',
+    'sent_lead': 'Vaša poruka je stigla. Javićemo vam se u najkraćem roku.',
+    'sent_again': 'Pošaljite novu poruku',
+    'form_eyebrow': 'Upit',
+    'form_title': 'Pošaljite poruku',
+    'form_lead': 'Ukratko nam recite o proizvodu, objektu ili standardu — predložićemo sledeći korak.',
+    'form_error': 'Popunite ime, email i poruku.',
+    'form_send_error': 'Poruka je sačuvana, ali slanje emaila trenutno nije uspelo. Pišite nam na',
+    'submit': 'Pošaljite poruku →',
+}
+
+NEWS_PAGE = {
+    'eyebrow': 'Aktuelnosti',
+    'title': 'Iz stručne prakse',
+    'lead': 'Saveti, propisi i praksa u oblasti bezbednosti hrane.',
+    'empty': 'Uskoro više tekstova.',
+    'read_more': 'Pročitajte →',
+    'pagination': 'Stranice aktuelnosti',
+    'prev': '← Prethodna',
+    'next': 'Sledeća →',
+    'all': 'Sve aktuelnosti',
+    'contact': 'Kontaktirajte nas',
+}
+
+SERVICE_PAGE = {
+    'eyebrow': 'Naše usluge',
+    'covers': 'Šta obuhvata',
+    'next_eyebrow': 'Sledeći korak',
+    'next_title': 'Želite da pokrenemo ovu uslugu?',
+    'next_lead': 'Javite nam se za konsultacije i konkretan predlog prilagođen vašem objektu i proizvodima.',
+    'cta_offer': 'Zatraži ponudu',
+    'cta_all': 'Sve usluge',
+}
+
+STRINGS = {
+    'skip_link': 'Preskoči na sadržaj',
+    'back_to_top': 'Nazad na vrh',
+    'loading': 'Učitavanje',
+    'nav_home': 'Food Compass početna',
+    'nav_main': 'Glavna navigacija',
+    'nav_mobile': 'Mobilna navigacija',
+    'lang_label': 'Izaberi jezik',
+    'panel': 'Panel',
+    'login': 'Prijava',
+    'open_menu': 'Otvori meni',
+    'footer_blurb': 'Stručna podrška u upravljanju bezbednošću hrane kroz znanje, iskustvo i savremena rešenja.',
+    'footer_nav': 'Navigacija',
+    'footer_services': 'Usluge',
+    'footer_terms': 'Uslovi korišćenja',
+    'footer_credit': 'Sajt uradio',
+    'seo_title_default': 'Food Compass | HACCP, deklarisanje i digitalizacija',
+    'seo_desc_default': (
+        'HACCP sistemi, digitalizacija HACCP-a i deklarisanje. '
+        'Food Compass — stručna podrška u bezbednosti hrane.'
+    ),
+    'og_image_alt': 'Food Compass — HACCP i digitalizacija HACCP sistema',
+    'jsonld_description': (
+        'Stručna podrška u bezbednosti hrane: HACCP, digitalizacija HACCP-a, '
+        'deklarisanje i priprema za audit.'
+    ),
+    'crumb_home': 'Početna',
+    'form_name': 'Ime i prezime *',
+    'form_email': 'Email *',
+    'form_phone': 'Telefon',
+    'form_message': 'Poruka *',
+    'journey_card_title': 'Od ideje do police',
+    'journey_card_desc': 'Kompletna stručna podrška od prve ideje i recepture do proizvoda spremnog za tržište.',
+}
+
 
 def get_service(slug):
     return next((item for item in SERVICES if item['slug'] == slug), None)
@@ -586,9 +761,9 @@ def get_service_cards():
         })
     cards.append({
         'number': '06',
-        'title': 'Od ideje do police',
+        'title': STRINGS['journey_card_title'],
         'standards': [],
-        'desc': 'Kompletna stručna podrška od prve ideje i recepture do proizvoda spremnog za tržište.',
+        'desc': STRINGS['journey_card_desc'],
         'icon': 'journey',
         'url_name': 'journey',
         'slug': None,
@@ -599,6 +774,8 @@ def get_service_cards():
 
 TERMS = {
     'title': 'Uslovi korišćenja',
+    'eyebrow': 'Pravne napomene',
+    'updated_label': 'Poslednje ažuriranje:',
     'updated': '18. avgust 2026.',
     'intro': (
         'Ovi uslovi uređuju korišćenje sajta foodcompass.rs. Korišćenjem sajta smatra se da ste ih '

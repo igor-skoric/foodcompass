@@ -7,12 +7,12 @@
     <header class="page-intro services-page__intro">
       {% breadcrumbs %}
       <div class="services-page__title">
-        <span class="eyebrow">Naše usluge</span>
+        <span class="eyebrow">{{ services_page.eyebrow }}</span>
         <h1>
-          <span class="services-page__title-light">Stručna podrška</span>
-          <span class="services-page__title-gold">za bezbedno i usklađeno poslovanje sa hranom.</span>
+          <span class="services-page__title-light">{{ services_page.title_light }}</span>
+          <span class="services-page__title-gold">{{ services_page.title_gold }}</span>
         </h1>
-        <p>Od implementacije standarda i pripreme za audit do deklarisanja proizvoda i digitalizacije sistema bezbednosti hrane.</p>
+        <p>{{ services_page.lead }}</p>
       </div>
     </header>
 
@@ -36,7 +36,7 @@
               {% endif %}
               <p class="service-card__desc">{{ card.desc }}</p>
             </div>
-            <span class="service-card__cta">Saznajte više <span aria-hidden="true">→</span></span>
+            <span class="service-card__cta">{{ services_page.more }} <span aria-hidden="true">→</span></span>
           </a>
         </div>
       {% endfor %}

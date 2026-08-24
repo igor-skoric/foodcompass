@@ -9,7 +9,7 @@
         <time class="article__date">{{ article.published_at|date:"d.m.Y." }}</time>
       {% endif %}
       <div class="prose article__body">
-        {{ article.body|safe }}
+        {{ article.display_body|safe }}
       </div>
       {% if article.images.all %}
         <div class="article__gallery">
@@ -22,8 +22,8 @@
         </div>
       {% endif %}
       <div class="cta-row">
-        <a href="{% url 'news' %}" class="btn btn--outline">Sve aktuelnosti</a>
-        <a href="{% url 'contact' %}" class="btn btn--gold">Kontaktirajte nas</a>
+        <a href="{% url 'news' %}" class="btn btn--outline">{{ news_page.all }}</a>
+        <a href="{% url 'contact' %}" class="btn btn--gold">{{ news_page.contact }}</a>
       </div>
     </article>
   </div>

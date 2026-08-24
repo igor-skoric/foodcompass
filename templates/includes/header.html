@@ -1,11 +1,11 @@
 {% load i18n site_tags %}
 <header class="nav{% if is_home %} nav--home is-transparent{% endif %}" data-nav>
   <div class="nav__inner">
-    <a href="{% url 'home' %}" class="nav__logo" aria-label="Food Compass početna">
+    <a href="{% url 'home' %}" class="nav__logo" aria-label="{{ t.nav_home }}">
       {% include 'includes/logo.html' with size='sm' variant='dark' %}
     </a>
 
-    <nav class="nav__links" aria-label="Glavna navigacija">
+    <nav class="nav__links" aria-label="{{ t.nav_main }}">
       {% for item in nav_items %}
         {% if item.children %}
           <div class="nav__dropdown">
@@ -28,9 +28,9 @@
       {% get_language_info_list for LANGUAGES as languages %}
       <form action="{% url 'set_language' %}" method="post" class="lang-switch">
         {% csrf_token %}
-        <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+        <input type="hidden" name="next" value="{{ language_neutral_path }}" />
         <details class="lang-switch__drop">
-          <summary class="lang-switch__toggle" aria-label="Izaberi jezik">
+          <summary class="lang-switch__toggle" aria-label="{{ t.lang_label }}">
             {% if LANGUAGE_CODE == 'en' %}ENG{% elif LANGUAGE_CODE == 'ru' %}RU{% else %}SR{% endif %}
           </summary>
           <div class="lang-switch__menu">
@@ -45,22 +45,22 @@
     </div>
 
     {% if user.is_staff %}
-      <a href="{% url 'app_home' %}" class="nav__panel" aria-label="Panel">
+      <a href="{% url 'app_home' %}" class="nav__panel" aria-label="{{ t.panel }}">
         <span class="nav__panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
       </a>
     {% else %}
-      <a href="{% url 'app_login' %}" class="nav__panel" aria-label="Prijava">
+      <a href="{% url 'app_login' %}" class="nav__panel" aria-label="{{ t.login }}">
         <span class="nav__panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
       </a>
     {% endif %}
 
-    <button class="nav__burger" type="button" aria-label="Otvori meni" aria-expanded="false" aria-controls="mobile-menu" data-burger>
+    <button class="nav__burger" type="button" aria-label="{{ t.open_menu }}" aria-expanded="false" aria-controls="mobile-menu" data-burger>
       <span></span><span></span><span></span>
     </button>
   </div>
 
   <div class="nav__backdrop" data-backdrop aria-hidden="true"></div>
-  <nav id="mobile-menu" class="nav__mobile" aria-label="Mobilna navigacija" aria-hidden="true" data-mobile>
+  <nav id="mobile-menu" class="nav__mobile" aria-label="{{ t.nav_mobile }}" aria-hidden="true" data-mobile>
     <div class="nav__mobile-list">
       {% for item in nav_items %}
         <div class="nav__mobile-group">
@@ -78,12 +78,12 @@
     {% if user.is_staff %}
       <a href="{% url 'app_home' %}" class="nav__mobile-panel">
         <span class="nav__mobile-panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
-        Panel
+        {{ t.panel }}
       </a>
     {% else %}
       <a href="{% url 'app_login' %}" class="nav__mobile-panel">
         <span class="nav__mobile-panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
-        Prijava
+        {{ t.login }}
       </a>
     {% endif %}
   </nav>

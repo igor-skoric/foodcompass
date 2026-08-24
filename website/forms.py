@@ -21,6 +21,16 @@ class ContactForm(forms.ModelForm):
             'message': 'Poruka *',
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        from .copy_loader import site_copy
+
+        strings = site_copy().STRINGS
+        self.fields['name'].label = strings['form_name']
+        self.fields['email'].label = strings['form_email']
+        self.fields['phone'].label = strings['form_phone']
+        self.fields['message'].label = strings['form_message']
+
 
 class AppLoginForm(AuthenticationForm):
     error_messages = {
@@ -74,24 +84,43 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ['title', 'excerpt', 'cover', 'body', 'is_published']
+        fields = [
+            'title', 'excerpt', 'body',
+            'title_en', 'excerpt_en', 'body_en',
+            'title_ru', 'excerpt_ru', 'body_ru',
+            'cover', 'is_published',
+        ]
         widgets = {
             'title': forms.TextInput(),
             'excerpt': forms.Textarea(attrs={'rows': 3}),
             'body': forms.Textarea(attrs={'rows': 16, 'id': 'id_body'}),
+            'title_en': forms.TextInput(),
+            'excerpt_en': forms.Textarea(attrs={'rows': 3}),
+            'body_en': forms.Textarea(attrs={'rows': 14, 'id': 'id_body_en'}),
+            'title_ru': forms.TextInput(),
+            'excerpt_ru': forms.Textarea(attrs={'rows': 3}),
+            'body_ru': forms.Textarea(attrs={'rows': 14, 'id': 'id_body_ru'}),
             'cover': forms.FileInput(attrs={'accept': 'image/*'}),
         }
         labels = {
             'title': 'Naslov',
             'excerpt': 'Kratak opis',
-            'cover': 'Slika',
             'body': 'Tekst',
+            'title_en': 'Naslov',
+            'excerpt_en': 'Kratak opis',
+            'body_en': 'Tekst',
+            'title_ru': 'Naslov',
+            'excerpt_ru': 'Kratak opis',
+            'body_ru': 'Tekst',
+            'cover': 'Slika',
             'is_published': 'Objavi na sajtu',
         }
         help_texts = {
             'excerpt': 'Prikazuje se na listi aktuelnosti i na početnoj.',
             'cover': 'Prikazuje se na listi, na početnoj i u headeru vesti.',
             'is_published': 'Ako nije označeno, vest ostaje kao nacrt.',
+            'title_en': 'Ako je prazno, na engleskom sajtu se prikazuje srpski naslov.',
+            'title_ru': 'Ako je prazno, na ruskom sajtu se prikazuje srpski naslov.',
         }
 
     def __init__(self, *args, **kwargs):

@@ -25,14 +25,14 @@
 <section class="section about-quote">
   <div class="container about-quote__grid">
     <blockquote class="about-quote__text reveal">
-      <span class="about-quote__mark" aria-hidden="true">„</span>
-      {{ about.quote }}<span class="about-quote__mark about-quote__mark--end" aria-hidden="true">“</span>
+        <span class="about-quote__mark" aria-hidden="true">{{ about.quote_open }}</span>
+          {{ about.quote }}<span class="about-quote__mark about-quote__mark--end" aria-hidden="true">{{ about.quote_close }}</span>
     </blockquote>
     <div class="about-quote__side reveal">
       <p>{{ about.quote_context }}</p>
       <p class="about-quote__stat">
         <span>22+</span>
-        godina iskustva
+        <span>{{ about.years_label }}</span>
       </p>
     </div>
   </div>
@@ -43,8 +43,8 @@
 <section class="section about-origin">
   <div class="container">
     <div class="about-origin__inner reveal">
-      <span class="eyebrow">Zašto je nastao Food Compass</span>
-      <h2>Od složenih zahteva do jasnog pravca</h2>
+      <span class="eyebrow">{{ about.origin_eyebrow }}</span>
+      <h2>{{ about.origin_title }}</h2>
       <p>{{ about.origin }}</p>
     </div>
   </div>
@@ -55,8 +55,8 @@
 <section class="section about-what">
   <div class="container about-what__grid">
     <div class="about-what__copy reveal">
-      <span class="eyebrow">Šta je Food Compass</span>
-      <h2>Stručnost koja ima praktičnu primenu</h2>
+      <span class="eyebrow">{{ about.what_eyebrow }}</span>
+      <h2>{{ about.what_title }}</h2>
       {% for p in about.what %}
         <p>{{ p }}</p>
       {% endfor %}
@@ -86,7 +86,7 @@
 <section class="section about-areas">
   <div class="container">
     <div class="section__head reveal">
-      <span class="eyebrow">Oblasti podrške</span>
+      <span class="eyebrow">{{ about.areas_eyebrow }}</span>
       <p class="about-areas__lead">{{ about.areas_intro }}</p>
     </div>
     <ul class="about-areas__grid">
@@ -104,8 +104,8 @@
 
 <section class="section about-value">
   <div class="container about-value__inner reveal">
-    <span class="eyebrow">Naš pristup</span>
-    <h2>Složene zahteve pretvaramo u jasna rešenja.</h2>
+    <span class="eyebrow">{{ about.value_eyebrow }}</span>
+    <h2>{{ about.value_title }}</h2>
     <p>{{ about.value }}</p>
   </div>
 </section>
@@ -115,7 +115,7 @@
 <section class="section about-founder">
   <div class="container">
     <div class="about-founder__copy reveal">
-      <span class="eyebrow">Osnivač Food Compass-a</span>
+      <span class="eyebrow">{{ about.founder_eyebrow }}</span>
       <h2>{{ about.founder_name }}</h2>
       <p class="about-founder__role">{{ about.founder_role }}</p>
       <p class="about-founder__specialty">{{ about.founder_specialty }}</p>
@@ -138,12 +138,12 @@
 
 <section class="section about-close">
   <div class="container about-close__inner reveal">
-    <span class="eyebrow">Naš cilj</span>
+    <span class="eyebrow">{{ about.goal_eyebrow }}</span>
     <h2>{{ about.goal_title }}</h2>
     <p>{{ about.goal }}</p>
     <div class="cta-row cta-row--center">
-      <a href="{% url 'contact' %}" class="btn btn--gold">Razgovarajmo o vašem poslovanju →</a>
-      <a href="{% url 'services' %}" class="btn btn--outline">Pogledajte naše usluge</a>
+      <a href="{% url 'contact' %}" class="btn btn--gold">{{ about.cta_talk }}</a>
+      <a href="{% url 'services' %}" class="btn btn--outline">{{ about.cta_services }}</a>
     </div>
   </div>
 </section>

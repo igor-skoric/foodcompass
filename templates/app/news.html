@@ -21,7 +21,7 @@
             {% endif %}
             <span>
               <strong>{{ item.title }}</strong>
-              <em>{% if item.is_published %}Objavljeno{% else %}Nacrt{% endif %}</em>
+              <em>{% if item.is_published %}Objavljeno{% else %}Nacrt{% endif %} · SR{% if item.title_en %} · EN{% endif %}{% if item.title_ru %} · RU{% endif %}</em>
             </span>
             <time>{% if item.published_at %}{{ item.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</time>
           </a>

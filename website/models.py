@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.text import slugify
 
 
@@ -19,6 +19,12 @@ class Article(models.Model):
         'Tekst',
         help_text='Glavni sadržaj vesti. Možete formatirati tekst i ubaciti slike.',
     )
+    title_en = models.CharField('Naslov (English)', max_length=220, blank=True)
+    excerpt_en = models.TextField('Kratak opis (English)', blank=True)
+    body_en = models.TextField('Tekst (English)', blank=True)
+    title_ru = models.CharField('Naslov (русский)', max_length=220, blank=True)
+    excerpt_ru = models.TextField('Kratak opis (русский)', blank=True)
+    body_ru = models.TextField('Tekst (русский)', blank=True)
     cover = models.ImageField(
         'Slika',
         upload_to='aktuelnosti/covers/',
@@ -65,6 +71,31 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('news_detail', kwargs={'slug': self.slug})
+
+    def _localized(self, field):
+        lang = (translation.get_language() or 'sr')[:2].lower()
+        if lang in ('en', 'ru'):
+            value = (getattr(self, f'{field}_{lang}') or '').strip()
+            if value:
+                return getattr(self, f'{field}_{lang}')
+        return getattr(self, field) or ''
+
+    @property
+    def display_title(self):
+        return self._localized('title')
+
+    @property
+    def display_excerpt(self):
+        return self._localized('excerpt')
+
+    @property
+    def display_body(self):
+        return self._localized('body')
+
+    def has_translation(self, lang):
+        if lang == 'sr':
+            return bool((self.title or '').strip())
+        return bool((getattr(self, f'title_{lang}', '') or '').strip() or (getattr(self, f'body_{lang}', '') or '').strip())
 
 
 class ArticleImage(models.Model):
