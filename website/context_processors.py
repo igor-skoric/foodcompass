@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils import translation
 from .content import CONTACT, NAV, SERVICES
+from .seo import canonical_url
 
 
 def site_globals(request):
@@ -10,6 +11,7 @@ def site_globals(request):
         'all_services': SERVICES,
         'site_name': settings.SITE_NAME,
         'site_url': settings.SITE_URL,
+        'canonical_url': canonical_url(request),
         'current_language': translation.get_language() or 'sr',
         'available_languages': settings.LANGUAGES,
     }

@@ -45,9 +45,13 @@
     </div>
 
     {% if user.is_staff %}
-      <a href="{% url 'app_home' %}" class="nav__panel">Panel</a>
+      <a href="{% url 'app_home' %}" class="nav__panel" aria-label="Panel">
+        <span class="nav__panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
+      </a>
     {% else %}
-      <a href="{% url 'app_login' %}" class="nav__panel">Prijava</a>
+      <a href="{% url 'app_login' %}" class="nav__panel" aria-label="Prijava">
+        <span class="nav__panel__icon" aria-hidden="true">{% include 'includes/compass.svg' %}</span>
+      </a>
     {% endif %}
 
     <button class="nav__burger" type="button" aria-label="Otvori meni" aria-expanded="false" aria-controls="mobile-menu" data-burger>

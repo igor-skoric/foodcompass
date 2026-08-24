@@ -93,7 +93,7 @@ SERVICES = [
                 'text': (
                     'Podrška u uspostavljanju, unapređenju i internoj proveri sistema upravljanja kvalitetom '
                     'prema zahtevima ISO 9001, kao i u pripremi organizacije za sertifikaciju. '
-                    'IRCA ISO 9001 Lead Auditor – sertifikovana obuka.'
+                    'ISO 9001 Lead Auditor – IRCA/CQI sertifikovana obuka.'
                 ),
             },
             {
@@ -203,7 +203,7 @@ SERVICES = [
         'title': 'Digitalizacija sistema bezbednosti hrane',
         'short': 'Digital HACCP | Digital IFS | Digital FSSC 22000 | Digital BRCGS',
         'standards': ['Digital HACCP', 'Digital IFS', 'Digital FSSC 22000', 'Digital BRCGS'],
-        'card': 'Prebacite dokumentaciju, kontrole i evidencije iz papira u jednostavan i pregledan digitalni sistem.',
+        'card': 'Prebacite dokumentaciju, kontrolne liste i evidencije sa papira u jednostavan i pregledan digitalni sistem.',
         'icon': 'digitalizacija',
         'hero': 'digital',
         'intro': 'Manje papira. Više kontrole. Bolji sistem.',
@@ -282,8 +282,8 @@ JOURNEY = [
     },
     {
         'id': 'do-bezbednog-proizvoda',
-        'title': 'Do bezbednog proizvoda',
-        'lead': 'HACCP i sistem bezbednosti hrane',
+        'title': '…I bezbednog proizvoda',
+        'lead': 'HACCP sistemi bezbednosti hrane',
         'intro': 'Kada je proizvod definisan, potrebno je uspostaviti sistem koji obezbeđuje njegovu bezbednost tokom proizvodnje.',
         'items': [
             'procena objekta i procesa',
@@ -375,7 +375,7 @@ ABOUT = {
         {'value': 'Međunarodno iskustvo', 'label': 'projekti i standardi'},
     ],
     'goal_title': 'Bezbednost hrane treba da bude razumljiva, efikasna i laka za upravljanje.',
-    'goal': 'Naš cilj je jednostavan: da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.',
+    'goal': 'Naš cilj je jednostavan – da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.',
 }
 
 ABOUT_ME = {
@@ -384,7 +384,7 @@ ABOUT_ME = {
     'initials': 'SĐK',
     'role': 'Master inženjer biohemijskog inženjerstva i biotehnologije',
     'role_extra': 'Specijalista za bezbednost hrane',
-    'lead': 'Više od 22 godine profesionalnog iskustva posvetila sam oblasti bezbednosti hrane, kroz rad na službenim kontrolama, HACCP sistemima, proceni rizika i usaglašenosti sa nacionalnim i evropskim propisima.',
+    'lead': 'Više od 22 godine profesionalnog iskustva, uz dugogodišnji rad u oblasti bezbednosti hrane, službenih kontrola, HACCP sistema, procene rizika i usaglašenosti sa nacionalnim i evropskim propisima.',
     'quote': 'Verujem da dobar sistem bezbednosti hrane ne treba da bude samo dokumentacija.',
     'facts': [
         {'value': '22+', 'label': 'godina iskustva'},
@@ -392,12 +392,13 @@ ABOUT_ME = {
         {'value': 'IRCA', 'label': 'ISO 9001 Lead Auditor'},
     ],
     'paragraphs': [
-        'Moje stručno obrazovanje potiče sa Tehnološko-metalurškog fakulteta Univerziteta u Beogradu, gde sam stekla zvanje master inženjera biohemijskog inženjerstva i biotehnologije, uz specijalizaciju u oblasti bezbednosti hrane. Tokom profesionalne karijere kontinuirano sam nadograđivala znanje kroz domaće i međunarodne obuke iz oblasti HACCP-a, higijene hrane, audita, regulatorne usaglašenosti i sistema upravljanja bezbednošću hrane.',
+        'Moje stručno obrazovanje stekla sam na Tehnološko-metalurškom fakultetu Univerziteta u Beogradu, gde sam završila master studije biohemijskog inženjerstva i biotehnologije, kao i specijalizaciju u oblasti bezbednosti hrane.',
+        'Tokom profesionalne karijere kontinuirano sam unapređivala svoja znanja kroz domaće i međunarodne obuke iz oblasti HACCP-a, higijene hrane, auditiranja, regulatorne usaglašenosti i sistema upravljanja bezbednošću hrane.',
         'Najveći deo profesionalne karijere provela sam u Ministarstvu poljoprivrede, šumarstva i vodoprivrede Republike Srbije, kao republički inspektor za bezbednost hrane. Rad u sistemu službenih kontrola omogućio mi je da bezbednost hrane sagledam izuzetno praktično – od procene rizika i planiranja kontrola, preko verifikacije HACCP sistema i tumačenja propisa, do neposrednog rada sa subjektima u poslovanju hranom i laboratorijama.',
-        'Moje iskustvo obuhvata i rad u oblasti agrarne politike i analitike, kao i učešće u brojnim domaćim i međunarodnim projektima i programima, uključujući EU TAIEX i Twinning projekte, USAID, UNEP-GEF, WTO SPS i IPA projekte, kao i projekte povezane sa laboratorijama i akreditacijom. Učestvovala sam i na projektu razvoja sistema bezbednosti hrane u saradnji sa KPMG-om.',
-        'U narednoj fazi svog profesionalnog razvoja fokus usmeravam na stručno savetovanje, audite, sertifikaciju i digitalizaciju sistema bezbednosti hrane. Posedujem IRCA obuku za ISO 9001 Lead Auditor, a svoje znanje kontinuirano proširujem u oblastima ISO/FSSC 22000, IFS i drugih međunarodno priznatih standarda.',
+        'Moje iskustvo obuhvata i rad u oblasti agrarne politike i analitike, kao i učešće u brojnim domaćim i međunarodnim projektima i programima, uključujući EU TAIEX i Twinning projekte, USAID, UNEP-GEF, WTO SPS i IPA projekte, kao i projekte povezane sa laboratorijama. Učestvovala sam i na projektu razvoja sistema bezbednosti hrane u saradnji sa KPMG-om.',
+        'U narednoj fazi svog profesionalnog razvoja fokus usmeravam na stručno savetovanje, audite, sertifikaciju i digitalizaciju sistema bezbednosti hrane. Posedujem IRCA sertifikat za ISO 9001 Lead Auditor, a svoje znanje kontinuirano proširujem u oblastima ISO/FSSC 22000, IFS i drugih međunarodno priznatih standarda.',
         'Posebnu vrednost u svom radu vidim u povezivanju struke, propisa i praktične primene. Dugogodišnje iskustvo u državnom sistemu kontrole hrane omogućilo mi je da razumem ne samo šta propisi zahtevaju, već i sa kakvim se konkretnim izazovima kompanije suočavaju kada te zahteve treba primeniti u svakodnevnom poslovanju.',
-        'Danas to iskustvo prenosim u drugačiji oblik – kroz Food Compass, sa ciljem da kompanijama pomognem da svoje sisteme bezbednosti hrane učine jasnijim, efikasnijim, transparentnijim i jednostavnijim za primenu i održavanje.',
+        'Danas svoje iskustvo prenosim u drugačiji oblik – kroz Food Compass, sa ciljem da kompanijama pomognem da svoje sisteme bezbednosti hrane učine jasnijim, efikasnijim, transparentnijim i jednostavnijim za primenu i održavanje.',
     ],
 }
 
@@ -419,12 +420,12 @@ SUPPORT = {
                 'pregled objekta i higijenskih uslova',
                 'proveru primene HACCP sistema u praksi',
                 'pregled dokumentacije i evidencija',
-                'kontrolu deklaracija proizvoda u ponudi',
+                'kontrolu deklaracija proizvoda',
                 'proveru usklađenosti sa zakonskim zahtevima',
                 'identifikaciju potencijalnih neusaglašenosti i preporuke za njihovo pravovremeno otklanjanje',
             ],
             'closer': [
-                'Naš cilj je da probleme prepoznate i rešite pre nego što postanu problem.',
+                'Naš cilj je da potencijalne probleme prepoznate i rešite pre nego što postanu stvarni problem.',
                 'Tako vaš sistem ostaje funkcionalan, vaše poslovanje usklađeno, a vi spremni za kontrole, audite i zahteve kupaca – bez dodatnog stresa.',
             ],
             'cta': 'Zatraži ponudu',
@@ -459,40 +460,97 @@ SUPPORT = {
 
 SEO_PAGES = {
     'home': {
-        'title': 'Food Compass | HACCP, deklarisanje i bezbednost hrane',
-        'description': 'Stručna podrška u bezbednosti hrane: HACCP, deklarisanje, digitalizacija i nadzor. Food Compass vas vodi od ideje do proizvoda na polici.',
+        'title': 'Food Compass | HACCP, deklarisanje i digitalizacija',
+        'description': (
+            'HACCP sistemi, digitalizacija HACCP-a, deklarisanje i priprema za audit. '
+            'Food Compass — stručna podrška u bezbednosti hrane od ideje do police.'
+        ),
     },
     'about': {
         'title': 'O nama',
-        'description': 'Food Compass je stručni i konsultantski koncept usmeren na bezbednost hrane, regulatornu usaglašenost i unapređenje sistema upravljanja.',
+        'description': (
+            'Food Compass je stručni i konsultantski koncept usmeren na HACCP, '
+            'digitalizaciju HACCP sistema i regulatornu usaglašenost.'
+        ),
     },
     'about_me': {
         'title': 'O meni',
-        'description': 'Sandra Đukanović Kojić — master inženjer biohemijskog inženjerstva i specijalista za bezbednost hrane sa više od 22 godine iskustva.',
+        'description': (
+            'Sandra Đukanović Kojić — specijalista za bezbednost hrane i HACCP '
+            'sa više od 22 godine iskustva.'
+        ),
     },
     'services': {
         'title': 'Naše usluge',
-        'description': 'Stručna podrška za bezbedno i usklađeno poslovanje sa hranom — standardi, audit, deklarisanje i digitalizacija.',
+        'description': (
+            'HACCP, digitalizacija HACCP-a, ISO standardi, deklarisanje, '
+            'gap analiza i priprema za sertifikaciju.'
+        ),
     },
     'journey': {
         'title': 'Od ideje do police',
-        'description': 'Kompletna stručna podrška za razvoj i plasman prehrambenog proizvoda — od ideje do police.',
+        'description': (
+            'Kompletna stručna podrška za razvoj proizvoda: HACCP, '
+            'deklarisanje i usaglašenost do police.'
+        ),
     },
     'support': {
         'title': 'Stručna podrška',
-        'description': 'Redovne i vanredne stručne posete: kontinuirana podrška HACCP sistemu, higijeni i dokumentaciji.',
+        'description': (
+            'Redovne i vanredne stručne posete: kontinuirana podrška HACCP sistemu, '
+            'higijeni i dokumentaciji.'
+        ),
     },
     'news': {
         'title': 'Aktuelnosti',
-        'description': 'Aktuelnosti Food Compass-a — stručni tekstovi o bezbednosti hrane, HACCP-u i regulatornoj usaglašenosti.',
+        'description': (
+            'Aktuelnosti Food Compass-a — stručni tekstovi o HACCP-u, '
+            'digitalizaciji i bezbednosti hrane.'
+        ),
     },
     'contact': {
         'title': 'Kontakt',
-        'description': 'Kontaktirajte Food Compass — pišite na office@foodcompass.rs ili pozovite +381 63 7707 319.',
+        'description': (
+            'Kontaktirajte Food Compass za HACCP, digitalizaciju HACCP-a i deklarisanje. '
+            'office@foodcompass.rs, +381 63 7707 319.'
+        ),
     },
     'terms': {
         'title': 'Uslovi korišćenja',
         'description': 'Uslovi korišćenja sajta Food Compass — prava, obaveze i merodavno pravo.',
+    },
+}
+
+SERVICE_SEO = {
+    'sistemi-i-standardi': {
+        'description': (
+            'Uspostavljanje, revizija i unapređenje HACCP, IFS, FSSC 22000 i BRCGS sistema '
+            'bezbednosti hrane, uz pripremu za audit i sertifikaciju.'
+        ),
+    },
+    'iso-standardi': {
+        'description': (
+            'Implementacija ISO 9001 i ISO 22000, povezivanje sa HACCP principima '
+            'i priprema organizacije za sertifikaciju.'
+        ),
+    },
+    'deklarisanje': {
+        'description': (
+            'Izrada i provera deklaracija, alergeni, nutritivne vrednosti i usaglašenost '
+            'označavanja hrane sa važećim propisima.'
+        ),
+    },
+    'gap-analiza': {
+        'description': (
+            'Procena usaglašenosti HACCP i standarda IFS, FSSC 22000, BRCGS i ISO '
+            'pre sertifikacionog audita.'
+        ),
+    },
+    'digitalizacija': {
+        'description': (
+            'Digitalizacija HACCP-a: procedure, kontrolne liste i evidencije sa papira '
+            'u pregledan digitalni sistem.'
+        ),
     },
 }
 

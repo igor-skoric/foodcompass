@@ -24,6 +24,7 @@ from .content import (
     CONTACT,
     JOURNEY,
     SEO_PAGES,
+    SERVICE_SEO,
     SERVICES,
     SUPPORT,
     TERMS,
@@ -33,6 +34,7 @@ from .content import (
 from .forms import ContactForm
 from .mail import send_contact_message
 from .models import Article
+from .seo import page_seo
 
 logger = logging.getLogger(__name__)
 
@@ -108,7 +110,17 @@ def _seo(key, extra=None):
     data = dict(SEO_PAGES.get(key, SEO_PAGES['home']))
     if extra:
         data.update(extra)
-    return data
+    published = data.get('published')
+    if published and hasattr(published, 'isoformat'):
+        published = published.isoformat()
+    return page_seo(
+        data.get('title'),
+        data.get('description'),
+        image=data.get('image'),
+        og_type=data.get('og_type', 'website'),
+        published=published,
+        image_alt=data.get('image_alt'),
+    )
 
 
 def home(request):
@@ -168,11 +180,12 @@ def service_detail(request, slug):
     service = get_service(slug)
     if not service:
         return redirect('services')
+    meta = SERVICE_SEO.get(slug, {})
     return render(request, 'pages/service_detail.html', {
         'service': service,
         'seo': _seo('services', {
             'title': service['title'],
-            'description': service.get('intro') or service['short'],
+            'description': meta.get('description') or service.get('intro') or service['short'],
         }),
         'hero': {
             'image': service.get('hero', 'services'),
@@ -236,10 +249,13 @@ def news_detail(request, slug):
     cover = article.header_image or article.cover
     return render(request, 'news/detail.html', {
         'article': article,
-        'seo': {
-            'title': article.title,
-            'description': article.excerpt or article.title,
-        },
+        'seo': page_seo(
+            article.title,
+            article.excerpt or article.title,
+            image=cover.url if cover else None,
+            og_type='article',
+            published=article.published_at,
+        ),
         'hero': {
             'image': 'services',
             'cover': cover.url if cover else '',
@@ -304,3 +320,19 @@ def service_worker(request):
     response['Service-Worker-Allowed'] = '/'
     response['Cache-Control'] = 'no-cache'
     return response
+
+
+def robots_txt(request):
+    sitemap = settings.SITE_URL.rstrip('/') + '/sitemap.xml'
+    body = '\n'.join([
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin/',
+        'Disallow: /app/',
+        'Disallow: /prijava/',
+        'Disallow: /odjava/',
+        'Disallow: /media-upload/',
+        f'Sitemap: {sitemap}',
+        '',
+    ])
+    return HttpResponse(body, content_type='text/plain')

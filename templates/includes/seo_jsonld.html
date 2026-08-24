@@ -1,0 +1,45 @@
+{% load static %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Food Compass",
+  "url": "{{ site_url }}",
+  "logo": "{{ site_url }}{% static 'icons/icon-512.png' %}",
+  "image": "{{ seo.image|default:site_url }}",
+  "description": "Stručna podrška u bezbednosti hrane: HACCP, digitalizacija HACCP-a, deklarisanje i priprema za audit.",
+  "email": "{{ contact_info.email }}",
+  "telephone": "{{ contact_info.phone }}",
+  "areaServed": "RS",
+  "knowsAbout": ["HACCP", "Digitalizacija HACCP", "Deklarisanje", "ISO 22000", "IFS", "FSSC 22000"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Food Compass",
+  "url": "{{ site_url }}",
+  "inLanguage": "sr"
+}
+</script>
+{% if seo.og_type == 'article' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ seo.title|escapejs }}",
+  "description": "{{ seo.description|escapejs }}",
+  "image": "{{ seo.image }}",
+  "datePublished": "{{ seo.published|default:'' }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Food Compass",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site_url }}{% static 'icons/icon-512.png' %}"
+    }
+  }
+}
+</script>
+{% endif %}

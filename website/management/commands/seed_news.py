@@ -72,7 +72,7 @@ BODY = """
 <p>Deklaracija mora sadržati informacije koje su propisane za konkretnu vrstu hrane, a podaci moraju biti tačni, jasni i usklađeni sa zahtevima koji se primenjuju.</p>
 <p>U zavisnosti od proizvoda i načina prodaje, mogu biti relevantni podaci kao što su naziv hrane, spisak sastojaka, alergeni, neto količina, rok trajanja, uslovi čuvanja, podaci o subjektu u poslovanju hranom, nutritivna deklaracija i druge obavezne informacije.</p>
 <p>Posebnu pažnju treba posvetiti alergenima, nutritivnim i zdravstvenim tvrdnjama, kao i podacima o poreklu, kada su primenljivi.</p>
-<p>Propisi o deklarisanju se menjaju, pa je pre štampanja ambalaže važno proveriti zahteve koji su važeći u trenutku stavljanja proizvoda na tržište. U Srbiji su tokom 2026. uvedene i izmene pravila u oblasti označavanja hrane, uključujući nova pravila koja se primenjuju od 1. jula 2026. za određene kategorije proizvoda.</p>
+<p>Propisi o deklarisanju se menjaju, pa je pre štampanja ambalaže važno proveriti zahteve koji su važeći u trenutku stavljanja proizvoda na tržište.</p>
 
 <h2>8. Ambalaža nije samo dizajn</h2>
 <p>Ambalaža ima važnu ulogu u očuvanju bezbednosti i kvaliteta proizvoda tokom njegovog roka trajanja.</p>
@@ -82,7 +82,7 @@ BODY = """
 <h2>9. Transport i skladištenje – lanac se ne završava proizvodnjom</h2>
 <p>Proizvod može biti pravilno proizveden, ali njegova bezbednost i kvalitet mogu biti ugroženi ako se ne skladišti ili transportuje u odgovarajućim uslovima.</p>
 <p>Potrebno je definisati odgovarajuće uslove skladištenja i transporta u zavisnosti od karakteristika proizvoda.</p>
-<p>Temperatura, higijena transportnog sredstva, zaštita proizvoda od kontaminacije, način slaganja i drugi uslovi mogu biti od ključnog značaja.</p>
+<p>Temperatura, higijena transportnog sredstva, zaštita proizvoda od kontaminacije, način rukovanja i drugi uslovi mogu biti od ključnog značaja.</p>
 <p>Zato transport treba posmatrati kao sastavni deo lanca bezbednosti hrane, a ne kao poslednji korak koji se rešava tek kada proizvod napusti objekat.</p>
 
 <h2>10. A šta kada proizvod konačno stigne na policu?</h2>
