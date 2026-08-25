@@ -1,150 +1,165 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-  <header class="app-page__head">
-    <span class="eyebrow">Evidencija</span>
-    <h1>Saradnja</h1>
-    <p>Unosi po datumu, iznosu i statusu. Pretražite, filtrirajte ili otvorite pregled i izmenu.</p>
-  </header>
-
-  <div class="app-total">
-    <div>
-      <span class="app-total__label">Ukupan iznos</span>
-      <strong>{{ total_all_display }} RSD</strong>
-    </div>
-    {% if filters_active %}
+  <div class="app-clients">
+    <header class="app-page__head app-page__head--compact app-page__head--clients">
       <div>
-        <span class="app-total__label">Zbir prikaza</span>
-        <strong>{{ total_filtered_display }} RSD</strong>
+        <span class="eyebrow">Evidencija</span>
+        <h1>Klijenti</h1>
       </div>
+      <div class="app-clients__sums">
+        <p>
+          <span class="app-toolbar__total-label">Ukupan iznos</span>
+          <strong>{{ total_all_display }} RSD</strong>
+        </p>
+        {% if filters_active %}
+          <p>
+            <span class="app-toolbar__total-label">Zbir prikaza</span>
+            <strong>{{ total_filtered_display }} RSD</strong>
+          </p>
+        {% endif %}
+        {% if page_obj.object_list %}
+          <span class="app-toolbar__count">{{ result_count }} na listi</span>
+        {% endif %}
+        <a href="{% url 'app_partner_create' %}" class="btn btn--gold">Novi unos</a>
+      </div>
+    </header>
+
+    <form class="app-toolbar app-toolbar--compact{% if filters_active %} is-open{% endif %}" method="get" role="search" data-filter>
+      <div class="app-toolbar__actions">
+        <button
+          type="button"
+          class="btn btn--outline"
+          data-filter-toggle
+          aria-expanded="{% if filters_active %}true{% else %}false{% endif %}"
+          aria-controls="app-filter-panel"
+        >{% if filters_active %}Zatvori filter{% else %}Filter{% endif %}</button>
+      </div>
+      <div class="app-toolbar__filters" id="app-filter-panel" data-filter-panel>
+        <label class="field">
+          <span>Pretraga</span>
+          <input type="search" name="q" value="{{ query }}" placeholder="Naziv, opis ili status" />
+        </label>
+        <label class="field">
+          <span>Od</span>
+          <input type="date" name="from" value="{{ date_from }}" />
+        </label>
+        <label class="field">
+          <span>Do</span>
+          <input type="date" name="to" value="{{ date_to }}" />
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select name="status">
+            <option value="">Svi</option>
+            {% for code, label in status_choices %}
+              <option value="{{ code }}"{% if status_filter == code %} selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <button type="submit" class="btn btn--gold">Traži</button>
+      </div>
+    </form>
+
+    {% if page_obj.object_list %}
+      <ul class="app-cards">
+        {% for partner in page_obj %}
+          <li class="app-card{% if partner.status == 'late' %} is-late{% endif %}">
+            <div class="app-card__top">
+              <time>{{ partner.recorded_on|date:"d.m.Y." }}</time>
+              <span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span>
+            </div>
+            <h2>{{ partner.name }}</h2>
+            {% if partner.description %}
+              <p>{{ partner.description|truncatechars:110 }}</p>
+            {% endif %}
+            <p class="app-card__amount">{{ partner.amount_display }} RSD</p>
+            <p class="app-card__meta">
+              Rok: {% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}
+              · {{ partner.payment_count }} {% if partner.payment_count == 1 %}rata{% else %}rate{% endif %}
+            </p>
+            <div class="app-card__actions">
+              <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
+              <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="app-table-wrap">
+        <table class="app-table app-table--dense">
+          <thead>
+            <tr>
+              <th>Naziv</th>
+              <th>Iznos</th>
+              <th>Datum</th>
+              <th>Rok</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for partner in page_obj %}
+              <tr{% if partner.status == 'late' %} class="is-late"{% endif %}>
+                <td>
+                  <strong>{{ partner.name }}</strong>
+                  {% if partner.description %}
+                    <span class="app-table__hint">{{ partner.description|truncatechars:90 }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ partner.amount_display }} RSD
+                  {% if partner.payment_count > 1 %}
+                    <span class="app-table__hint">{{ partner.payment_count }} rate</span>
+                  {% endif %}
+                </td>
+                <td>{{ partner.recorded_on|date:"d.m.Y." }}</td>
+                <td>{% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}</td>
+                <td><span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span></td>
+                <td class="app-table__actions">
+                  <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
+                  <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="pagination" aria-label="Stranice klijenata">
+          {% if page_obj.has_previous %}
+            <a class="pagination__nav" href="?page={{ page_obj.previous_page_number }}{% if query_string %}&amp;{{ query_string }}{% endif %}">← Prethodna</a>
+          {% else %}
+            <span class="pagination__nav is-disabled">← Prethodna</span>
+          {% endif %}
+          <ol class="pagination__pages">
+            {% for num in page_numbers %}
+              <li>
+                {% if num == page_obj.paginator.ELLIPSIS %}
+                  <span class="pagination__ellipsis">…</span>
+                {% elif num == page_obj.number %}
+                  <span class="pagination__page is-current" aria-current="page">{{ num }}</span>
+                {% else %}
+                  <a class="pagination__page" href="?page={{ num }}{% if query_string %}&amp;{{ query_string }}{% endif %}">{{ num }}</a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+          {% if page_obj.has_next %}
+            <a class="pagination__nav" href="?page={{ page_obj.next_page_number }}{% if query_string %}&amp;{{ query_string }}{% endif %}">Sledeća →</a>
+          {% else %}
+            <span class="pagination__nav is-disabled">Sledeća →</span>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <p class="app-empty">
+        {% if filters_active %}
+          Nema unosa za ovu pretragu.
+        {% else %}
+          Još nema unosa klijenata.
+        {% endif %}
+      </p>
     {% endif %}
   </div>
-
-  <form class="app-toolbar{% if filters_active %} is-open{% endif %}" method="get" role="search" data-filter>
-    <div class="app-toolbar__filters" id="app-filter-panel" data-filter-panel>
-      <label class="field app-toolbar__search">
-        <span>Pretraga</span>
-        <input type="search" name="q" value="{{ query }}" placeholder="Naziv, opis ili status" />
-      </label>
-      <label class="field">
-        <span>Od</span>
-        <input type="date" name="from" value="{{ date_from }}" />
-      </label>
-      <label class="field">
-        <span>Do</span>
-        <input type="date" name="to" value="{{ date_to }}" />
-      </label>
-      <label class="field">
-        <span>Status</span>
-        <select name="status">
-          <option value="">Svi</option>
-          {% for code, label in status_choices %}
-            <option value="{{ code }}"{% if status_filter == code %} selected{% endif %}>{{ label }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <button type="submit" class="btn btn--gold">Traži</button>
-    </div>
-    <div class="app-toolbar__actions">
-      <button
-        type="button"
-        class="btn btn--outline"
-        data-filter-toggle
-        aria-expanded="{% if filters_active %}true{% else %}false{% endif %}"
-        aria-controls="app-filter-panel"
-      >{% if filters_active %}Zatvori filter{% else %}Filter{% endif %}</button>
-      <a href="{% url 'app_partner_create' %}" class="btn btn--gold">Novi unos</a>
-    </div>
-  </form>
-
-  {% if page_obj.object_list %}
-    <p class="app-toolbar__count">{{ result_count }} na listi</p>
-    <ul class="app-cards">
-      {% for partner in page_obj %}
-        <li class="app-card">
-          <div class="app-card__top">
-            <time>{{ partner.recorded_on|date:"d.m.Y." }}</time>
-            <span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span>
-          </div>
-          <h2>{{ partner.name }}</h2>
-          {% if partner.description %}
-            <p>{{ partner.description|truncatechars:110 }}</p>
-          {% endif %}
-          <p class="app-card__amount">{{ partner.amount_display }} RSD</p>
-          <div class="app-card__actions">
-            <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
-            <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-    <div class="app-table-wrap">
-      <table class="app-table">
-        <thead>
-          <tr>
-            <th>Datum</th>
-            <th>Naziv</th>
-            <th>Iznos</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for partner in page_obj %}
-            <tr>
-              <td>{{ partner.recorded_on|date:"d.m.Y." }}</td>
-              <td>
-                <strong>{{ partner.name }}</strong>
-                {% if partner.description %}
-                  <span class="app-table__hint">{{ partner.description|truncatechars:90 }}</span>
-                {% endif %}
-              </td>
-              <td>{{ partner.amount_display }} RSD</td>
-              <td><span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span></td>
-              <td class="app-table__actions">
-                <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
-                <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    {% if page_obj.paginator.num_pages > 1 %}
-      <nav class="pagination" aria-label="Stranice saradnje">
-        {% if page_obj.has_previous %}
-          <a class="pagination__nav" href="?page={{ page_obj.previous_page_number }}{% if query_string %}&amp;{{ query_string }}{% endif %}">← Prethodna</a>
-        {% else %}
-          <span class="pagination__nav is-disabled">← Prethodna</span>
-        {% endif %}
-        <ol class="pagination__pages">
-          {% for num in page_numbers %}
-            <li>
-              {% if num == page_obj.paginator.ELLIPSIS %}
-                <span class="pagination__ellipsis">…</span>
-              {% elif num == page_obj.number %}
-                <span class="pagination__page is-current" aria-current="page">{{ num }}</span>
-              {% else %}
-                <a class="pagination__page" href="?page={{ num }}{% if query_string %}&amp;{{ query_string }}{% endif %}">{{ num }}</a>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ol>
-        {% if page_obj.has_next %}
-          <a class="pagination__nav" href="?page={{ page_obj.next_page_number }}{% if query_string %}&amp;{{ query_string }}{% endif %}">Sledeća →</a>
-        {% else %}
-          <span class="pagination__nav is-disabled">Sledeća →</span>
-        {% endif %}
-      </nav>
-    {% endif %}
-  {% else %}
-    <p class="app-empty">
-      {% if filters_active %}
-        Nema unosa za ovu pretragu.
-      {% else %}
-        Još nema unosa saradnje.
-      {% endif %}
-    </p>
-  {% endif %}
 {% endblock %}

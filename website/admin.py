@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Article, ArticleImage, ContactMessage, Partner
+from .models import Article, ArticleImage, ContactMessage, Partner, PartnerPayment
 
 
 class ArticleImageInline(admin.TabularInline):
@@ -64,8 +64,20 @@ class ContactMessageAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'email', 'phone', 'message', 'created_at')
 
 
+class PartnerPaymentInline(admin.TabularInline):
+    model = PartnerPayment
+    extra = 1
+
+
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'recorded_on', 'amount', 'status', 'updated_at')
-    list_filter = ('status', 'recorded_on')
+    list_display = ('name', 'recorded_on', 'due_on', 'amount', 'status', 'updated_at')
+    list_filter = ('status', 'recorded_on', 'due_on')
     search_fields = ('name', 'description')
+    readonly_fields = ('amount',)
+    inlines = [PartnerPaymentInline]
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.sync_amount()
+        form.instance.apply_overdue()

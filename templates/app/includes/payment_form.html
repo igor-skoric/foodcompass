@@ -1,0 +1,24 @@
+<div class="app-rate" data-payment-form>
+  {{ form.id }}
+  <label class="field">
+    <span>{{ form.amount.label }}</span>
+    {{ form.amount }}
+    {{ form.amount.errors }}
+  </label>
+  <label class="field">
+    <span>{{ form.paid_on.label }}</span>
+    {{ form.paid_on }}
+    {{ form.paid_on.errors }}
+  </label>
+  <label class="field app-rate__note">
+    <span>{{ form.note.label }}</span>
+    {{ form.note }}
+    {{ form.note.errors }}
+  </label>
+  {% if form.DELETE %}
+    <label class="app-rate__delete">
+      {{ form.DELETE }}
+      <span>Ukloni</span>
+    </label>
+  {% endif %}
+</div>

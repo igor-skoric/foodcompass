@@ -2,23 +2,18 @@
 
 {% block content %}
   <header class="app-page__head">
-    <a class="app-back" href="{% if partner %}{% url 'app_partner_detail' partner.pk %}{% else %}{% url 'app_partners' %}{% endif %}"><span aria-hidden="true">←</span> {% if partner %}Nazad na pregled{% else %}Nazad na saradnju{% endif %}</a>
+    <a class="app-back" href="{% if partner %}{% url 'app_partner_detail' partner.pk %}{% else %}{% url 'app_partners' %}{% endif %}"><span aria-hidden="true">←</span> {% if partner %}Nazad na pregled{% else %}Nazad na klijente{% endif %}</a>
     <span class="eyebrow">{% if is_create %}Novi unos{% else %}Izmena{% endif %}</span>
     <h1>{% if is_create %}Novi unos{% else %}{{ partner.name }}{% endif %}</h1>
   </header>
 
-  <form class="app-form" method="post" novalidate>
+  <form class="app-form app-form--wide app-form--client" method="post" novalidate>
     {% csrf_token %}
-    <label class="field">
-      <span>{{ form.name.label }}</span>
-      {{ form.name }}
-      {{ form.name.errors }}
-    </label>
-    <div class="app-form__row">
+    <div class="app-form__row app-form__row--name">
       <label class="field">
-        <span>{{ form.recorded_on.label }}</span>
-        {{ form.recorded_on }}
-        {{ form.recorded_on.errors }}
+        <span>{{ form.name.label }}</span>
+        {{ form.name }}
+        {{ form.name.errors }}
       </label>
       <label class="field">
         <span>{{ form.status.label }}</span>
@@ -26,17 +21,51 @@
         {{ form.status.errors }}
       </label>
     </div>
-    <label class="field">
-      <span>{{ form.amount.label }}</span>
-      {{ form.amount }}
-      {% if form.amount.help_text %}<small>{{ form.amount.help_text }}</small>{% endif %}
-      {{ form.amount.errors }}
-    </label>
+    <div class="app-form__row">
+      <label class="field">
+        <span>{{ form.recorded_on.label }}</span>
+        {{ form.recorded_on }}
+        {{ form.recorded_on.errors }}
+      </label>
+      <label class="field">
+        <span>{{ form.due_on.label }}</span>
+        {{ form.due_on }}
+        {{ form.due_on.errors }}
+      </label>
+    </div>
+    {% if form.due_on.help_text %}
+      <p class="app-form__hint">{{ form.due_on.help_text }}</p>
+    {% endif %}
     <label class="field">
       <span>{{ form.description.label }}</span>
       {{ form.description }}
       {{ form.description.errors }}
     </label>
+
+    <fieldset class="app-rates" data-payment-formset>
+      <legend>Rate</legend>
+      <p class="app-form__hint">Možete uneti više iznosa (npr. po rati). Ukupan iznos se sabira automatski.</p>
+      {{ formset.management_form }}
+      {% if formset.non_form_errors %}
+        <p class="contact-form__error" role="alert">{{ formset.non_form_errors|join:' ' }}</p>
+      {% endif %}
+      <div class="app-rate app-rate--head" aria-hidden="true">
+        <span>Iznos</span>
+        <span>Datum rate</span>
+        <span>Napomena</span>
+        <span></span>
+      </div>
+      <div data-payment-forms>
+        {% for payment_form in formset %}
+          {% include 'app/includes/payment_form.html' with form=payment_form %}
+        {% endfor %}
+      </div>
+      <template data-payment-empty>
+        {% include 'app/includes/payment_form.html' with form=formset.empty_form %}
+      </template>
+      <button type="button" class="btn btn--outline" data-payment-add>Dodaj ratu</button>
+    </fieldset>
+
     {% if form.non_field_errors %}
       <p class="contact-form__error" role="alert">{{ form.non_field_errors|join:' ' }}</p>
     {% endif %}

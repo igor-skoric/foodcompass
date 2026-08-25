@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/app.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/app.css' %}?v=panel-2" />
   </head>
   <body class="app-body">
     <div class="app" data-app>
@@ -39,7 +39,7 @@
             {% if app_unread %}<span class="app__badge">{{ app_unread }}</span>{% endif %}
           </a>
           <a href="{% url 'app_news' %}" class="app__link{% if request.resolver_match.url_name == 'app_news' or request.resolver_match.url_name == 'app_news_detail' or request.resolver_match.url_name == 'app_news_create' or request.resolver_match.url_name == 'app_news_edit' %} is-active{% endif %}">Aktuelnosti</a>
-          <a href="{% url 'app_partners' %}" class="app__link{% if request.resolver_match.url_name == 'app_partners' or request.resolver_match.url_name == 'app_partner_detail' or request.resolver_match.url_name == 'app_partner_edit' or request.resolver_match.url_name == 'app_partner_create' %} is-active{% endif %}">Saradnja</a>
+          <a href="{% url 'app_partners' %}" class="app__link{% if request.resolver_match.url_name == 'app_partners' or request.resolver_match.url_name == 'app_partner_detail' or request.resolver_match.url_name == 'app_partner_edit' or request.resolver_match.url_name == 'app_partner_create' %} is-active{% endif %}">Klijenti</a>
         </nav>
         <div class="app__nav app__nav--foot">
           <a href="{% url 'admin:index' %}" class="app__link">Administracija</a>
@@ -54,7 +54,7 @@
         {% block content %}{% endblock %}
       </main>
     </div>
-    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/app.js' %}?v=panel-2"></script>
     <script src="{% static 'js/pwa.js' %}"></script>
     {% block extra_js %}{% endblock %}
   </body>

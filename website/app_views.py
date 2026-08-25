@@ -1,18 +1,19 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q, Sum
+from django.db.models import Count, Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from .forms import AppLoginForm, ArticleForm, PartnerForm
+from .forms import AppLoginForm, ArticleForm, PartnerForm, PartnerPaymentFormSet
 from .models import Article, ContactMessage, Partner
 
 
@@ -76,16 +77,34 @@ def app_logout(request):
 
 @owner_required
 def app_home(request):
-    messages = ContactMessage.objects.all()[:6]
-    articles = Article.objects.all()[:5]
+    Partner.mark_overdue()
+    today = timezone.localdate()
+    soon = today + timedelta(days=14)
+    partners = Partner.objects.all()
+    late = partners.filter(status=Partner.STATUS_LATE)
+    open_qs = partners.exclude(status=Partner.STATUS_COMPLETED)
+    due_soon = partners.filter(
+        due_on__gte=today,
+        due_on__lte=soon,
+    ).exclude(status=Partner.STATUS_COMPLETED).order_by('due_on', 'name')
+    late_list = late.order_by('due_on', 'name')[:8]
+    total = partners.aggregate(total=Sum('amount'), count=Count('id'))
+    late_agg = late.aggregate(total=Sum('amount'), count=Count('id'))
+    open_agg = open_qs.aggregate(total=Sum('amount'))
     return render(request, 'app/home.html', _app_context(
         request,
         'Pregled',
-        recent_messages=messages,
-        recent_articles=articles,
-        message_count=ContactMessage.objects.count(),
-        article_count=Article.objects.filter(is_published=True).count(),
-        partner_count=Partner.objects.count(),
+        partner_count=total['count'] or 0,
+        total_amount_display=Partner.format_amount(total['total']),
+        open_amount_display=Partner.format_amount(open_agg['total']),
+        late_amount_display=Partner.format_amount(late_agg['total']),
+        late_count=late_agg['count'] or 0,
+        due_soon_count=due_soon.count(),
+        active_count=partners.filter(status=Partner.STATUS_ACTIVE).count(),
+        pending_count=partners.filter(status=Partner.STATUS_PENDING).count(),
+        completed_count=partners.filter(status=Partner.STATUS_COMPLETED).count(),
+        late_partners=late_list,
+        due_soon_partners=due_soon[:8],
     ))
 
 
@@ -182,7 +201,7 @@ def _partner_queryset(request):
     status = request.GET.get('status', '').strip()
     date_from = _parse_date(request.GET.get('from', '').strip())
     date_to = _parse_date(request.GET.get('to', '').strip())
-    partners = Partner.objects.all()
+    partners = Partner.objects.annotate(payment_count=Count('payments'))
     if query:
         status_matches = [
             code for code, label in Partner.STATUS_CHOICES
@@ -198,13 +217,14 @@ def _partner_queryset(request):
         partners = partners.filter(recorded_on__gte=date_from)
     if date_to:
         partners = partners.filter(recorded_on__lte=date_to)
-    return partners, query, status, date_from, date_to
+    return partners.order_by('-recorded_on', 'name'), query, status, date_from, date_to
 
 
 @owner_required
 def app_partners(request):
+    Partner.mark_overdue()
     partners, query, status, date_from, date_to = _partner_queryset(request)
-    paginator = Paginator(partners, 10)
+    paginator = Paginator(partners, 40)
     page_obj = paginator.get_page(request.GET.get('page'))
     page_numbers = page_obj.paginator.get_elided_page_range(
         page_obj.number, on_each_side=1, on_ends=1
@@ -216,7 +236,7 @@ def app_partners(request):
     filters_active = bool(query or status or date_from or date_to)
     return render(request, 'app/partners.html', _app_context(
         request,
-        'Saradnja',
+        'Klijenti',
         page_obj=page_obj,
         page_numbers=page_numbers,
         query=query,
@@ -233,31 +253,44 @@ def app_partners(request):
 
 
 def _save_partner(request, instance=None):
-    form = PartnerForm(request.POST or None, instance=instance)
-    if request.method == 'POST' and form.is_valid():
+    partner = instance
+    form = PartnerForm(request.POST or None, instance=partner)
+    formset = PartnerPaymentFormSet(
+        request.POST or None,
+        instance=partner or Partner(),
+        prefix='payments',
+    )
+    if request.method == 'POST' and form.is_valid() and formset.is_valid():
         partner = form.save()
+        formset.instance = partner
+        formset.save()
+        partner.sync_amount()
+        partner.apply_overdue()
         toast = 'saved' if instance else 'created'
         url = reverse('app_partner_detail', kwargs={'pk': partner.pk})
         return redirect(f'{url}?toast={toast}')
-    return form
+    return form, formset
 
 
 @owner_required
 def app_partner_create(request):
-    form = _save_partner(request)
-    if not isinstance(form, PartnerForm):
-        return form
+    saved = _save_partner(request)
+    if not isinstance(saved, tuple):
+        return saved
+    form, formset = saved
     return render(request, 'app/partner_form.html', _app_context(
         request,
         'Novi unos',
         form=form,
+        formset=formset,
         is_create=True,
     ))
 
 
 @owner_required
 def app_partner_detail(request, pk):
-    partner = get_object_or_404(Partner, pk=pk)
+    Partner.mark_overdue()
+    partner = get_object_or_404(Partner.objects.prefetch_related('payments'), pk=pk)
     return render(request, 'app/partner_detail.html', _app_context(
         request,
         partner.name,
@@ -265,24 +298,18 @@ def app_partner_detail(request, pk):
     ))
 
 
-def app_partner_detail_redirect(request, pk):
-    return redirect('app_partner_detail', pk=pk)
-
-
-def app_partner_edit_redirect(request, pk):
-    return redirect('app_partner_edit', pk=pk)
-
-
 @owner_required
 def app_partner_edit(request, pk):
     partner = get_object_or_404(Partner, pk=pk)
-    form = _save_partner(request, partner)
-    if not isinstance(form, PartnerForm):
-        return form
+    saved = _save_partner(request, partner)
+    if not isinstance(saved, tuple):
+        return saved
+    form, formset = saved
     return render(request, 'app/partner_form.html', _app_context(
         request,
         f'Izmena — {partner.name}',
         form=form,
+        formset=formset,
         partner=partner,
         is_create=False,
     ))

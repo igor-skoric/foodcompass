@@ -313,10 +313,10 @@ ABOUT = {
         'Food Compass is an expert consulting concept focused on food safety, '
         'regulatory compliance and improving management systems in food businesses.'
     ),
-    'quote': 'If we had known it was needed, we would certainly have done it — but we did not know.',
+    'quote': '“\u2060If we had known it was needed, we would certainly have done it — but we did not know.\u2060”',
     'quote_context': (
-        'As the founder of Food Compass and a specialist with more than 22 years of experience '
-        'in food safety, I have heard this sentence countless times.'
+        'As the founder of Food Compass and a specialist with more than 22 years of professional '
+        'experience, along with long-standing work in food safety, I have heard this sentence countless times.'
     ),
     'origin': (
         'It was one of the main reasons I started Food Compass — as a clear guide through '
@@ -389,7 +389,7 @@ ABOUT_ME = {
     'role': 'Master of Biochemical Engineering and Biotechnology',
     'role_extra': 'Food safety specialist',
     'lead': 'More than 22 years of professional experience, including long-standing work in food safety, official controls, HACCP systems, risk assessment and compliance with national and European regulations.',
-    'quote': 'I believe a good food safety system should not be documentation alone.',
+    'quote': '“\u2060I believe a good food safety system should not be documentation alone.\u2060”',
     'quote_open': '“',
     'quote_close': '”',
     'facts': [
@@ -604,7 +604,7 @@ HOME = {
     'news_more': 'Read →',
     'news_all': 'All news →',
     'goal_eyebrow': 'Our goal',
-    'goal_quote': 'To make food safety clearer, more efficient and easier to manage.',
+    'goal_quote': '“\u2060To make food safety clearer, more efficient and easier to manage.\u2060”',
     'goal_aside': 'You have the idea. We show you the way.',
     'goal_cta': 'Book a meeting',
 }
@@ -643,7 +643,7 @@ JOURNEY_PAGE = {
         'Food Compass connects product development, food safety, regulatory compliance, '
         'documentation and labelling so your product is correctly defined, safe and ready for the market.'
     ),
-    'quote': 'You have the idea. We show you the way.',
+    'quote': '“\u2060You have the idea. We show you the way.\u2060”',
     'cta_meeting': 'Book a meeting',
     'cta_services': 'Our services',
     'hero_eyebrow': 'From idea to shelf',
@@ -668,8 +668,29 @@ CONTACT_PAGE = {
     'form_title': 'Send a message',
     'form_lead': 'Tell us briefly about the product, premises or standard — we will propose the next step.',
     'form_error': 'Please fill in your name, email and message.',
+    'form_message_too_long': 'The message can be at most 5000 characters.',
+    'form_rate_error': 'Too many messages from this address. Please try again in a few minutes.',
     'form_send_error': 'The message was saved, but sending email currently failed. Write to us at',
     'submit': 'Send message →',
+}
+
+CONTACT_RECEIPT = {
+    'subject': 'Your message has arrived — Food Compass',
+    'preheader': 'Thank you. We will review your enquiry and get back to you as soon as possible.',
+    'eyebrow': 'Message received',
+    'title': 'Thank you, {name}.',
+    'title_plain': 'Thank you.',
+    'lead': 'Your enquiry has been received. We will review it carefully and reply as soon as possible.',
+    'body': (
+        'This is an automatic confirmation. There is no need to reply to this email — '
+        'we will get in touch personally once we have reviewed your enquiry.'
+    ),
+    'quote_label': 'Your message',
+    'motto': 'You have the idea. We show you the way.',
+    'cta': 'Visit the website',
+    'signoff': 'Kind regards,',
+    'team': 'The Food Compass team',
+    'footer': 'Expert support in food safety management.',
 }
 
 NEWS_PAGE = {

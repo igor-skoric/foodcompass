@@ -79,8 +79,10 @@
             </label>
             {% if send_error %}
               <p class="contact-form__error" role="alert">{{ contact_page.form_send_error }} {{ contact.email }}.</p>
+            {% elif form.non_field_errors %}
+              <p class="contact-form__error" role="alert">{{ form.non_field_errors.0 }}</p>
             {% elif form.errors %}
-              <p class="contact-form__error" role="alert">{{ contact_page.form_error }}</p>
+              <p class="contact-form__error" role="alert">{% if form.message.errors %}{{ form.message.errors.0 }}{% else %}{{ contact_page.form_error }}{% endif %}</p>
             {% endif %}
             <button type="submit" class="btn btn--gold">{{ contact_page.submit }}</button>
           </form>

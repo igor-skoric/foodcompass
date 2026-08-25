@@ -1,10 +1,22 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.forms import BaseInlineFormSet, inlineformset_factory
 from django.utils import timezone
-from .models import Article, ContactMessage, Partner
+from .models import Article, ContactMessage, Partner, PartnerPayment
+
+CONTACT_MESSAGE_MAX_LENGTH = 5000
 
 
 class ContactForm(forms.ModelForm):
+    message = forms.CharField(
+        max_length=CONTACT_MESSAGE_MAX_LENGTH,
+        widget=forms.Textarea(attrs={
+            'rows': 6,
+            'required': True,
+            'maxlength': str(CONTACT_MESSAGE_MAX_LENGTH),
+        }),
+    )
+
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'phone', 'message']
@@ -12,7 +24,6 @@ class ContactForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'autocomplete': 'name', 'required': True}),
             'email': forms.EmailInput(attrs={'autocomplete': 'email', 'required': True}),
             'phone': forms.TextInput(attrs={'autocomplete': 'tel'}),
-            'message': forms.Textarea(attrs={'rows': 6, 'required': True}),
         }
         labels = {
             'name': 'Ime i prezime *',
@@ -25,11 +36,15 @@ class ContactForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         from .copy_loader import site_copy
 
-        strings = site_copy().STRINGS
+        copy = site_copy()
+        strings = copy.STRINGS
         self.fields['name'].label = strings['form_name']
         self.fields['email'].label = strings['form_email']
         self.fields['phone'].label = strings['form_phone']
         self.fields['message'].label = strings['form_message']
+        self.fields['message'].error_messages['max_length'] = (
+            copy.CONTACT_PAGE['form_message_too_long']
+        )
 
 
 class AppLoginForm(AuthenticationForm):
@@ -54,29 +69,96 @@ class AppLoginForm(AuthenticationForm):
 class PartnerForm(forms.ModelForm):
     class Meta:
         model = Partner
-        fields = ['name', 'recorded_on', 'amount', 'description', 'status']
+        fields = ['name', 'recorded_on', 'due_on', 'description', 'status']
         widgets = {
             'name': forms.TextInput(attrs={'autocomplete': 'organization'}),
             'recorded_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
-            'amount': forms.NumberInput(attrs={'step': '0.01', 'min': '0', 'inputmode': 'decimal'}),
-            'description': forms.Textarea(attrs={'rows': 5}),
+            'due_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'description': forms.Textarea(attrs={'rows': 3}),
         }
         labels = {
-            'name': 'Naziv saradnika',
+            'name': 'Naziv klijenta',
             'recorded_on': 'Datum',
-            'amount': 'Iznos',
+            'due_on': 'Rok',
             'description': 'Opis',
             'status': 'Status',
         }
         help_texts = {
-            'amount': 'Iznos u RSD, npr. 15000.00',
+            'due_on': 'Ako rok prođe, status automatski postaje „Kasni sa plaćanjem“.',
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['recorded_on'].input_formats = ['%Y-%m-%d']
+        self.fields['due_on'].input_formats = ['%Y-%m-%d']
+        self.fields['due_on'].required = False
         if not self.instance.pk:
             self.fields['recorded_on'].initial = timezone.localdate()
+
+
+class PartnerPaymentForm(forms.ModelForm):
+    class Meta:
+        model = PartnerPayment
+        fields = ['amount', 'paid_on', 'note']
+        widgets = {
+            'amount': forms.NumberInput(attrs={'step': '0.01', 'min': '0', 'inputmode': 'decimal'}),
+            'paid_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'note': forms.TextInput(attrs={'placeholder': 'npr. 1. rata'}),
+        }
+        labels = {
+            'amount': 'Iznos',
+            'paid_on': 'Datum rate',
+            'note': 'Napomena',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['paid_on'].input_formats = ['%Y-%m-%d']
+        self.fields['amount'].required = False
+        self.fields['paid_on'].required = False
+        if not self.instance.pk:
+            self.fields['paid_on'].initial = None
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get('DELETE'):
+            return cleaned
+        amount = cleaned.get('amount')
+        if amount is not None and amount <= 0:
+            self.add_error('amount', 'Iznos mora biti veći od nule.')
+        if amount and not cleaned.get('paid_on'):
+            cleaned['paid_on'] = timezone.localdate()
+        if (cleaned.get('note') or cleaned.get('paid_on')) and not amount:
+            self.add_error('amount', 'Unesite iznos rate.')
+        return cleaned
+
+
+class BasePartnerPaymentFormSet(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        if any(self.errors):
+            return
+        filled = 0
+        for form in self.forms:
+            data = form.cleaned_data
+            if not data or data.get('DELETE'):
+                continue
+            if data.get('amount'):
+                filled += 1
+        if filled == 0:
+            raise forms.ValidationError('Unesite bar jednu ratu.')
+
+
+PartnerPaymentFormSet = inlineformset_factory(
+    Partner,
+    PartnerPayment,
+    form=PartnerPaymentForm,
+    formset=BasePartnerPaymentFormSet,
+    extra=1,
+    can_delete=True,
+    min_num=0,
+    max_num=40,
+)
 
 
 class ArticleForm(forms.ModelForm):

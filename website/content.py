@@ -321,10 +321,10 @@ ABOUT = {
         'Food Compass je stručni i konsultantski koncept usmeren na bezbednost hrane, '
         'regulatornu usaglašenost i unapređenje sistema upravljanja u poslovanju hranom.'
     ),
-    'quote': 'Da smo znali da to treba, sigurno bismo to i uradili – ali nismo znali.',
+    'quote': '„\u2060Da smo znali da to treba, sigurno bismo to i uradili – ali nismo znali.\u2060“',
     'quote_context': (
-        'Kao osnivač Food Compass-a i stručnjak sa više od 22 godine iskustva u oblasti '
-        'bezbednosti hrane, ovu rečenicu sam čula bezbroj puta.'
+        'Kao osnivač Food Compass-a i stručnjak sa više od 22 godine profesionalnog iskustva, '
+        'uz dugogodišnji rad u oblasti bezbednosti hrane, ovu rečenicu sam čula bezbroj puta.'
     ),
     'origin': (
         'Upravo ona bila je jedan od glavnih motiva da pokrenem Food Compass – kao jasan '
@@ -399,7 +399,7 @@ ABOUT_ME = {
     'role': 'Master inženjer biohemijskog inženjerstva i biotehnologije',
     'role_extra': 'Specijalista za bezbednost hrane',
     'lead': 'Više od 22 godine profesionalnog iskustva, uz dugogodišnji rad u oblasti bezbednosti hrane, službenih kontrola, HACCP sistema, procene rizika i usaglašenosti sa nacionalnim i evropskim propisima.',
-    'quote': 'Verujem da dobar sistem bezbednosti hrane ne treba da bude samo dokumentacija.',
+    'quote': '„\u2060Verujem da dobar sistem bezbednosti hrane ne treba da bude samo dokumentacija.\u2060“',
     'quote_open': '„',
     'quote_close': '“',
     'facts': [
@@ -614,7 +614,7 @@ HOME = {
     'news_more': 'Pročitajte →',
     'news_all': 'Sve aktuelnosti →',
     'goal_eyebrow': 'Naš cilj',
-    'goal_quote': 'Da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.',
+    'goal_quote': '„\u2060Da bezbednost hrane učinimo razumljivijom, efikasnijom i lakšom za upravljanje.\u2060“',
     'goal_aside': 'Vi imate ideju. Mi vam pokazujemo put.',
     'goal_cta': 'Zakažite sastanak',
 }
@@ -654,7 +654,7 @@ JOURNEY_PAGE = {
         'dokumentaciju i deklarisanje kako bi vaš proizvod bio pravilno definisan, bezbedan '
         'i spreman za tržište.'
     ),
-    'quote': 'Vi imate ideju. Mi vam pokazujemo put.',
+    'quote': '„\u2060Vi imate ideju. Mi vam pokazujemo put.\u2060“',
     'cta_meeting': 'Zakažite sastanak',
     'cta_services': 'Naše usluge',
     'hero_eyebrow': 'Od ideje do police',
@@ -679,8 +679,29 @@ CONTACT_PAGE = {
     'form_title': 'Pošaljite poruku',
     'form_lead': 'Ukratko nam recite o proizvodu, objektu ili standardu — predložićemo sledeći korak.',
     'form_error': 'Popunite ime, email i poruku.',
+    'form_message_too_long': 'Poruka može imati najviše 5000 karaktera.',
+    'form_rate_error': 'Previše poruka sa ove adrese. Pokušajte ponovo za nekoliko minuta.',
     'form_send_error': 'Poruka je sačuvana, ali slanje emaila trenutno nije uspelo. Pišite nam na',
     'submit': 'Pošaljite poruku →',
+}
+
+CONTACT_RECEIPT = {
+    'subject': 'Vaša poruka je stigla — Food Compass',
+    'preheader': 'Hvala vam. Pregledaćemo upit i javićemo se u najkraćem roku.',
+    'eyebrow': 'Potvrda prijema',
+    'title': 'Hvala vam, {name}.',
+    'title_plain': 'Hvala vam.',
+    'lead': 'Vaš upit je uspešno stigao. Pažljivo ćemo ga pregledati i odgovoriti u najkraćem roku.',
+    'body': (
+        'Ovo je automatska potvrda. Nije potrebno da odgovarate na ovu poruku — '
+        'javićemo vam se lično čim pregledamo vaš upit.'
+    ),
+    'quote_label': 'Vaša poruka',
+    'motto': 'Vi imate ideju. Mi vam pokazujemo put.',
+    'cta': 'Posetite sajt',
+    'signoff': 'Srdačan pozdrav,',
+    'team': 'Tim Food Compass',
+    'footer': 'Stručna podrška u upravljanju bezbednošću hrane.',
 }
 
 NEWS_PAGE = {
@@ -740,36 +761,6 @@ STRINGS = {
     'journey_card_title': 'Od ideje do police',
     'journey_card_desc': 'Kompletna stručna podrška od prve ideje i recepture do proizvoda spremnog za tržište.',
 }
-
-
-def get_service(slug):
-    return next((item for item in SERVICES if item['slug'] == slug), None)
-
-
-def get_service_cards():
-    cards = []
-    for index, service in enumerate(SERVICES, start=1):
-        cards.append({
-            'number': f'{index:02d}',
-            'title': service['title'],
-            'standards': service.get('standards') or [],
-            'desc': service.get('card') or service['short'],
-            'icon': service['icon'],
-            'url_name': 'service_detail',
-            'slug': service['slug'],
-            'flagship': False,
-        })
-    cards.append({
-        'number': '06',
-        'title': STRINGS['journey_card_title'],
-        'standards': [],
-        'desc': STRINGS['journey_card_desc'],
-        'icon': 'journey',
-        'url_name': 'journey',
-        'slug': None,
-        'flagship': True,
-    })
-    return cards
 
 
 TERMS = {

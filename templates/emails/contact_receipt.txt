@@ -1,0 +1,20 @@
+{{ title }}
+
+{{ copy.lead }}
+
+{{ copy.body }}
+{% if message_preview %}
+
+{{ copy.quote_label }}:
+{{ message_preview }}
+{% endif %}
+
+{{ copy.motto }}
+
+{{ copy.signoff }}
+{{ copy.team }}
+
+{{ copy.footer }}
+{{ contact.email }}
+{{ contact.phone_display }}
+{{ home_url }}

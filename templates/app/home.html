@@ -3,70 +3,96 @@
 {% block content %}
   <header class="app-page__head">
     <span class="eyebrow">Pregled</span>
-    <h1>Dobro došli</h1>
-    <p>Poruke sa sajta, saradnja i aktuelnosti.</p>
+    <h1>Klijenti i naplata</h1>
+    <p>Iznosi, dugovanja i rokovi plaćanja.</p>
   </header>
 
-  <section class="app-stats">
-    <a href="{% url 'app_messages' %}" class="app-stat">
-      <span class="app-stat__label">Nove poruke</span>
-      <strong>{{ app_unread }}</strong>
+  <section class="app-stats app-stats--wide">
+    <a href="{% url 'app_partners' %}" class="app-stat">
+      <span class="app-stat__label">Ukupan iznos</span>
+      <strong>{{ total_amount_display }} <span class="app-stat__unit">RSD</span></strong>
+    </a>
+    <a href="{% url 'app_partners' %}?status=late" class="app-stat app-stat--warn">
+      <span class="app-stat__label">Dugovanja</span>
+      <strong>{{ late_amount_display }} <span class="app-stat__unit">RSD</span></strong>
     </a>
     <a href="{% url 'app_partners' %}" class="app-stat">
-      <span class="app-stat__label">Saradnja</span>
+      <span class="app-stat__label">Otvoreno</span>
+      <strong>{{ open_amount_display }} <span class="app-stat__unit">RSD</span></strong>
+    </a>
+    <a href="{% url 'app_partners' %}?status=late" class="app-stat app-stat--warn">
+      <span class="app-stat__label">Kasni sa plaćanjem</span>
+      <strong>{{ late_count }}</strong>
+    </a>
+    <a href="{% url 'app_partners' %}" class="app-stat">
+      <span class="app-stat__label">Rok u 14 dana</span>
+      <strong>{{ due_soon_count }}</strong>
+    </a>
+    <a href="{% url 'app_partners' %}" class="app-stat">
+      <span class="app-stat__label">Klijenti</span>
       <strong>{{ partner_count }}</strong>
     </a>
-    <a href="{% url 'app_news' %}" class="app-stat">
-      <span class="app-stat__label">Objavljene vesti</span>
-      <strong>{{ article_count }}</strong>
+    <a href="{% url 'app_partners' %}?status=active" class="app-stat">
+      <span class="app-stat__label">Aktivni</span>
+      <strong>{{ active_count }}</strong>
+    </a>
+    <a href="{% url 'app_partners' %}?status=pending" class="app-stat">
+      <span class="app-stat__label">Na čekanju</span>
+      <strong>{{ pending_count }}</strong>
+    </a>
+    <a href="{% url 'app_partners' %}?status=completed" class="app-stat">
+      <span class="app-stat__label">Završeni</span>
+      <strong>{{ completed_count }}</strong>
     </a>
   </section>
 
-  <section class="app-panel">
-    <div class="app-panel__head">
-      <h2>Poslednje poruke</h2>
-      <a href="{% url 'app_messages' %}">Sve poruke →</a>
-    </div>
-    {% if recent_messages %}
-      <ul class="app-list">
-        {% for item in recent_messages %}
-          <li>
-            <a href="{% url 'app_message_detail' item.pk %}" class="app-list__row{% if not item.is_read %} is-unread{% endif %}">
-              <span>
-                <strong>{{ item.name }}</strong>
-                <em>{{ item.email }}</em>
-              </span>
-              <time>{{ item.created_at|date:"d.m.Y. H:i" }}</time>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="app-empty">Još nema poruka sa kontakt forme.</p>
-    {% endif %}
-  </section>
+  <div class="app-home-cols">
+    <section class="app-panel">
+      <div class="app-panel__head">
+        <h2>Kasne sa plaćanjem</h2>
+        <a href="{% url 'app_partners' %}?status=late">Svi →</a>
+      </div>
+      {% if late_partners %}
+        <ul class="app-list">
+          {% for item in late_partners %}
+            <li>
+              <a href="{% url 'app_partner_detail' item.pk %}" class="app-list__row">
+                <span>
+                  <strong>{{ item.name }}</strong>
+                  <em>{{ item.amount_display }} RSD{% if item.due_on %} · rok {{ item.due_on|date:"d.m.Y." }}{% endif %}</em>
+                </span>
+                <span class="app-status app-status--late">{{ item.get_status_display }}</span>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="app-empty">Nema klijenata koji kasne sa plaćanjem.</p>
+      {% endif %}
+    </section>
 
-  <section class="app-panel" style="margin-top: 1.25rem">
-    <div class="app-panel__head">
-      <h2>Aktuelnosti</h2>
-      <a href="{% url 'app_news' %}">Sve vesti →</a>
-    </div>
-    {% if recent_articles %}
-      <ul class="app-list">
-        {% for item in recent_articles %}
-          <li>
-            <a href="{% url 'app_news_detail' item.pk %}" class="app-list__row">
-              <span>
-                <strong>{{ item.title }}</strong>
-                <em>{% if item.is_published %}Objavljeno{% else %}Nacrt{% endif %}</em>
-              </span>
-              <time>{% if item.published_at %}{{ item.published_at|date:"d.m.Y." }}{% else %}—{% endif %}</time>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="app-empty">Još nema aktuelnosti.</p>
-    {% endif %}
-  </section>
+    <section class="app-panel">
+      <div class="app-panel__head">
+        <h2>Predstojeći rokovi</h2>
+        <a href="{% url 'app_partners' %}">Klijenti →</a>
+      </div>
+      {% if due_soon_partners %}
+        <ul class="app-list">
+          {% for item in due_soon_partners %}
+            <li>
+              <a href="{% url 'app_partner_detail' item.pk %}" class="app-list__row">
+                <span>
+                  <strong>{{ item.name }}</strong>
+                  <em>{{ item.amount_display }} RSD</em>
+                </span>
+                <time>{{ item.due_on|date:"d.m.Y." }}</time>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="app-empty">Nema rokova u narednih 14 dana.</p>
+      {% endif %}
+    </section>
+  </div>
 {% endblock %}

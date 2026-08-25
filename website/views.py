@@ -8,10 +8,11 @@ from PIL import Image
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.staticfiles import finders
+from django.core.cache import cache
 from django.core.files.storage import default_storage
 from django.core.mail import BadHeaderError
 from django.core.paginator import Paginator
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
@@ -20,13 +21,40 @@ from smtplib import SMTPException
 from .content import CONTACT
 from .copy_loader import get_service, get_service_cards, published_articles, site_copy
 from .forms import ContactForm
-from .mail import send_contact_message
+from .mail import receipt_html, send_contact_message, send_contact_receipt
 from .models import Article
 from .seo import page_seo
 
 logger = logging.getLogger(__name__)
 
 HERO_FILE = re.compile(r'^hero(\d+)\.(png|jpe?g)$', re.I)
+
+# Light contact-form throttle: locmem is per-process (fine for a single Gunicorn worker).
+CONTACT_RATE_MAX = 8
+CONTACT_RATE_SECONDS = 10 * 60
+
+
+def _client_ip(request):
+    # Reverse proxy (Nginx/Caddy) MUST overwrite X-Forwarded-For — do not append a
+    # client-supplied value; the leftmost hop is spoofable. With overwrite there is
+    # one trusted IP. If the proxy appends, the rightmost hop is the nearest address
+    # Gunicorn should trust. REMOTE_ADDR is the TCP peer (often the proxy itself).
+    forwarded = (request.META.get('HTTP_X_FORWARDED_FOR') or '').strip()
+    if forwarded:
+        return forwarded.split(',')[-1].strip() or 'unknown'
+    return (request.META.get('REMOTE_ADDR') or '').strip() or 'unknown'
+
+
+def _contact_submit_limited(request):
+    key = f'contact-form:{_client_ip(request)}'
+    if cache.add(key, 1, CONTACT_RATE_SECONDS):
+        return False
+    try:
+        count = cache.incr(key)
+    except ValueError:
+        cache.set(key, 1, CONTACT_RATE_SECONDS)
+        return False
+    return count > CONTACT_RATE_MAX
 
 
 def _export_hero_variants(src: Path):
@@ -264,14 +292,21 @@ def news_detail(request, slug):
 
 
 def contact(request):
+    copy = site_copy()
     sent = False
     send_error = False
     if request.method == 'POST':
         form = ContactForm(request.POST)
-        if form.is_valid():
+        if _contact_submit_limited(request):
+            form.add_error(None, copy.CONTACT_PAGE['form_rate_error'])
+        elif form.is_valid():
             message = form.save()
             try:
                 send_contact_message(message)
+                try:
+                    send_contact_receipt(message)
+                except (SMTPException, BadHeaderError, OSError):
+                    logger.exception('Failed to send contact receipt to %s', message.email)
                 sent = True
                 form = ContactForm()
             except (SMTPException, BadHeaderError, OSError):
@@ -279,7 +314,6 @@ def contact(request):
                 send_error = True
     else:
         form = ContactForm()
-    copy = site_copy()
     return render(request, 'pages/contact.html', {
         'form': form,
         'sent': sent,
@@ -288,6 +322,17 @@ def contact(request):
         'contact_page': copy.CONTACT_PAGE,
         'seo': _seo('contact'),
     })
+
+
+def contact_receipt_preview(request):
+    if not settings.DEBUG:
+        raise Http404()
+    return _contact_receipt_preview(request)
+
+
+@staff_member_required
+def _contact_receipt_preview(request):
+    return HttpResponse(receipt_html())
 
 
 def terms(request):

@@ -13,5 +13,6 @@ urlpatterns = [
     path('aktuelnosti/', views.news_list, name='news'),
     path('aktuelnosti/<slug:slug>/', views.news_detail, name='news_detail'),
     path('kontakt/', views.contact, name='contact'),
+    path('kontakt/pregled-potvrde/', views.contact_receipt_preview, name='contact_receipt_preview'),
     path('uslovi-koriscenja/', views.terms, name='terms'),
 ]

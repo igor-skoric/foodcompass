@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="x-apple-disable-message-reformatting" />
+  <meta name="color-scheme" content="light" />
+  <meta name="supported-color-schemes" content="light" />
+  <title>{{ copy.subject }}</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <style>
+    table, td, th, div, p, a, h1, h2 { font-family: Arial, sans-serif !important; }
+  </style>
+  <![endif]-->
+  <style>
+    html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+    a { text-decoration: none; }
+    @media only screen and (max-width: 620px) {
+      .email-outer { width: 100% !important; }
+      .email-pad { padding: 28px 22px !important; }
+      .email-head { padding: 22px 22px 20px !important; }
+      .email-logo { width: 40px !important; height: 40px !important; }
+      .email-title { font-size: 26px !important; line-height: 1.25 !important; }
+      .email-lead { font-size: 17px !important; }
+      .email-btn { display: block !important; width: 100% !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#eef6f1;width:100%;">
+  <div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    {{ copy.preheader }}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+  </div>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#eef6f1;margin:0;padding:0;width:100%;">
+    <tr>
+      <td align="center" style="padding:24px 12px;">
+        <table role="presentation" class="email-outer" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px;max-width:600px;background-color:#fffdf8;border-radius:8px;overflow:hidden;">
+          <tr>
+            <td class="email-head" style="background-color:#0c3322;padding:24px 40px 22px;border-bottom:3px solid #b8924f;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr>
+                  <td valign="middle" width="56" style="width:56px;padding:0;">
+                    <img class="email-logo" src="{{ logo_url }}" width="48" height="48" alt="Food Compass" style="display:block;width:48px;height:48px;border:0;outline:none;" />
+                  </td>
+                  <td valign="middle" style="padding:0 0 0 14px;">
+                    <p style="margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#b8924f;">
+                      Food Compass
+                    </p>
+                    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:#f4efe6;">
+                      {{ copy.eyebrow }}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="email-pad" style="padding:36px 40px 12px;">
+              <h1 class="email-title" style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.2;font-weight:normal;color:#0c3322;">
+                {{ title }}
+              </h1>
+              <p class="email-lead" style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.55;color:#1a2e24;">
+                {{ copy.lead }}
+              </p>
+              <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#5c7268;">
+                {{ copy.body }}
+              </p>
+              {% if message_preview %}
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 28px;">
+                <tr>
+                  <td style="padding:18px 20px;background-color:#eef6f1;border-left:3px solid #b8924f;">
+                    <p style="margin:0 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#b8924f;">
+                      {{ copy.quote_label }}
+                    </p>
+                    <p style="margin:0;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.55;color:#0c3322;">
+                      {{ message_preview }}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              {% endif %}
+              <p style="margin:0 0 28px;font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.5;font-style:italic;color:#0c3322;">
+                {{ copy.motto }}
+              </p>
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" bgcolor="#b8924f" style="background-color:#b8924f;border-radius:2px;">
+                    <a class="email-btn" href="{{ home_url }}" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#ffffff;text-decoration:none;">
+                      {{ copy.cta }}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:32px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#1a2e24;">
+                {{ copy.signoff }}<br />
+                <strong style="color:#0c3322;">{{ copy.team }}</strong>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td class="email-pad" style="padding:8px 40px 36px;">
+              <p style="margin:0 0 12px;border-top:1px solid #d9ebe1;font-size:1px;line-height:1px;">&nbsp;</p>
+              <p style="margin:16px 0 8px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#5c7268;">
+                {{ copy.footer }}
+              </p>
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.7;color:#5c7268;">
+                <a href="mailto:{{ contact.email }}" style="color:#0c3322;text-decoration:underline;">{{ contact.email }}</a>
+                &nbsp;·&nbsp;
+                <a href="tel:{{ contact.phone }}" style="color:#0c3322;text-decoration:underline;">{{ contact.phone_display }}</a>
+                <br />
+                <a href="{{ home_url }}" style="color:#0c3322;text-decoration:underline;">foodcompass.rs</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

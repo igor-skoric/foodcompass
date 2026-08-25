@@ -2,30 +2,55 @@
 
 {% block content %}
   <header class="app-page__head">
-    <a class="app-back" href="{% url 'app_partners' %}"><span aria-hidden="true">←</span> Nazad na saradnju</a>
+    <a class="app-back" href="{% url 'app_partners' %}"><span aria-hidden="true">←</span> Nazad na klijente</a>
     <span class="eyebrow">Pregled</span>
     <h1>{{ partner.name }}</h1>
   </header>
 
-  <article class="app-message">
+  <article class="app-message app-message--client">
     <dl>
       <div>
-        <dt>Naziv saradnika</dt>
+        <dt>Naziv klijenta</dt>
         <dd>{{ partner.name }}</dd>
-      </div>
-      <div>
-        <dt>Datum</dt>
-        <dd>{{ partner.recorded_on|date:"d.m.Y." }}</dd>
       </div>
       <div>
         <dt>Iznos</dt>
         <dd>{{ partner.amount_display }} RSD</dd>
       </div>
       <div>
+        <dt>Datum</dt>
+        <dd>{{ partner.recorded_on|date:"d.m.Y." }}</dd>
+      </div>
+      <div>
+        <dt>Rok</dt>
+        <dd>{% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}</dd>
+      </div>
+      <div>
         <dt>Status</dt>
         <dd><span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span></dd>
       </div>
     </dl>
+    {% if partner.payments.all %}
+      <h2 class="app-message__sub">Rate</h2>
+      <table class="app-table app-table--dense app-table--plain">
+        <thead>
+          <tr>
+            <th>Datum rate</th>
+            <th>Iznos</th>
+            <th>Napomena</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in partner.payments.all %}
+            <tr>
+              <td>{{ payment.paid_on|date:"d.m.Y." }}</td>
+              <td>{{ payment.amount_display }} RSD</td>
+              <td>{% if payment.note %}{{ payment.note }}{% else %}—{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
     {% if partner.description %}
       <p class="app-message__body">{{ partner.description|linebreaksbr }}</p>
     {% else %}

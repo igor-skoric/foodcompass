@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.text import slugify
@@ -92,11 +93,6 @@ class Article(models.Model):
     def display_body(self):
         return self._localized('body')
 
-    def has_translation(self, lang):
-        if lang == 'sr':
-            return bool((self.title or '').strip())
-        return bool((getattr(self, f'title_{lang}', '') or '').strip() or (getattr(self, f'body_{lang}', '') or '').strip())
-
 
 class ArticleImage(models.Model):
     article = models.ForeignKey(
@@ -140,15 +136,18 @@ class Partner(models.Model):
     STATUS_PENDING = 'pending'
     STATUS_COMPLETED = 'completed'
     STATUS_PAUSED = 'paused'
+    STATUS_LATE = 'late'
     STATUS_CHOICES = [
         (STATUS_ACTIVE, 'Aktivan'),
         (STATUS_PENDING, 'Na čekanju'),
         (STATUS_COMPLETED, 'Završen'),
         (STATUS_PAUSED, 'Pauziran'),
+        (STATUS_LATE, 'Kasni sa plaćanjem'),
     ]
 
-    name = models.CharField('Naziv saradnika', max_length=180)
+    name = models.CharField('Naziv klijenta', max_length=180)
     recorded_on = models.DateField('Datum', default=timezone.localdate, db_index=True)
+    due_on = models.DateField('Rok', null=True, blank=True, db_index=True)
     amount = models.DecimalField('Iznos', max_digits=12, decimal_places=2, default=0)
     description = models.TextField('Opis', blank=True)
     status = models.CharField(
@@ -163,8 +162,8 @@ class Partner(models.Model):
 
     class Meta:
         ordering = ['-recorded_on', 'name']
-        verbose_name = 'Saradnja'
-        verbose_name_plural = 'Saradnja'
+        verbose_name = 'Klijent'
+        verbose_name_plural = 'Klijenti'
 
     def __str__(self):
         return self.name
@@ -177,3 +176,62 @@ class Partner(models.Model):
     @property
     def amount_display(self):
         return self.format_amount(self.amount)
+
+    @property
+    def is_overdue(self):
+        return bool(
+            self.due_on
+            and self.due_on < timezone.localdate()
+            and self.status != self.STATUS_COMPLETED
+        )
+
+    def sync_amount(self):
+        total = self.payments.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+        if self.amount != total:
+            type(self).objects.filter(pk=self.pk).update(amount=total, updated_at=timezone.now())
+            self.amount = total
+        return total
+
+    def apply_overdue(self, save=True):
+        if self.status == self.STATUS_COMPLETED or not self.is_overdue:
+            return False
+        if self.status == self.STATUS_LATE:
+            return False
+        self.status = self.STATUS_LATE
+        if save and self.pk:
+            type(self).objects.filter(pk=self.pk).update(
+                status=self.STATUS_LATE,
+                updated_at=timezone.now(),
+            )
+        return True
+
+    @classmethod
+    def mark_overdue(cls):
+        today = timezone.localdate()
+        return cls.objects.filter(due_on__lt=today).exclude(
+            status__in=(cls.STATUS_COMPLETED, cls.STATUS_LATE),
+        ).update(status=cls.STATUS_LATE)
+
+
+class PartnerPayment(models.Model):
+    partner = models.ForeignKey(
+        Partner,
+        related_name='payments',
+        on_delete=models.CASCADE,
+        verbose_name='Klijent',
+    )
+    amount = models.DecimalField('Iznos', max_digits=12, decimal_places=2)
+    paid_on = models.DateField('Datum rate', default=timezone.localdate)
+    note = models.CharField('Napomena', max_length=180, blank=True)
+
+    class Meta:
+        ordering = ['paid_on', 'id']
+        verbose_name = 'Rata'
+        verbose_name_plural = 'Rate'
+
+    def __str__(self):
+        return f'{self.partner.name} — {self.amount_display}'
+
+    @property
+    def amount_display(self):
+        return Partner.format_amount(self.amount)
