@@ -1,5 +1,5 @@
 {% load static site_tags %}
-<section class="page-top page-top--hero">
+<section class="page-top page-top--hero{% if hero.variant %} page-top--{{ hero.variant }}{% endif %}">
   <div class="page-top__media" aria-hidden="true">
     {% if hero.cover %}
       <img src="{{ hero.cover }}" alt="" class="page-top__photo" />

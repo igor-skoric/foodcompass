@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
@@ -6,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count, Q, Sum
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -15,6 +17,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import AppLoginForm, ArticleForm, PartnerForm, PartnerPaymentFormSet
 from .models import Article, ContactMessage, Partner
+from .translate import TranslationError, translate_article
 
 
 def owner_required(view):
@@ -144,9 +147,32 @@ def _save_article(request, instance=None):
     if request.method == 'POST' and form.is_valid():
         article = form.save()
         toast = 'saved' if instance else 'created'
+        if getattr(form, 'auto_translated', None):
+            toast = 'translated'
         url = reverse('app_news_detail', kwargs={'pk': article.pk})
         return redirect(f'{url}?toast={toast}')
     return form
+
+
+@owner_required
+@require_POST
+def app_news_translate(request):
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Neispravan zahtev.'}, status=400)
+    if not isinstance(payload, dict):
+        return JsonResponse({'error': 'Neispravan zahtev.'}, status=400)
+    title = payload.get('title') or ''
+    excerpt = payload.get('excerpt') or ''
+    body = payload.get('body') or ''
+    if not isinstance(title, str) or not isinstance(excerpt, str) or not isinstance(body, str):
+        return JsonResponse({'error': 'Neispravan zahtev.'}, status=400)
+    try:
+        result = translate_article(title, excerpt, body)
+    except TranslationError as exc:
+        return JsonResponse({'error': str(exc)}, status=502)
+    return JsonResponse(result)
 
 
 @owner_required

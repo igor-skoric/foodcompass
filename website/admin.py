@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from .images import ImageProcessingError, normalize_cover
 from .models import Article, ArticleImage, ContactMessage, Partner, PartnerPayment
+from .translate import fill_empty_translations
 
 
 class ArticleImageInline(admin.TabularInline):
@@ -27,7 +29,10 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Srpski', {
             'fields': ('title', 'excerpt', 'body'),
-            'description': 'Obavezno. Ako prevod nije unet, na tom jeziku se prikazuje srpski tekst.',
+            'description': (
+                'Obavezno. Prazan prevod na engleski i ruski popunjava se automatski pri čuvanju. '
+                'Posle toga možete da korigujete tekst.'
+            ),
         }),
         ('English', {
             'fields': ('title_en', 'excerpt_en', 'body_en'),
@@ -45,6 +50,20 @@ class ArticleAdmin(admin.ModelAdmin):
             'https://cdn.jsdelivr.net/npm/tinymce@7.6.0/tinymce.min.js',
             'admin/js/tinymce_init.js',
         )
+
+    def save_model(self, request, obj, form, change):
+        if form.cleaned_data.get('cover') and 'cover' in form.changed_data:
+            try:
+                obj.cover = normalize_cover(form.cleaned_data['cover'])
+            except ImageProcessingError:
+                pass
+        filled = fill_empty_translations(obj)
+        super().save_model(request, obj, form, change)
+        if filled:
+            self.message_user(
+                request,
+                'Prevod na engleski i ruski je automatski popunjen. Proverite ga pre objave.',
+            )
 
     def cover_preview(self, obj):
         if not obj.cover:

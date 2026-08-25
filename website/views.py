@@ -21,6 +21,7 @@ from smtplib import SMTPException
 from .content import CONTACT
 from .copy_loader import get_service, get_service_cards, published_articles, site_copy
 from .forms import ContactForm
+from .images import ImageProcessingError, constrain_inline_image
 from .mail import receipt_html, send_contact_message, send_contact_receipt
 from .models import Article
 from .seo import page_seo
@@ -284,6 +285,7 @@ def news_detail(request, slug):
         'hero': {
             'image': 'services',
             'cover': cover.url if cover else '',
+            'variant': 'article',
             'eyebrow': news_page['eyebrow'],
             'title': article.display_title,
             'lead': article.display_excerpt or '',
@@ -348,7 +350,11 @@ def upload_image(request):
     uploaded = request.FILES.get('file')
     if not uploaded:
         return JsonResponse({'error': 'Nije poslata slika.'}, status=400)
-    path = default_storage.save(f'aktuelnosti/inline/{uploaded.name}', uploaded)
+    try:
+        stored = constrain_inline_image(uploaded)
+    except ImageProcessingError as exc:
+        return JsonResponse({'error': str(exc)}, status=400)
+    path = default_storage.save(f'aktuelnosti/inline/{stored.name}', stored)
     return JsonResponse({'location': f'{settings.MEDIA_URL}{path}'})
 
 

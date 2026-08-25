@@ -13,6 +13,7 @@ urlpatterns = [
     path('poruke/<int:pk>/', app_views.app_message_detail, name='app_message_detail'),
     path('aktuelnosti/', app_views.app_news, name='app_news'),
     path('aktuelnosti/nova/', app_views.app_news_create, name='app_news_create'),
+    path('aktuelnosti/prevod/', app_views.app_news_translate, name='app_news_translate'),
     path('aktuelnosti/<int:pk>/', app_views.app_news_detail, name='app_news_detail'),
     path('aktuelnosti/<int:pk>/izmena/', app_views.app_news_edit, name='app_news_edit'),
     path('klijenti/', app_views.app_partners, name='app_partners'),

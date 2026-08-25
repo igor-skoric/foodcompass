@@ -8,12 +8,12 @@
     <h1>{% if is_create %}Nova vest{% else %}{{ article.title }}{% endif %}</h1>
   </header>
 
-  <form class="app-form app-form--wide" method="post" enctype="multipart/form-data" novalidate>
+  <form class="app-form app-form--wide app-form--news" method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
 
     <fieldset class="app-form__lang">
       <legend>Srpski</legend>
-      <p class="app-form__hint">Obavezno. Ako prevod nije unet, na tom jeziku se prikazuje ovaj tekst.</p>
+      <p class="app-form__hint">Obavezno. Pišete na srpskom — engleski i ruski se popunjavaju automatski.</p>
       <label class="field">
         <span>{{ form.title.label }}</span>
         {{ form.title }}
@@ -31,6 +31,16 @@
         {{ form.body.errors }}
       </label>
     </fieldset>
+
+    <div class="app-form__translate">
+      <button
+        type="button"
+        class="btn btn--outline"
+        id="news-translate"
+        data-translate-url="{% url 'app_news_translate' %}"
+      >Popuni prevod (EN i RU)</button>
+      <p class="app-form__hint" id="news-translate-status">Prevod možete da izmenite pre čuvanja. Ako ostavite prazna polja, popuniće se i kada sačuvate vest.</p>
+    </div>
 
     <fieldset class="app-form__lang">
       <legend>English</legend>
@@ -74,6 +84,15 @@
 
     <div class="field">
       <span>{{ form.cover.label }}</span>
+      <aside class="app-form__notes">
+        <strong>Napomene za sliku i tekst</strong>
+        <ul>
+          <li>Idealna slika: <strong>1600 × 900 px</strong> (16:9, pejzaž). Ista slika ide na početnu, na listu aktuelnosti i u header otvorene vesti.</li>
+          <li>Ako slika nije 16:9, iseče se na centar da layout ostane isti.</li>
+          <li>Naslov na karticama: najviše 2 reda, ostatak se skraćuje sa …</li>
+          <li>Kratak opis na karticama: najviše 3 reda (oko 140 karaktera), ostatak se skraćuje sa …</li>
+        </ul>
+      </aside>
       {% if article and article.cover %}
         <img src="{{ article.cover.url }}" alt="" class="app-form__preview" />
       {% endif %}
@@ -100,9 +119,18 @@
       <button type="submit" class="btn btn--gold">{% if is_create %}Sačuvaj vest{% else %}Sačuvaj izmene{% endif %}</button>
     </div>
   </form>
+
+  <div class="app-translate-overlay" id="news-translate-overlay" hidden>
+    <div class="app-translate-overlay__box" role="status" aria-live="polite" aria-busy="true">
+      <span class="app-translate-overlay__spinner" aria-hidden="true"></span>
+      <p class="app-translate-overlay__title">Tekst se prevodi</p>
+      <p class="app-translate-overlay__text">Sačekajte, prevodimo vest na engleski i ruski…</p>
+    </div>
+  </div>
 {% endblock %}
 
 {% block extra_js %}
   <script src="https://cdn.jsdelivr.net/npm/tinymce@7.6.0/tinymce.min.js"></script>
   <script src="{% static 'admin/js/tinymce_init.js' %}"></script>
+  <script src="{% static 'js/news_translate.js' %}?v=2"></script>
 {% endblock %}

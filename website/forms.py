@@ -1,8 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms import BaseInlineFormSet, inlineformset_factory
+from django.forms import inlineformset_factory
 from django.utils import timezone
+from .images import ImageProcessingError, normalize_cover
 from .models import Article, ContactMessage, Partner, PartnerPayment
+from .translate import fill_empty_translations
 
 CONTACT_MESSAGE_MAX_LENGTH = 5000
 
@@ -93,7 +95,9 @@ class PartnerForm(forms.ModelForm):
         self.fields['due_on'].input_formats = ['%Y-%m-%d']
         self.fields['due_on'].required = False
         if not self.instance.pk:
-            self.fields['recorded_on'].initial = timezone.localdate()
+            today = timezone.localdate()
+            self.fields['recorded_on'].initial = today
+            self.fields['due_on'].initial = today
 
 
 class PartnerPaymentForm(forms.ModelForm):
@@ -103,7 +107,7 @@ class PartnerPaymentForm(forms.ModelForm):
         widgets = {
             'amount': forms.NumberInput(attrs={'step': '0.01', 'min': '0', 'inputmode': 'decimal'}),
             'paid_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
-            'note': forms.TextInput(attrs={'placeholder': 'npr. 1. rata'}),
+            'note': forms.TextInput(),
         }
         labels = {
             'amount': 'Iznos',
@@ -117,7 +121,16 @@ class PartnerPaymentForm(forms.ModelForm):
         self.fields['amount'].required = False
         self.fields['paid_on'].required = False
         if not self.instance.pk:
-            self.fields['paid_on'].initial = None
+            self.fields['paid_on'].initial = timezone.localdate()
+
+    def has_changed(self):
+        if self.instance.pk:
+            return super().has_changed()
+        if self.is_bound:
+            raw = (self.data.get(self.add_prefix('amount')) or '').strip()
+            if not raw:
+                return False
+        return super().has_changed()
 
     def clean(self):
         cleaned = super().clean()
@@ -126,34 +139,16 @@ class PartnerPaymentForm(forms.ModelForm):
         amount = cleaned.get('amount')
         if amount is not None and amount <= 0:
             self.add_error('amount', 'Iznos mora biti veći od nule.')
+            return cleaned
         if amount and not cleaned.get('paid_on'):
             cleaned['paid_on'] = timezone.localdate()
-        if (cleaned.get('note') or cleaned.get('paid_on')) and not amount:
-            self.add_error('amount', 'Unesite iznos rate.')
         return cleaned
-
-
-class BasePartnerPaymentFormSet(BaseInlineFormSet):
-    def clean(self):
-        super().clean()
-        if any(self.errors):
-            return
-        filled = 0
-        for form in self.forms:
-            data = form.cleaned_data
-            if not data or data.get('DELETE'):
-                continue
-            if data.get('amount'):
-                filled += 1
-        if filled == 0:
-            raise forms.ValidationError('Unesite bar jednu ratu.')
 
 
 PartnerPaymentFormSet = inlineformset_factory(
     Partner,
     PartnerPayment,
     form=PartnerPaymentForm,
-    formset=BasePartnerPaymentFormSet,
     extra=1,
     can_delete=True,
     min_num=0,
@@ -198,11 +193,11 @@ class ArticleForm(forms.ModelForm):
             'is_published': 'Objavi na sajtu',
         }
         help_texts = {
-            'excerpt': 'Prikazuje se na listi aktuelnosti i na početnoj.',
-            'cover': 'Prikazuje se na listi, na početnoj i u headeru vesti.',
+            'excerpt': 'Na karticama se prikazuju najviše 3 reda; duži tekst se skraćuje sa …',
+            'cover': 'Najbolje 1600 × 900 px (16:9, pejzaž). Ista slika ide na početnu, listu i header vesti.',
             'is_published': 'Ako nije označeno, vest ostaje kao nacrt.',
-            'title_en': 'Ako je prazno, na engleskom sajtu se prikazuje srpski naslov.',
-            'title_ru': 'Ako je prazno, na ruskom sajtu se prikazuje srpski naslov.',
+            'title_en': 'Ako ostane prazno, popuniće se automatski pri čuvanju. Možete da korigujete prevod.',
+            'title_ru': 'Ako ostane prazno, popuniće se automatski pri čuvanju. Možete da korigujete prevod.',
         }
 
     def __init__(self, *args, **kwargs):
@@ -210,12 +205,23 @@ class ArticleForm(forms.ModelForm):
         if not (self.instance.pk and self.instance.cover):
             self.fields.pop('remove_cover')
 
+    def clean_cover(self):
+        cover = self.cleaned_data.get('cover')
+        uploaded = self.files.get('cover')
+        if not uploaded:
+            return cover
+        try:
+            return normalize_cover(uploaded)
+        except ImageProcessingError as exc:
+            raise forms.ValidationError(str(exc)) from exc
+
     def save(self, commit=True):
         article = super().save(commit=False)
         if self.cleaned_data.get('remove_cover') and not self.files.get('cover'):
             if article.cover:
                 article.cover.delete(save=False)
             article.cover = ''
+        self.auto_translated = fill_empty_translations(article)
         if commit:
             article.save()
         return article

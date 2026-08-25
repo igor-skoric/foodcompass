@@ -44,7 +44,7 @@
 
     <fieldset class="app-rates" data-payment-formset>
       <legend>Rate</legend>
-      <p class="app-form__hint">Možete uneti više iznosa (npr. po rati). Ukupan iznos se sabira automatski.</p>
+      <p class="app-form__hint">Rate nisu obavezne. Možete ih dodati odmah ili kasnije (1. rata, 2. rata…). Ukupan iznos se sabira automatski.</p>
       {{ formset.management_form }}
       {% if formset.non_form_errors %}
         <p class="contact-form__error" role="alert">{{ formset.non_form_errors|join:' ' }}</p>

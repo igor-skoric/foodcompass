@@ -2,6 +2,7 @@
   const TOAST_COPY = {
     created: 'Unos je dodat.',
     saved: 'Unos je sačuvan.',
+    translated: 'Vest je sačuvana. Prevod na engleski i ruski je popunjen.',
   };
 
   function hideToast(el) {
@@ -12,14 +13,14 @@
     }, 280);
   }
 
-  function showToast(text) {
+  function showToast(text, kind) {
     if (!text) return;
     document.querySelectorAll('.app-toast').forEach(function (node) {
       node.remove();
     });
     const el = document.createElement('div');
-    el.className = 'app-toast';
-    el.setAttribute('role', 'status');
+    el.className = 'app-toast' + (kind ? ' app-toast--' + kind : '');
+    el.setAttribute('role', kind === 'error' ? 'alert' : 'status');
     el.textContent = text;
     document.body.appendChild(el);
     window.requestAnimationFrame(function () {
@@ -27,12 +28,14 @@
     });
     const timer = window.setTimeout(function () {
       hideToast(el);
-    }, 3400);
+    }, kind === 'error' ? 5200 : 3800);
     el.addEventListener('click', function () {
       window.clearTimeout(timer);
       hideToast(el);
     });
   }
+
+  window.appShowToast = showToast;
 
   const params = new URLSearchParams(window.location.search);
   const toastKey = params.get('toast');
@@ -42,6 +45,22 @@
     const next = params.toString();
     const clean = window.location.pathname + (next ? '?' + next : '') + window.location.hash;
     window.history.replaceState({}, '', clean);
+  }
+
+  const serverErrors = [];
+  document.querySelectorAll(
+    '.app-form .errorlist li, .app-form .contact-form__error, .app-login__form .contact-form__error'
+  ).forEach(function (node) {
+    const field = node.closest('.field');
+    const label = field && field.querySelector(':scope > span');
+    const text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!text) return;
+    serverErrors.push(label ? (label.textContent.trim() + ': ' + text) : text);
+  });
+  if (serverErrors.length) {
+    showToast(serverErrors.filter(function (item, index) {
+      return serverErrors.indexOf(item) === index;
+    }).join(' '), 'error');
   }
 })();
 
@@ -112,6 +131,16 @@
   const addBtn = root.querySelector('[data-payment-add]');
   const totalInput = root.querySelector('input[name$="-TOTAL_FORMS"]');
 
+  function localToday() {
+    const now = new Date();
+    return new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+
+  function fillPaymentDate(row) {
+    const paid = row.querySelector('input[type="date"][name$="-paid_on"]');
+    if (paid && !paid.value) paid.value = localToday();
+  }
+
   function bindDelete(row) {
     const checkbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
     if (!checkbox) return;
@@ -122,7 +151,10 @@
   }
 
   if (holder) {
-    holder.querySelectorAll('[data-payment-form]').forEach(bindDelete);
+    holder.querySelectorAll('[data-payment-form]').forEach(function (row) {
+      bindDelete(row);
+      fillPaymentDate(row);
+    });
   }
 
   if (addBtn && template && totalInput && holder) {
@@ -134,6 +166,7 @@
       if (!row) return;
       holder.appendChild(row);
       bindDelete(row);
+      fillPaymentDate(row);
       totalInput.value = Number(index) + 1;
       const amount = row.querySelector('input[name$="-amount"]');
       if (amount) amount.focus();

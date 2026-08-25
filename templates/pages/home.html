@@ -165,7 +165,7 @@
         {% for article in latest_news %}
           <a href="{{ article.get_absolute_url }}" class="news-card{% if latest_news|length == 1 %} news-card--featured{% endif %} reveal">
             {% if article.cover %}
-              <img src="{{ article.cover.url }}" alt="" class="news-card__img" />
+              <img src="{{ article.cover.url }}" alt="" class="news-card__img" width="1600" height="900" />
             {% else %}
               <div class="news-card__placeholder" aria-hidden="true"></div>
             {% endif %}
