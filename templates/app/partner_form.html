@@ -37,6 +37,12 @@
       <p class="app-form__hint">{{ form.due_on.help_text }}</p>
     {% endif %}
     <label class="field">
+      <span>{{ form.agreed_amount.label }}</span>
+      {{ form.agreed_amount }}
+      {% if form.agreed_amount.help_text %}<small>{{ form.agreed_amount.help_text }}</small>{% endif %}
+      {{ form.agreed_amount.errors }}
+    </label>
+    <label class="field">
       <span>{{ form.description.label }}</span>
       {{ form.description }}
       {{ form.description.errors }}
@@ -44,7 +50,7 @@
 
     <fieldset class="app-rates" data-payment-formset>
       <legend>Rate</legend>
-      <p class="app-form__hint">Rate nisu obavezne. Možete ih dodati odmah ili kasnije (1. rata, 2. rata…). Ukupan iznos se sabira automatski.</p>
+      <p class="app-form__hint">Rate su evidencija uplata — koliko je klijent do sada dao. Nisu obavezne. Preostali dug se računa automatski.</p>
       {{ formset.management_form }}
       {% if formset.non_form_errors %}
         <p class="contact-form__error" role="alert">{{ formset.non_form_errors|join:' ' }}</p>

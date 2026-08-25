@@ -90,11 +90,15 @@ class PartnerPaymentInline(admin.TabularInline):
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'recorded_on', 'due_on', 'amount', 'status', 'updated_at')
+    list_display = ('name', 'recorded_on', 'due_on', 'agreed_amount', 'amount', 'remaining_display', 'status', 'updated_at')
     list_filter = ('status', 'recorded_on', 'due_on')
     search_fields = ('name', 'description')
     readonly_fields = ('amount',)
     inlines = [PartnerPaymentInline]
+
+    @admin.display(description='Duguje')
+    def remaining_display(self, obj):
+        return obj.remaining_display
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)

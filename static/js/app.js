@@ -2,6 +2,7 @@
   const TOAST_COPY = {
     created: 'Unos je dodat.',
     saved: 'Unos je sačuvan.',
+    deleted: 'Unos je obrisan.',
     translated: 'Vest je sačuvana. Prevod na engleski i ruski je popunjen.',
   };
 
@@ -62,6 +63,85 @@
       return serverErrors.indexOf(item) === index;
     }).join(' '), 'error');
   }
+})();
+
+(function () {
+  const dialog = document.querySelector('[data-confirm-dialog]');
+  const titleEl = document.getElementById('app-confirm-title');
+  const textEl = document.getElementById('app-confirm-text');
+  const acceptBtn = dialog && dialog.querySelector('[data-confirm-accept]');
+  const cancelBtn = dialog && dialog.querySelector('[data-confirm-cancel]');
+  if (!dialog || !titleEl || !textEl || !acceptBtn || !cancelBtn) return;
+
+  const app = document.querySelector('[data-app]');
+  const dismissEls = dialog.querySelectorAll('[data-confirm-dismiss]');
+  let pendingForm = null;
+  let lastFocus = null;
+
+  function setOpen(open) {
+    dialog.hidden = !open;
+    document.documentElement.classList.toggle('app-confirm-open', open);
+    if (app) app.inert = open;
+    if (open) {
+      cancelBtn.focus();
+    } else if (lastFocus && typeof lastFocus.focus === 'function') {
+      lastFocus.focus();
+    }
+  }
+
+  function close() {
+    pendingForm = null;
+    setOpen(false);
+  }
+
+  document.querySelectorAll('form[data-confirm]').forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      pendingForm = form;
+      lastFocus = document.activeElement;
+      titleEl.textContent = form.getAttribute('data-confirm-title') || 'Obrisati unos?';
+      textEl.textContent = form.getAttribute('data-confirm') || 'Ova radnja se ne može opozvati.';
+      setOpen(true);
+    });
+  });
+
+  acceptBtn.addEventListener('click', function () {
+    const form = pendingForm;
+    if (!form) {
+      close();
+      return;
+    }
+    pendingForm = null;
+    setOpen(false);
+    form.submit();
+  });
+
+  dismissEls.forEach(function (el) {
+    el.addEventListener('click', close);
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (dialog.hidden) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+    const focusable = Array.prototype.slice.call(
+      dialog.querySelectorAll('button:not([disabled])')
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 })();
 
 (function () {

@@ -42,6 +42,10 @@
       {% if article.is_published %}
         <a class="btn btn--outline" href="{{ article.get_absolute_url }}" target="_blank" rel="noopener">Pogledaj na sajtu</a>
       {% endif %}
+      <form method="post" action="{% url 'app_news_delete' article.pk %}" data-confirm-title="Obrisati vest?" data-confirm="Vest i priložene slike biće trajno obrisane.">
+        {% csrf_token %}
+        <button type="submit" class="btn btn--outline">Obriši</button>
+      </form>
     </div>
   </article>
 {% endblock %}

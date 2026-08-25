@@ -376,6 +376,35 @@ body.app-body:not(.app-body--login) .app {
   color: var(--green-900);
 }
 
+.app-balance {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(19, 69, 48, 0.1);
+  border-radius: var(--radius);
+}
+
+.app-balance span {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+
+.app-balance strong {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--green-900);
+}
+
 .app-message__body {
   margin: 0 0 1.35rem;
   color: var(--ink);
@@ -697,7 +726,7 @@ body.app-body:not(.app-body--login) .app {
 .app-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 36rem;
+  min-width: 52rem;
 }
 
 .app-clients .app-table-wrap {
@@ -739,6 +768,40 @@ body.app-body:not(.app-body--login) .app {
   background: rgba(155, 44, 44, 0.06);
 }
 
+.app-table tbody tr.app-row-hit {
+  position: relative;
+  cursor: pointer;
+}
+
+.app-table tbody tr.app-row-hit:hover td {
+  background: rgba(19, 69, 48, 0.045);
+}
+
+.app-table tbody tr.app-row-hit.is-late:hover td {
+  background: rgba(155, 44, 44, 0.1);
+}
+
+.app-row-hit__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-row-hit__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.app-table__num {
+  white-space: nowrap;
+}
+
+.app-table td.is-owed,
+.app-card__money .is-owed,
+.app-balance .is-owed strong {
+  color: #7a1f1f;
+}
+
 .app-table th {
   font-size: 0.7rem;
   font-weight: 600;
@@ -766,15 +829,20 @@ body.app-body:not(.app-body--login) .app {
 }
 
 .app-table__actions {
+  position: relative;
+  z-index: 1;
   white-space: nowrap;
   text-align: right;
 }
 
-.app-table__actions a {
+.app-table__actions a,
+.app-table__actions button {
   margin-left: 0.85rem;
+  font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1.2;
   text-transform: uppercase;
   color: var(--gold-700);
 }
@@ -828,6 +896,36 @@ body.app-body:not(.app-body--login) .app {
   color: var(--green-900);
 }
 
+.app-card__amount span {
+  margin-left: 0.35rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.app-card__money {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0.1rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.app-card__main {
+  display: grid;
+  gap: 0.45rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-card__main:hover h2 {
+  color: var(--gold-700);
+}
+
 .app-card__meta {
   margin: 0.15rem 0 0;
   font-size: 0.8rem;
@@ -846,12 +944,124 @@ body.app-body:not(.app-body--login) .app {
   border-top: 1px solid var(--line);
 }
 
-.app-card__actions a {
+.app-card__actions a,
+.app-card__actions button {
+  font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1.2;
   text-transform: uppercase;
   color: var(--gold-700);
+}
+
+.cta-row form,
+.app-card__actions form,
+.app-table__actions form {
+  margin: 0;
+}
+
+.cta-row form {
+  display: flex;
+}
+
+.app-card__actions form {
+  display: flex;
+  align-items: center;
+}
+
+.app-table__actions form {
+  display: inline;
+}
+
+.app-card__actions button,
+.app-table__actions button {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.app-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+}
+
+.app-dialog[hidden] {
+  display: none;
+}
+
+.app-dialog__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 36, 24, 0.58);
+  backdrop-filter: blur(4px);
+}
+
+.app-dialog__panel {
+  position: relative;
+  z-index: 1;
+  width: min(24.5rem, 100%);
+  padding: 1.65rem 1.5rem 1.4rem;
+  background: #fffaf4;
+  color: var(--green-900);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--gold-500);
+  box-shadow: 0 22px 48px rgba(6, 36, 24, 0.28);
+  animation: app-dialog-in 0.28s var(--ease);
+}
+
+@keyframes app-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.app-dialog__panel .eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--gold-700);
+}
+
+.app-dialog__panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.app-dialog__panel p {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.app-dialog__panel .cta-row {
+  margin-top: 1.25rem;
+}
+
+.app-dialog__panel .cta-row .btn {
+  flex: 1;
+  font-family: var(--font-body);
+}
+
+.cta-row .btn {
+  font-family: var(--font-body);
 }
 
 .app-status {
@@ -1401,6 +1611,14 @@ html.app-translating body {
   .app-rate__note,
   .app-rate__delete {
     grid-column: 1 / -1;
+  }
+
+  .cta-row form {
+    width: 100%;
+  }
+
+  .app-balance {
+    grid-template-columns: 1fr;
   }
 }
 

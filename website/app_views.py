@@ -1,12 +1,11 @@
 import json
 from datetime import datetime, timedelta
-from decimal import Decimal
 from functools import wraps
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Count, Q, Sum
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -85,23 +84,21 @@ def app_home(request):
     soon = today + timedelta(days=14)
     partners = Partner.objects.all()
     late = partners.filter(status=Partner.STATUS_LATE)
-    open_qs = partners.exclude(status=Partner.STATUS_COMPLETED)
     due_soon = partners.filter(
         due_on__gte=today,
         due_on__lte=soon,
     ).exclude(status=Partner.STATUS_COMPLETED).order_by('due_on', 'name')
     late_list = late.order_by('due_on', 'name')[:8]
-    total = partners.aggregate(total=Sum('amount'), count=Count('id'))
-    late_agg = late.aggregate(total=Sum('amount'), count=Count('id'))
-    open_agg = open_qs.aggregate(total=Sum('amount'))
+    total = partners.aggregate(count=Count('id'))
+    money = Partner.money_totals(partners)
     return render(request, 'app/home.html', _app_context(
         request,
         'Pregled',
         partner_count=total['count'] or 0,
-        total_amount_display=Partner.format_amount(total['total']),
-        open_amount_display=Partner.format_amount(open_agg['total']),
-        late_amount_display=Partner.format_amount(late_agg['total']),
-        late_count=late_agg['count'] or 0,
+        total_amount_display=Partner.format_amount(money['agreed']),
+        paid_amount_display=Partner.format_amount(money['paid']),
+        owed_amount_display=Partner.format_amount(money['owed']),
+        late_count=late.count(),
         due_soon_count=due_soon.count(),
         active_count=partners.filter(status=Partner.STATUS_ACTIVE).count(),
         pending_count=partners.filter(status=Partner.STATUS_PENDING).count(),
@@ -213,6 +210,25 @@ def app_news_edit(request, pk):
     ))
 
 
+def _delete_article_files(article):
+    if article.cover:
+        article.cover.delete(save=False)
+    if article.header_image:
+        article.header_image.delete(save=False)
+    for image in article.images.all():
+        if image.image:
+            image.image.delete(save=False)
+
+
+@owner_required
+@require_POST
+def app_news_delete(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    _delete_article_files(article)
+    article.delete()
+    return redirect(f"{reverse('app_news')}?toast=deleted")
+
+
 def _parse_date(value):
     if not value:
         return None
@@ -257,8 +273,8 @@ def app_partners(request):
     )
     params = request.GET.copy()
     params.pop('page', None)
-    total_all = Partner.objects.aggregate(total=Sum('amount'))['total'] or Decimal('0')
-    total_filtered = partners.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    total_all = Partner.money_totals()
+    total_filtered = Partner.money_totals(partners)
     filters_active = bool(query or status or date_from or date_to)
     return render(request, 'app/partners.html', _app_context(
         request,
@@ -272,8 +288,12 @@ def app_partners(request):
         query_string=params.urlencode(),
         status_choices=Partner.STATUS_CHOICES,
         result_count=paginator.count,
-        total_all_display=Partner.format_amount(total_all),
-        total_filtered_display=Partner.format_amount(total_filtered),
+        total_agreed_display=Partner.format_amount(total_all['agreed']),
+        total_paid_display=Partner.format_amount(total_all['paid']),
+        total_owed_display=Partner.format_amount(total_all['owed']),
+        filtered_agreed_display=Partner.format_amount(total_filtered['agreed']),
+        filtered_paid_display=Partner.format_amount(total_filtered['paid']),
+        filtered_owed_display=Partner.format_amount(total_filtered['owed']),
         filters_active=filters_active,
     ))
 
@@ -339,3 +359,11 @@ def app_partner_edit(request, pk):
         partner=partner,
         is_create=False,
     ))
+
+
+@owner_required
+@require_POST
+def app_partner_delete(request, pk):
+    partner = get_object_or_404(Partner, pk=pk)
+    partner.delete()
+    return redirect(f"{reverse('app_partners')}?toast=deleted")

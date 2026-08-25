@@ -8,14 +8,24 @@
   </header>
 
   <article class="app-message app-message--client">
+    <div class="app-balance">
+      <div>
+        <span>Dogovoreno</span>
+        <strong>{{ partner.agreed_display }} RSD</strong>
+      </div>
+      <div>
+        <span>Dato</span>
+        <strong>{{ partner.paid_display }} RSD</strong>
+      </div>
+      <div{% if partner.remaining_amount %} class="is-owed"{% endif %}>
+        <span>Duguje</span>
+        <strong>{{ partner.remaining_display }} RSD</strong>
+      </div>
+    </div>
     <dl>
       <div>
         <dt>Naziv klijenta</dt>
         <dd>{{ partner.name }}</dd>
-      </div>
-      <div>
-        <dt>Iznos</dt>
-        <dd>{{ partner.amount_display }} RSD</dd>
       </div>
       <div>
         <dt>Datum</dt>
@@ -31,7 +41,7 @@
       </div>
     </dl>
     {% if partner.payments.all %}
-      <h2 class="app-message__sub">Rate</h2>
+      <h2 class="app-message__sub">Uplate</h2>
       <table class="app-table app-table--dense app-table--plain">
         <thead>
           <tr>
@@ -58,6 +68,10 @@
     {% endif %}
     <div class="cta-row">
       <a class="btn btn--gold" href="{% url 'app_partner_edit' partner.pk %}">Izmeni</a>
+      <form method="post" action="{% url 'app_partner_delete' partner.pk %}" data-confirm-title="Obrisati klijenta?" data-confirm="Klijent i unete rate biće trajno obrisani.">
+        {% csrf_token %}
+        <button type="submit" class="btn btn--outline">Obriši</button>
+      </form>
     </div>
   </article>
 {% endblock %}

@@ -9,16 +9,16 @@
 
   <section class="app-stats app-stats--wide">
     <a href="{% url 'app_partners' %}" class="app-stat">
-      <span class="app-stat__label">Ukupan iznos</span>
+      <span class="app-stat__label">Dogovoreno</span>
       <strong>{{ total_amount_display }} <span class="app-stat__unit">RSD</span></strong>
     </a>
-    <a href="{% url 'app_partners' %}?status=late" class="app-stat app-stat--warn">
-      <span class="app-stat__label">Dugovanja</span>
-      <strong>{{ late_amount_display }} <span class="app-stat__unit">RSD</span></strong>
-    </a>
     <a href="{% url 'app_partners' %}" class="app-stat">
-      <span class="app-stat__label">Otvoreno</span>
-      <strong>{{ open_amount_display }} <span class="app-stat__unit">RSD</span></strong>
+      <span class="app-stat__label">Dato</span>
+      <strong>{{ paid_amount_display }} <span class="app-stat__unit">RSD</span></strong>
+    </a>
+    <a href="{% url 'app_partners' %}" class="app-stat app-stat--warn">
+      <span class="app-stat__label">Duguju</span>
+      <strong>{{ owed_amount_display }} <span class="app-stat__unit">RSD</span></strong>
     </a>
     <a href="{% url 'app_partners' %}?status=late" class="app-stat app-stat--warn">
       <span class="app-stat__label">Kasni sa plaćanjem</span>
@@ -59,7 +59,7 @@
               <a href="{% url 'app_partner_detail' item.pk %}" class="app-list__row">
                 <span>
                   <strong>{{ item.name }}</strong>
-                  <em>{{ item.amount_display }} RSD{% if item.due_on %} · rok {{ item.due_on|date:"d.m.Y." }}{% endif %}</em>
+                  <em>{{ item.agreed_display }} dogovoreno · duguje {{ item.remaining_display }} RSD{% if item.due_on %} · rok {{ item.due_on|date:"d.m.Y." }}{% endif %}</em>
                 </span>
                 <span class="app-status app-status--late">{{ item.get_status_display }}</span>
               </a>
@@ -83,7 +83,7 @@
               <a href="{% url 'app_partner_detail' item.pk %}" class="app-list__row">
                 <span>
                   <strong>{{ item.name }}</strong>
-                  <em>{{ item.amount_display }} RSD</em>
+                  <em>{{ item.agreed_display }} dogovoreno · duguje {{ item.remaining_display }} RSD</em>
                 </span>
                 <time>{{ item.due_on|date:"d.m.Y." }}</time>
               </a>

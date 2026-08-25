@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import inlineformset_factory
@@ -71,22 +73,25 @@ class AppLoginForm(AuthenticationForm):
 class PartnerForm(forms.ModelForm):
     class Meta:
         model = Partner
-        fields = ['name', 'recorded_on', 'due_on', 'description', 'status']
+        fields = ['name', 'recorded_on', 'due_on', 'agreed_amount', 'description', 'status']
         widgets = {
             'name': forms.TextInput(attrs={'autocomplete': 'organization'}),
             'recorded_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
             'due_on': forms.DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),
+            'agreed_amount': forms.NumberInput(attrs={'step': '0.01', 'min': '0', 'inputmode': 'decimal'}),
             'description': forms.Textarea(attrs={'rows': 3}),
         }
         labels = {
             'name': 'Naziv klijenta',
             'recorded_on': 'Datum',
             'due_on': 'Rok',
+            'agreed_amount': 'Dogovoreni iznos',
             'description': 'Opis',
             'status': 'Status',
         }
         help_texts = {
             'due_on': 'Ako rok prođe, status automatski postaje „Kasni sa plaćanjem“.',
+            'agreed_amount': 'Konačan iznos koji je dogovoren. Rate ispod su evidencija uplata.',
         }
 
     def __init__(self, *args, **kwargs):
@@ -94,10 +99,22 @@ class PartnerForm(forms.ModelForm):
         self.fields['recorded_on'].input_formats = ['%Y-%m-%d']
         self.fields['due_on'].input_formats = ['%Y-%m-%d']
         self.fields['due_on'].required = False
+        self.fields['agreed_amount'].required = False
         if not self.instance.pk:
             today = timezone.localdate()
             self.fields['recorded_on'].initial = today
             self.fields['due_on'].initial = today
+        if not self.data and not (self.instance.pk and self.instance.agreed_amount):
+            self.initial['agreed_amount'] = None
+            self.fields['agreed_amount'].initial = None
+
+    def clean_agreed_amount(self):
+        value = self.cleaned_data.get('agreed_amount')
+        if value is None:
+            return Decimal('0')
+        if value < 0:
+            raise forms.ValidationError('Iznos ne može biti negativan.')
+        return value
 
 
 class PartnerPaymentForm(forms.ModelForm):
@@ -127,8 +144,13 @@ class PartnerPaymentForm(forms.ModelForm):
         if self.instance.pk:
             return super().has_changed()
         if self.is_bound:
-            raw = (self.data.get(self.add_prefix('amount')) or '').strip()
+            raw = (self.data.get(self.add_prefix('amount')) or '').strip().replace(',', '.')
             if not raw:
+                return False
+            try:
+                if Decimal(raw) <= 0:
+                    return False
+            except Exception:
                 return False
         return super().has_changed()
 
@@ -137,8 +159,12 @@ class PartnerPaymentForm(forms.ModelForm):
         if cleaned.get('DELETE'):
             return cleaned
         amount = cleaned.get('amount')
-        if amount is not None and amount <= 0:
-            self.add_error('amount', 'Iznos mora biti veći od nule.')
+        if amount is None or amount == 0:
+            if not self.instance.pk:
+                return cleaned
+            cleaned['amount'] = Decimal('0')
+        if amount is not None and amount < 0:
+            self.add_error('amount', 'Iznos ne može biti negativan.')
             return cleaned
         if amount and not cleaned.get('paid_on'):
             cleaned['paid_on'] = timezone.localdate()

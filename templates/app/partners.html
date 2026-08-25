@@ -9,13 +9,21 @@
       </div>
       <div class="app-clients__sums">
         <p>
-          <span class="app-toolbar__total-label">Ukupan iznos</span>
-          <strong>{{ total_all_display }} RSD</strong>
+          <span class="app-toolbar__total-label">Dogovoreno</span>
+          <strong>{{ total_agreed_display }} RSD</strong>
+        </p>
+        <p>
+          <span class="app-toolbar__total-label">Dato</span>
+          <strong>{{ total_paid_display }} RSD</strong>
+        </p>
+        <p>
+          <span class="app-toolbar__total-label">Duguju</span>
+          <strong>{{ total_owed_display }} RSD</strong>
         </p>
         {% if filters_active %}
           <p>
-            <span class="app-toolbar__total-label">Zbir prikaza</span>
-            <strong>{{ total_filtered_display }} RSD</strong>
+            <span class="app-toolbar__total-label">Prikaz</span>
+            <strong>{{ filtered_agreed_display }} / {{ filtered_paid_display }} / {{ filtered_owed_display }} RSD</strong>
           </p>
         {% endif %}
         {% if page_obj.object_list %}
@@ -65,22 +73,32 @@
       <ul class="app-cards">
         {% for partner in page_obj %}
           <li class="app-card{% if partner.status == 'late' %} is-late{% endif %}">
-            <div class="app-card__top">
-              <time>{{ partner.recorded_on|date:"d.m.Y." }}</time>
-              <span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span>
-            </div>
-            <h2>{{ partner.name }}</h2>
-            {% if partner.description %}
-              <p>{{ partner.description|truncatechars:110 }}</p>
-            {% endif %}
-            <p class="app-card__amount">{{ partner.amount_display }} RSD</p>
-            <p class="app-card__meta">
-              Rok: {% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}
-              · {{ partner.payment_count }} {% if partner.payment_count == 1 %}rata{% else %}rate{% endif %}
-            </p>
+            <a href="{% url 'app_partner_detail' partner.pk %}" class="app-card__main">
+              <div class="app-card__top">
+                <time>{{ partner.recorded_on|date:"d.m.Y." }}</time>
+                <span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span>
+              </div>
+              <h2>{{ partner.name }}</h2>
+              {% if partner.description %}
+                <p>{{ partner.description|truncatechars:110 }}</p>
+              {% endif %}
+              <p class="app-card__amount">{{ partner.agreed_display }} RSD <span>dogovoreno</span></p>
+              <p class="app-card__money">
+                <span>Dato {{ partner.paid_display }} RSD</span>
+                <span{% if partner.remaining_amount %} class="is-owed"{% endif %}>Duguje {{ partner.remaining_display }} RSD</span>
+              </p>
+              <p class="app-card__meta">
+                Rok: {% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}
+                · {{ partner.payment_count }} {% if partner.payment_count == 1 %}rata{% else %}rate{% endif %}
+              </p>
+            </a>
             <div class="app-card__actions">
               <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
               <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
+              <form method="post" action="{% url 'app_partner_delete' partner.pk %}" data-confirm-title="Obrisati klijenta?" data-confirm="Klijent i unete rate biće trajno obrisani.">
+                {% csrf_token %}
+                <button type="submit">Obriši</button>
+              </form>
             </div>
           </li>
         {% endfor %}
@@ -90,7 +108,9 @@
           <thead>
             <tr>
               <th>Naziv</th>
-              <th>Iznos</th>
+              <th>Dogovoreno</th>
+              <th>Dato</th>
+              <th>Duguje</th>
               <th>Datum</th>
               <th>Rok</th>
               <th>Status</th>
@@ -99,25 +119,27 @@
           </thead>
           <tbody>
             {% for partner in page_obj %}
-              <tr{% if partner.status == 'late' %} class="is-late"{% endif %}>
+              <tr class="app-row-hit{% if partner.status == 'late' %} is-late{% endif %}">
                 <td>
-                  <strong>{{ partner.name }}</strong>
-                  {% if partner.description %}
-                    <span class="app-table__hint">{{ partner.description|truncatechars:90 }}</span>
-                  {% endif %}
+                  <a href="{% url 'app_partner_detail' partner.pk %}" class="app-row-hit__link">
+                    <strong>{{ partner.name }}</strong>
+                    {% if partner.description %}
+                      <span class="app-table__hint">{{ partner.description|truncatechars:90 }}</span>
+                    {% endif %}
+                  </a>
                 </td>
-                <td>
-                  {{ partner.amount_display }} RSD
-                  {% if partner.payment_count > 1 %}
-                    <span class="app-table__hint">{{ partner.payment_count }} rate</span>
-                  {% endif %}
-                </td>
+                <td class="app-table__num">{{ partner.agreed_display }} RSD</td>
+                <td class="app-table__num">{{ partner.paid_display }} RSD</td>
+                <td class="app-table__num{% if partner.remaining_amount %} is-owed{% endif %}">{{ partner.remaining_display }} RSD</td>
                 <td>{{ partner.recorded_on|date:"d.m.Y." }}</td>
                 <td>{% if partner.due_on %}{{ partner.due_on|date:"d.m.Y." }}{% else %}—{% endif %}</td>
                 <td><span class="app-status app-status--{{ partner.status }}">{{ partner.get_status_display }}</span></td>
                 <td class="app-table__actions">
-                  <a href="{% url 'app_partner_detail' partner.pk %}">Pregled</a>
                   <a href="{% url 'app_partner_edit' partner.pk %}">Izmena</a>
+                  <form method="post" action="{% url 'app_partner_delete' partner.pk %}" data-confirm-title="Obrisati klijenta?" data-confirm="Klijent i unete rate biće trajno obrisani.">
+                    {% csrf_token %}
+                    <button type="submit">Obriši</button>
+                  </form>
                 </td>
               </tr>
             {% endfor %}

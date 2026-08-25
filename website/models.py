@@ -148,7 +148,14 @@ class Partner(models.Model):
     name = models.CharField('Naziv klijenta', max_length=180)
     recorded_on = models.DateField('Datum', default=timezone.localdate, db_index=True)
     due_on = models.DateField('Rok', null=True, blank=True, db_index=True)
-    amount = models.DecimalField('Iznos', max_digits=12, decimal_places=2, default=0)
+    agreed_amount = models.DecimalField(
+        'Dogovoreni iznos',
+        max_digits=12,
+        decimal_places=2,
+        default=0,
+        blank=True,
+    )
+    amount = models.DecimalField('Uplaćeno', max_digits=12, decimal_places=2, default=0)
     description = models.TextField('Opis', blank=True)
     status = models.CharField(
         'Status',
@@ -176,6 +183,43 @@ class Partner(models.Model):
     @property
     def amount_display(self):
         return self.format_amount(self.amount)
+
+    @property
+    def paid_display(self):
+        return self.amount_display
+
+    @property
+    def agreed_display(self):
+        return self.format_amount(self.agreed_amount)
+
+    @property
+    def remaining_amount(self):
+        left = (self.agreed_amount or Decimal('0')) - (self.amount or Decimal('0'))
+        return left if left > 0 else Decimal('0')
+
+    @property
+    def remaining_display(self):
+        return self.format_amount(self.remaining_amount)
+
+    @classmethod
+    def money_totals(cls, qs=None):
+        qs = cls.objects.all() if qs is None else qs
+        agreed = Decimal('0')
+        paid = Decimal('0')
+        owed = Decimal('0')
+        for agreed_amount, paid_amount in qs.values_list('agreed_amount', 'amount'):
+            agreed_value = agreed_amount or Decimal('0')
+            paid_value = paid_amount or Decimal('0')
+            agreed += agreed_value
+            paid += paid_value
+            left = agreed_value - paid_value
+            if left > 0:
+                owed += left
+        return {
+            'agreed': agreed,
+            'paid': paid,
+            'owed': owed,
+        }
 
     @property
     def is_overdue(self):
