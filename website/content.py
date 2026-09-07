@@ -406,6 +406,7 @@ ABOUT_ME = {
         {'value': '22+', 'label': 'godina iskustva'},
         {'value': 'TMF', 'label': 'Univerzitet u Beogradu'},
         {'value': 'IRCA', 'label': 'ISO 9001 Lead Auditor'},
+        {'value': 'IFS', 'label': 'Internal Auditor'},
     ],
     'paragraphs': [
         'Moje stručno obrazovanje stekla sam na Tehnološko-metalurškom fakultetu Univerziteta u Beogradu, gde sam završila master studije biohemijskog inženjerstva i biotehnologije, kao i specijalizaciju u oblasti bezbednosti hrane.',

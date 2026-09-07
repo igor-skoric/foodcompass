@@ -1,0 +1,14 @@
+---
+description: Always check port availability before starting the Django dev server.
+alwaysApply: true
+---
+
+# Django dev server port
+
+Before starting `manage.py runserver`, check whether the port is free.
+
+- Prefer **8000**.
+- If 8000 is already in use, use **8001**.
+- If both are taken by other apps, use **8003** (or the next free port).
+- If this project's server is already healthy on the chosen port, reuse it instead of starting another process.
+- Report the URL actually used.

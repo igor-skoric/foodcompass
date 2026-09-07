@@ -396,6 +396,7 @@ ABOUT_ME = {
         {'value': '22+', 'label': 'years of experience'},
         {'value': 'TMF', 'label': 'University of Belgrade'},
         {'value': 'IRCA', 'label': 'ISO 9001 Lead Auditor'},
+        {'value': 'IFS', 'label': 'Internal Auditor'},
     ],
     'paragraphs': [
         'I completed my professional education at the Faculty of Technology and Metallurgy, University of Belgrade, with a master’s degree in biochemical engineering and biotechnology and a specialization in food safety.',
